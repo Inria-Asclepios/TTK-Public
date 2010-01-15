@@ -1,0 +1,22 @@
+#
+# This file sets up include directories, link directories, and
+# compiler settings for a project to use IPF.  It should not be
+# included directly, but rather through the IPF_USE_FILE setting
+# obtained from IPFConfig.cmake.
+#
+
+# Load the compiler settings used for IPF.
+IF(IPF_BUILD_SETTINGS_FILE)
+  INCLUDE(${CMAKE_ROOT}/Modules/CMakeImportBuildSettings.cmake)
+  CMAKE_IMPORT_BUILD_SETTINGS(${IPF_BUILD_SETTINGS_FILE})
+ENDIF(IPF_BUILD_SETTINGS_FILE)
+
+# Add compiler flags needed to use IPF.
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${IPF_REQUIRED_C_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IPF_REQUIRED_CXX_FLAGS}")
+
+# Add include directories needed to use IPF.
+INCLUDE_DIRECTORIES(${IPF_INCLUDE_DIRS})
+
+# Add link directories needed to use IPF.
+LINK_DIRECTORIES(${IPF_LIBRARY_DIRS})

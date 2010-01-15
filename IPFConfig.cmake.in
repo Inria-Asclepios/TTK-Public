@@ -1,0 +1,28 @@
+#-----------------------------------------------------------------------------
+#
+# IPFConfig.cmake - IPF CMake configuration file for external projects.
+#
+# This file is configured by IPF and used by the UseIPF.cmake module
+# to load IPF's settings for an external project.
+
+# The IPF source tree.
+SET(IPF_SOURCE_DIR "@IPF_SOURCE_DIR@")
+
+# The IPF include file directories.
+SET(IPF_INCLUDE_DIRS "@IPF_INCLUDE_DIRS_CONFIG@")
+
+# The IPF library directories.
+SET(IPF_LIBRARY_DIRS "@IPF_LIBRARY_DIRS_CONFIG@")
+
+# The C and C++ flags added by IPF to the cmake-configured flags.
+SET(IPF_REQUIRED_C_FLAGS "@IPF_REQUIRED_C_FLAGS@")
+SET(IPF_REQUIRED_CXX_FLAGS "@IPF_REQUIRED_CXX_FLAGS@")
+
+# The location of the UseIPF.cmake file.
+SET(IPF_USE_FILE "@IPF_USE_FILE@")
+
+# The build settings file.
+SET(IPF_BUILD_SETTINGS_FILE "@IPF_BUILD_SETTINGS_FILE@")
+
+# Some libraries variables useful to keep.
+SET(ITK_DIR          "@ITK_DIR@")

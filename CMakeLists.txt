@@ -110,5 +110,5 @@ INCLUDE (${IPF_SOURCE_DIR}/ipfGenerateIPFConfig.cmake)
 INSTALL_FILES(/lib .cmake
  ${IPF_BINARY_DIR}/IPFBuildSettings
  ${IPF_BINARY_DIR}/UseIPF
- ${IPF_BINARY_DIR}/IPFConfig
+ ${IPF_BINARY_DIR}/Utilities/IPFConfig
 )

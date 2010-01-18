@@ -3,9 +3,7 @@
 
 
 #include "itkProcessObject.h"
-
 /**
-   
  */
 
 namespace itk
@@ -22,7 +20,7 @@ namespace itk
     itkTypeMacro (CommandObjectBase, ProcessObject);
 
     virtual const char *GetCommandName (void) = 0;
-    virtual const char *GetShortDescription (void) const;
+	virtual const char *GetShortDescription (void) const;
     virtual const char *GetLongDescription (void) const;
 
     virtual int Execute (int nargs, const char *args[]) = 0;
@@ -30,6 +28,9 @@ namespace itk
   protected:
     CommandObjectBase();
     ~CommandObjectBase();
+	  
+	std::string m_ShortDescription;
+	std::string m_LongDescription;
 
 
   private:

@@ -40,19 +40,19 @@ CommandObjectFactory::CreateCommandObject(const char* name)
 	
 void CommandObjectFactory::PrintHelp(std::ostream &os, Indent indent)
 {
-	std::list<LightObject::Pointer> allobjects =
+  std::list<LightObject::Pointer> allobjects =
     ObjectFactoryBase::CreateAllInstance("itkCommandObjectBase");
-	for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
-		i != allobjects.end(); ++i)
+  for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
+      i != allobjects.end(); ++i)
+  {
+    CommandObjectBase* command = dynamic_cast<CommandObjectBase*>(i->GetPointer());
+    if(command)
     {
-		CommandObjectBase* command = dynamic_cast<CommandObjectBase*>(i->GetPointer());
-		if(command)
-		{
-			os << indent << command->GetCommandName() << " : ";
-			os << indent << command->GetShortDescription() << "\n";
+      os << indent << command->GetCommandName() << ":\t";
+      os << indent << command->GetShortDescription() << "\n";
 			os << "\n";
-		}
-   }	
+    }
+  }	
 }
 	
 	

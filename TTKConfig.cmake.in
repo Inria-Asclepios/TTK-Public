@@ -1,0 +1,40 @@
+#-----------------------------------------------------------------------------
+#
+# TTKConfig.cmake - TTK CMake configuration file for external projects.
+#
+# This file is configured by TTK and used by the UseTTK.cmake module
+# to load TTK's settings for an external project.
+
+# The TTK source tree.
+SET(TTK_SOURCE_DIR "@TTK_SOURCE_DIR@")
+
+# The TTK include file directories.
+SET(TTK_INCLUDE_DIRS "@TTK_INCLUDE_DIRS_CONFIG@")
+
+# The TTK library directories.
+SET(TTK_LIBRARY_DIRS "@TTK_LIBRARY_DIRS_CONFIG@")
+
+# The C and C++ flags added by TTK to the cmake-configured flags.
+SET(TTK_REQUIRED_C_FLAGS "@TTK_REQUIRED_C_FLAGS@")
+SET(TTK_REQUIRED_CXX_FLAGS "@TTK_REQUIRED_CXX_FLAGS@")
+
+# The TTK version number
+SET(TTK_VERSION_MAJOR "@TTK_VERSION_MAJOR@")
+SET(TTK_VERSION_MINOR "@TTK_VERSION_MINOR@")
+
+# The location of the UseTTK.cmake file.
+SET(TTK_USE_FILE "@TTK_USE_FILE@")
+
+# The build settings file.
+SET(TTK_BUILD_SETTINGS_FILE "@TTK_BUILD_SETTINGS_FILE@")
+
+# Whether TTK was built with shared libraries.
+# SET(TTK_BUILD_SHARED "@BUILD_SHARED_LIBS@")
+
+# TTK Configuration options.
+SET(TTK_USE_MIPS       "@TTK_USE_MIPS@")
+
+# Some libraries variables useful to keep.
+SET(ITK_DIR          "@ITK_DIR@")
+SET(VTK_DIR          "@VTK_DIR@")
+SET(MIPS_DIR         "@MIPS_DIR@")

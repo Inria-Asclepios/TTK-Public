@@ -1,0 +1,7 @@
+#ifndef _ttkConfigure_h_
+#define _ttkConfigure_h_
+
+#cmakedefine TTK_USE_MIPS
+
+
+#endif

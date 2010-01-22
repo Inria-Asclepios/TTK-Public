@@ -1,0 +1,314 @@
+#include "itkLogTensorImageFilter.h"
+#include "itkExpTensorImageFilter.h"
+#include "itkResampleTensorImageFilter.h"
+#include "itkAffineTensorTransform.h"
+#include "itkTensorLinearInterpolateImageFunction.h"
+#include "itkTensorImageIO.h"
+
+#include "GetPot.h"
+
+#include "ttkConfigure.h"
+
+#ifdef TTK_USE_MIPS
+#include "mipsInrimageImageIOFactory.h"
+#endif
+
+void PrintHelp(const char* exec)
+{
+  std::cout << "Usage: " << std::endl;
+  std::cout << exec << " <-i input> <-m matrix> <-b 0/1> <-r file> <-t threads> <-o output>" << std::endl;
+  exit(0);
+}
+
+
+int main(int argc, char* argv[])
+{
+  
+  GetPot cl(argc, argv); // argument parser
+  if( cl.size() == 1 || cl.search(2, "--help", "-h") )
+  {
+    PrintHelp(cl[0]);
+  }
+  
+  const bool IsInputPresent = cl.search(2,"-I","-i");
+  const bool IsOutputPresent = cl.search(2,"-O","-o");
+
+  if( !IsInputPresent || !IsOutputPresent )
+  {
+    std::cerr << "Error: Input and (or) output not set." << std::endl;
+    exit (-1);
+  }
+  
+  const char* tensorFile = cl.follow("NoFile",2,"-I","-i");
+  const char* outFile = cl.follow("NoFile",2,"-O","-o");
+  const char* mat = cl.follow("NoFile",2,"-m","-M");
+  const char* ref = cl.follow("NoFile",2,"-r","-R");
+  const bool bal = cl.follow (false, 2, "-b", "-B");
+  const bool le = cl.follow (1,2,"-l","-L");
+  const int threads = cl.follow(1,2,"-t","-T");
+  
+
+    
+  typedef double                                ScalarType;  
+  typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
+  typedef IOType::TensorImageType               TensorImageType;
+  typedef itk::ResampleTensorImageFilter<TensorImageType,TensorImageType> FilterType;
+  typedef TensorImageType::SizeType    SizeType;
+  typedef TensorImageType::SpacingType SpacingType;
+  typedef TensorImageType::PointType   PointType;
+
+
+
+
+
+
+
+
+  
+  IOType::Pointer myIO = IOType::New();
+  myIO->SetFileName(tensorFile);
+
+  std::cout << "Reading: " << tensorFile << std::endl;
+  try
+  {
+    myIO->Read();
+  }
+  catch(itk::ExceptionObject &e)
+  {
+    std::cerr << e << std::endl;
+    exit(-1);
+  }
+  
+  TensorImageType::Pointer tensors = myIO->GetOutput();
+
+  // log:
+
+  if( le )
+  {
+    typedef itk::LogTensorImageFilter<TensorImageType, TensorImageType> LogFilterType;
+    LogFilterType::Pointer myLog = LogFilterType::New();
+    myLog->SetInput(tensors);
+    myLog->SetNumberOfThreads(threads);
+    
+    try
+    {
+      myLog->Update();
+    }
+    catch (itk::ExceptionObject &e)
+    {
+      std::cerr << e << std::endl;
+      exit(-1);
+    }
+
+    tensors = myLog->GetOutput();
+    
+  }
+  
+
+
+  
+  typedef itk::AffineTensorTransform< double, 3 >  TransformType;
+  TransformType::Pointer transform = TransformType::New();
+
+
+  // read the affine matrix
+  std::ifstream buffer (mat);
+  if( buffer.fail() )
+  {
+    std::cerr << "Error: Cannot read file " << mat << std::endl;
+    exit (-1);
+  }
+
+  
+  TransformType::MatrixType       matrix;
+  TransformType::OutputVectorType translation;
+
+  if( bal ) // baladin's style
+  {
+    // skip 2 first characters
+    char junk[512];
+    buffer >> junk;
+    buffer >> junk;
+
+    for( unsigned int i=0 ;i<3; i++)
+    {
+      buffer >> matrix (i,0);
+      buffer >> matrix (i,1);
+      buffer >> matrix (i,2);
+      buffer >> translation[i];
+    }
+    transform->SetMatrix (matrix);
+    transform->SetTranslation (translation);
+
+    TransformType::Pointer inv_transform = TransformType::New();
+    transform->GetInverse(inv_transform);
+
+    transform = inv_transform;
+  }
+  else
+  {  
+  
+    // skip the first 12 floats
+    char junk [512];
+    for( unsigned int i=0; i<12; i++)
+    {
+      buffer >> junk;
+    }
+    
+    for( unsigned int i=0 ;i<3; i++)
+    {
+      buffer >> matrix (i,0);
+      buffer >> matrix (i,1);
+      buffer >> matrix (i,2);
+    }
+    
+    for( unsigned int i=0; i<3; i++)
+    {
+      buffer >> translation[i];
+    }
+    
+    transform->SetMatrix (matrix);
+    transform->SetTranslation (translation);
+    
+    TransformType::Pointer inv_transform = TransformType::New();
+    transform->GetInverse(inv_transform);
+    
+    transform = inv_transform;
+  }
+  buffer.close();
+  
+  std::cout << "Matrix is: " << std::endl;
+  std::cout << matrix << std::endl;
+  std::cout << "Translation is: " << std::endl;
+  std::cout << translation << std::endl;
+  
+  std::cout << transform << std::endl;
+  
+
+  FilterType::Pointer filter = FilterType::New();
+
+  typedef itk::TensorLinearInterpolateImageFunction<TensorImageType, double>  InterpolatorType;
+  InterpolatorType::Pointer interpolator = InterpolatorType::New();
+
+  
+  filter->SetTensorInterpolator( interpolator );
+  filter->SetInput ( tensors );
+  filter->SetNumberOfThreads(threads);
+  //filter->SetUseReferenceImage (true);
+  //filter->SetReferenceImage ( myIO->GetOutput() );
+
+#ifdef TTK_USE_MIPS
+  itk::InrimageImageIOFactory::RegisterOneFactory();
+#endif
+
+  typedef itk::Image<double, 3> ImageType;
+  itk::ImageFileReader< ImageType >::Pointer io2 = itk::ImageFileReader< ImageType >::New();
+  io2->SetFileName( ref );
+  try
+  {
+    io2->Update();
+  } catch (itk::ExceptionObject &e)
+  {
+    std::cerr << e;
+    return -1;
+  }
+  
+
+  ImageType::Pointer reference = io2->GetOutput();
+  ImageType::SpacingType spacing = reference->GetSpacing();
+  ImageType::PointType   origin  = reference->GetOrigin();
+  ImageType::SizeType size =   reference->GetLargestPossibleRegion().GetSize();
+  filter->SetOutputOrigin( origin );
+  filter->SetOutputSpacing( spacing );
+  filter->SetSize( size );
+
+  /*
+  TransformType::OutputVectorType translation1;
+  const double imageCenterX = origin[0] + spacing[0] * size[0] / 2.0;
+  const double imageCenterY = origin[1] + spacing[1] * size[1] / 2.0;
+  const double imageCenterZ = origin[0] + spacing[0] * size[0] / 2.0;
+    
+  translation1[0] =   -imageCenterX;
+  translation1[1] =   -imageCenterY;
+  translation1[2] =   -imageCenterZ;
+    
+  transform->Translate( translation1 );
+  
+  const double degreesToRadians = atan(1.0) / 45.0;
+  const double angle = degree * degreesToRadians;
+
+  TransformType::OutputVectorType vec;
+  vec[0] = 0.0;
+  vec[1] = 0.0;
+  vec[2] = 0.1;  
+  transform->Rotate3D(vec, -angle, false );
+
+
+  TransformType::OutputVectorType translation2;
+  translation2[0] =   imageCenterX;
+  translation2[1] =   imageCenterY;
+  translation2[2] =   imageCenterZ;
+  transform->Translate( translation2, false );
+  */
+
+  
+  
+  filter->SetTensorTransform( transform );
+
+  try
+  {
+    filter->Update();
+  }
+  catch (itk::ExceptionObject &e )
+  {
+    std::cerr << e;
+    exit (-1);
+  }
+
+  tensors = filter->GetOutput();
+   
+  if (le )
+  {
+    // exp:
+    typedef itk::ExpTensorImageFilter<TensorImageType, TensorImageType> ExpFilterType;
+    ExpFilterType::Pointer myExp = ExpFilterType::New();
+    
+    myExp->SetInput( filter->GetOutput() );
+    myExp->SetNumberOfThreads(threads);
+
+    std::cout << "Pipeline started." << std::endl;
+    std::cout << std::flush;
+    try
+    {
+      myExp->Update();
+    }
+    catch(itk::ExceptionObject &e)
+    {
+      std::cerr << e;
+      exit(-1);
+    }
+    std::cout << "Pipeline finished." << std::endl;
+
+    tensors = myExp->GetOutput();
+  }
+  
+  
+  myIO->SetFileName(outFile);
+  myIO->SetInput( tensors );
+  
+  std::cout << "Writing: " << outFile << std::flush;
+  try
+  {
+    myIO->Write();
+  }
+  catch(itk::ExceptionObject &e)
+  {
+    std::cerr << e << std::endl;
+    exit(-1);
+  }
+  std::cout << " Done." << std::endl;
+  
+  return 0;
+
+  
+}

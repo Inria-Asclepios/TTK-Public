@@ -1,11 +1,13 @@
 project(TTK)
 
+
 cmake_minimum_required(VERSION 2.4)
 IF(COMMAND cmake_policy)
   cmake_policy(VERSION 2.4)
   cmake_policy(SET CMP0005 OLD)
   cmake_policy(SET CMP0003 NEW)
 ENDIF(COMMAND cmake_policy)
+
 
 SET(EXECUTABLE_OUTPUT_PATH 
   ${CMAKE_BINARY_DIR}/bin 
@@ -16,13 +18,20 @@ SET(LIBRARY_OUTPUT_PATH
   CACHE PATH "Single output directory for building all libraries."
   )
 
+
 find_package(ITK)
 find_package(VTK)
+find_package(Boost)
 
 if( ITK_FOUND AND VTK_FOUND )
 
+
 include(${ITK_USE_FILE})
 include(${VTK_USE_FILE})
+if( Boost_FOUND )
+  include_directories(${Boost_INCLUDE_DIR})
+endif( Boost_FOUND )
+
 
 option(TTK_USE_MIPS "Use MIPS and make TTK compatible with inrimage file format (discouraged)")
 if(TTK_USE_MIPS)
@@ -41,6 +50,7 @@ if(TTK_USE_MIPS)
   endif(MIPS_USE_MKL OR MIPS_USE_ACML)
 
 endif(TTK_USE_MIPS)
+
 
 configure_file(${PROJECT_SOURCE_DIR}/ttkConfigure.h.in
                ${PROJECT_BINARY_DIR}/ttkConfigure.h CONFIGURE IMMEDIATE)
@@ -72,7 +82,15 @@ ITKCommon
 #  ENDIF (VTK_FOUND)
 
 
-INSTALL(TARGETS ITKTensor DESTINATION lib/)
+if( Boost_FOUND )
+  add_subdirectory(Hardi)
+endif( Boost_FOUND )
+
+
+INSTALL(TARGETS ITKTensor 
+DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+COMPONENT RuntimeLibraries
+)
 
 
 # A simple program to average several images
@@ -477,6 +495,14 @@ ${ITK_LIBRARIES}
 vtkIO
 )
 
+
+file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+file(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
+install(FILES ${__files1} ${__files2} ${__files3}
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+  COMPONENT Development
+)
 
 
 

@@ -468,6 +468,17 @@ endif(TTK_USE_MIPS)
     #)
 
 
+ADD_EXECUTABLE(itkGenerateSyntheticTensorField generateSyntheticTensorField.cxx)
+
+TARGET_LINK_LIBRARIES(itkGenerateSyntheticTensorField
+ITKTensor
+${ITK_LIBRARIES}
+#${LAPACK_LIBRARIES}
+vtkIO
+)
+
+
+
 
 #-----------------------------------------------------------------------------
 # Help other projects use TTK.

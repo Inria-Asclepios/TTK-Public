@@ -9,4 +9,5 @@ vertex3.cpp
 )
 
 TARGET_LINK_LIBRARIES(fodf
+${ITK_LIBRARIES}
 )

@@ -11,10 +11,10 @@
 #include <math.h>
 //#include <cmath>
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
   #include <mkl_lapack.h>
 #else
-#ifdef ACML_IN_USE
+#ifdef TTK_USE_ACML
   #include <acml.h>
 #else
   #include <vnl/algo/vnl_symmetric_eigensystem.h>
@@ -321,7 +321,7 @@ namespace itk
   ::Log (void) const
   {
     Self result;
-#if defined (MKL_IN_USE) || defined (ACML_IN_USE)
+#if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
     char uplo = 'U';
     double *ev  = new double[NDimension];
@@ -336,7 +336,7 @@ namespace itk
     for(unsigned int i=0;i<NDegreesOfFreedom;i++)
       buffer[i] = static_cast<double>((*this)[i]);
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     dspev(&job,&uplo,&order,buffer,ev,z,&ldz,work,&info);
 #else // ACML
     dspev(job,uplo,order,buffer,ev,z,ldz,&info);
@@ -402,7 +402,7 @@ namespace itk
   ::Exp (void) const
   {
     Self result;
-#if defined (MKL_IN_USE) || defined (ACML_IN_USE)
+#if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
     char uplo = 'U';
     double *ev  = new double[NDimension];
@@ -417,7 +417,7 @@ namespace itk
     for(unsigned int i=0;i<NDegreesOfFreedom;i++)
       buffer[i] = static_cast<double>((*this)[i]);
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     dspev(&job,&uplo,&order,buffer,ev,z,&ldz,work,&info);
 #else // ACML
     dspev(job,uplo,order,buffer,ev,z,ldz,&info);
@@ -467,7 +467,7 @@ namespace itk
   {
 
     Self result;
-#if defined (MKL_IN_USE) || defined (ACML_IN_USE)
+#if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
     char uplo = 'U';
     double *ev  = new double[NDimension];
@@ -482,7 +482,7 @@ namespace itk
     for(unsigned int i=0;i<NDegreesOfFreedom;i++)
       buffer[i] = static_cast<double>((*this)[i]);
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     dspev(&job,&uplo,&order,buffer,ev,z,&ldz,work,&info);
 #else // ACML
     dspev(job,uplo,order,buffer,ev,z,ldz,&info);
@@ -558,7 +558,7 @@ namespace itk
   {
 
     T result;
-#if defined (MKL_IN_USE) || defined (ACML_IN_USE)
+#if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
     char uplo = 'U';
     double *ev  = new double[NDimension];
@@ -573,7 +573,7 @@ namespace itk
     for(unsigned int i=0;i<NDegreesOfFreedom;i++)
       buffer[i] = static_cast<double>((*this)[i]);
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     dspev(&job,&uplo,&order,buffer,ev,z,&ldz,work,&info);
 #else // ACML
     dspev(job,uplo,order,buffer,ev,z,ldz,&info);
@@ -606,7 +606,7 @@ namespace itk
   ::GetEigenvector (unsigned int n) const
   {
     VectorType result;
-#if defined (MKL_IN_USE) || defined (ACML_IN_USE)
+#if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
     char uplo = 'U';
     double *ev  = new double[NDimension];
@@ -621,7 +621,7 @@ namespace itk
     for(unsigned int i=0;i<NDegreesOfFreedom;i++)
       buffer[i] = static_cast<double>((*this)[i]);
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     dspev(&job,&uplo,&order,buffer,ev,z,&ldz,work,&info);
 #else // ACML
     dspev(job,uplo,order,buffer,ev,z,ldz,&info);
@@ -687,7 +687,7 @@ namespace itk
   {
 
     bool result = true;
-#if defined (MKL_IN_USE) || defined (ACML_IN_USE)
+#if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
     char uplo = 'U';
     double *ev  = new double[NDimension];
@@ -702,7 +702,7 @@ namespace itk
     for(unsigned int i=0;i<NDegreesOfFreedom;i++)
       buffer[i] = static_cast<double>((*this)[i]);
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     dspev(&job,&uplo,&order,buffer,ev,z,&ldz,work,&info);
 #else // ACML
     dspev(job,uplo,order,buffer,ev,z,ldz,&info);
@@ -737,7 +737,7 @@ namespace itk
   {
 
     bool result = true;
-#if defined (MKL_IN_USE) || defined (ACML_IN_USE)
+#if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
     char uplo = 'U';
     double *ev  = new double[NDimension];
@@ -752,7 +752,7 @@ namespace itk
     for(unsigned int i=0;i<NDegreesOfFreedom;i++)
       buffer[i] = static_cast<double>((*this)[i]);
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     dspev(&job,&uplo,&order,buffer,ev,z,&ldz,work,&info);
 #else // ACML
     dspev(job,uplo,order,buffer,ev,z,ldz,&info);
@@ -928,7 +928,7 @@ namespace itk
   {
 
     Self Result;
-#if defined (MKL_IN_USE) || defined (ACML_IN_USE)
+#if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
     char uplo = 'U';
     double *ev  = new double[NDimension];
@@ -943,7 +943,7 @@ namespace itk
     for(unsigned int i=0;i<NDegreesOfFreedom;i++)
       buffer[i] = static_cast<double>((*this)[i]);
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     dspev(&job,&uplo,&order,buffer,ev,z,&ldz,work,&info);
 #else // ACML
     dspev(job,uplo,order,buffer,ev,z,ldz,&info);

@@ -19,37 +19,62 @@ SET(LIBRARY_OUTPUT_PATH
   )
 
 
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
+
+
 find_package(ITK)
 find_package(VTK)
 find_package(Boost)
 
-if( ITK_FOUND AND VTK_FOUND )
 
 
-include(${ITK_USE_FILE})
-include(${VTK_USE_FILE})
-if( Boost_FOUND )
-  include_directories(${Boost_INCLUDE_DIR})
-endif( Boost_FOUND )
+### Use MKL or ACML ###
+
+option(TTK_USE_MKL  OFF "Use MKL to solve eigensystems")
+option(TTK_USE_ACML OFF "Use ACML to solve eigensystems")
+
+if (TTK_USE_MKL AND TTK_USE_ACML)
+  message(FATAL_ERROR "Both TTK_USE_MKL and TTK_USE_ACML are set to ON, only one can be used at the same time")
+endif (TTK_USE_MKL AND TTK_USE_ACML)
+
+set(LAPACK_LIBRARIES
+)
+
+if (TTK_USE_MKL)
+  find_package(MKL REQUIRED)  
+  set(LAPACK_LIBRARIES
+  ${MKL_LIBRARIES}
+  )
+endif(TTK_USE_MKL)
+
+if (TTK_USE_ACML)
+  find_package(ACML REQUIRED)
+  set(LAPACK_LIBRARIES
+  ${ACML_LIBRARY}
+  )
+endif(TTK_USE_ACML)
 
 
-option(TTK_USE_MIPS "Use MIPS and make TTK compatible with inrimage file format (discouraged)")
+
+### Use Mips? ###
+
+set(MIPS_LIBRARIES
+)
+
+option(TTK_USE_MIPS OFF "Use MIPS and make TTK compatible with inrimage file format (discouraged)")
+
 if(TTK_USE_MIPS)
   find_package(MIPS REQUIRED)
   include(${MIPS_USE_FILE})
-  link_libraries(mipsItkImageIO InrimageNG LinearAlgebra Basics mipsZ) # ugly but I don't want to detail dependencies for each project
-
-  if(MIPS_USE_MKL OR MIPS_USE_ACML)
-    if(MIPS_USE_MKL)
-      link_directories(${MKL_LINK_DIRS})
-      link_libraries(${MKL_LIBRARIES})
-    else(MIPS_USE_MKL)
-      link_directories(${ACML_LINK_DIRS})
-      link_libraries(${ACML_LIBRARIES})
-    endif(MIPS_USE_MKL)
-  endif(MIPS_USE_MKL OR MIPS_USE_ACML)
-
+ 
+  set(MIPS_LIBRARIES 
+  mipsItkImageIO 
+  InrimageNG 
+  LinearAlgebra 
+  Basics 
+  mipsZ)
 endif(TTK_USE_MIPS)
+
 
 
 configure_file(${PROJECT_SOURCE_DIR}/ttkConfigure.h.in
@@ -60,386 +85,401 @@ set(TTK_REQUIRED_C_FLAGS)
 set(TTK_REQUIRED_CXX_FLAGS)
 
 
-include(${TTK_SOURCE_DIR}/ttkIncludeDirectories.cmake)
-include_directories(
-${TTK_INCLUDE_DIRS_BUILD_TREE}
-${TTK_INCLUDE_DIRS_SOURCE_TREE}
-)
 
-SET(TTK_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "TTK_DIR variable if required")
+if( ITK_FOUND AND VTK_FOUND )
 
-add_library(ITKTensor
-itkNumericTraitsTensorPixel2.cxx
-)
-TARGET_LINK_LIBRARIES(ITKTensor
-ITKCommon
-)
+  include(${ITK_USE_FILE})
+  include(${VTK_USE_FILE})
+
+  include(${TTK_SOURCE_DIR}/ttkIncludeDirectories.cmake)
+  include_directories(
+    ${TTK_INCLUDE_DIRS_BUILD_TREE}
+    ${TTK_INCLUDE_DIRS_SYSTEM}
+  )
+
+
+  set(TTK_TENSOR_BUILD_TYPE
+  )
+  if (NOT WIN32)
+    if (ITK_BUILD_SHARED_LIBS)
+      set (TTK_TENSOR_BUILD_TYPE SHARED)
+    endif (ITK_BUILD_SHARED_LIBS)
+  endif (NOT WIN32)
+
+  add_library(ITKTensor ${TTK_TENSOR_BUILD_TYPE}
+  itkNumericTraitsTensorPixel2.cxx
+  )
+  TARGET_LINK_LIBRARIES(ITKTensor
+  ITKCommon
+  ${LAPACK_LIBRARIES}
+  )
+	
+
+  if( Boost_FOUND )
+    add_subdirectory(Hardi)
+  endif( Boost_FOUND )
+
+
+  INSTALL(TARGETS ITKTensor 
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+  COMPONENT RuntimeLibraries
+  )
+
+
+  # A simple program to average several images
+  add_executable(itkAverageStdImageFilter itkAverageStdImageFilter.cxx)
+  
+  # A simple program to warp an image
+  add_executable(itkWarpImage itkWarpImage.cxx)
+
+  # A simple program to resample an image
+  add_executable(itkResampleImage itkResampleImage.cxx)
+
+  # A B0 brain mask extractor
+  add_executable(itkB0BrainMaskExtractor itkB0BrainMaskExtraction.cxx)
+
+  # A program to apply a mask to an image
+  add_executable(itkApplyMaskToImage itkApplyMaskToImages.cxx)
+
+  # A 4D DWI reader
+  add_executable(itkRead4DDWI itkRead4DDWI.cxx)
+
+  # An image file converter
+  add_executable(imconvert gipl2ana.cxx)
+
+  # A vector field converter
+  add_executable(itkStanleyToITK itkStanleyVectorFieldToITKVectorField.cxx)
+
+  add_executable(vtkConsolidateFiberBundle vtkConsolidateFiberBundle.cxx)
+
+  # An anisotropic filter for tensor field
+  add_executable(itkTensorAnisotropicFilter itkTensorAnisotropicFilter.cxx)
+
+  # An ITK dti estimator
+  add_executable(itkDTIEstimator itkDTIEstimator.cxx)
+
+  # This program removes NPT (Non-Positive Tensors)
+  add_executable(itkRemoveNPT itkRemoveNPT.cxx)
+
+  # This program Flips tensors around an axis
+  add_executable(itkFlipTensors itkFlipTensors.cxx)
+
+  add_executable(itkAddNoiseToTensors itkAddNoiseToTensors.cxx)
+
+  ADD_EXECUTABLE(itkNormalizeTensors itkNormalizeTensorImage.cxx)
+
+  # A Log-Euclidean BFGS dti estimator
+  ADD_EXECUTABLE(itkDTIEstimatorWithBFGS itkDTIEstimatorWithBFGS.cxx)
+
+
+  TARGET_LINK_LIBRARIES(itkAverageStdImageFilter
+  ITKCommon
+  ITKIO
+  )
+
+  TARGET_LINK_LIBRARIES(itkWarpImage
+  ITKCommon
+  ITKIO
+  # LinearAlgebra
+  )
+  
+  TARGET_LINK_LIBRARIES(itkResampleImage
+  ITKCommon
+  ITKIO
+  # LinearAlgebra
+  )
+  
+  TARGET_LINK_LIBRARIES(itkB0BrainMaskExtractor
+  ITKCommon
+  ITKIO
+  # LinearAlgebra
+  )
+
+  TARGET_LINK_LIBRARIES(itkApplyMaskToImage
+  ITKTensor
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+  
+  TARGET_LINK_LIBRARIES(itkRead4DDWI
+  ITKCommon
+  ITKIO
+  # LinearAlgebra
+  )
+  
+  TARGET_LINK_LIBRARIES(imconvert
+  ITKCommon
+  ITKIO
+  # mipsItkImageIO
+  # LinearAlgebra
+  )
+
+  TARGET_LINK_LIBRARIES(itkStanleyToITK
+  ITKCommon
+  ITKIO
+  # LinearAlgebra
+  )
+  
+  TARGET_LINK_LIBRARIES(vtkConsolidateFiberBundle
+  vtkIO
+  # LinearAlgebra
+  )
+
+  TARGET_LINK_LIBRARIES(itkTensorAnisotropicFilter
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+
+  TARGET_LINK_LIBRARIES(itkDTIEstimator
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+
+  TARGET_LINK_LIBRARIES(itkRemoveNPT
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+
+  TARGET_LINK_LIBRARIES(itkFlipTensors
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+
+  TARGET_LINK_LIBRARIES(itkAddNoiseToTensors
+  ITKCommon
+  ITKStatistics
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+
+  TARGET_LINK_LIBRARIES(itkNormalizeTensors
+  ITKCommon
+  ITKStatistics
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+
+  TARGET_LINK_LIBRARIES(itkDTIEstimatorWithBFGS
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+  
+  # A Log-Euclidean dti estimator
+  ADD_EXECUTABLE(itkLogEuclideanDTIEstimator itkLogEuclideanDTIEstimator.cxx)
+
+  TARGET_LINK_LIBRARIES(itkLogEuclideanDTIEstimator
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+
+  # A Tensors to DWI converter
+  ADD_EXECUTABLE(itkWarpTensorImage itkWarpTensorImage.cxx)
+  TARGET_LINK_LIBRARIES(itkWarpTensorImage
+  ITKTensor
+  ITKCommon
+  # InrimageNG
+  ITKIO
+  vtkIO
+  )
+
+  # A Tensor Gaussian smoother
+  ADD_EXECUTABLE(itkGaussianTensorImageFilter itkGaussianTensorImageFilter.cxx)
+  TARGET_LINK_LIBRARIES(itkGaussianTensorImageFilter
+  ITKTensor
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
+
+  # A tensor z-score calculator 
+  ADD_EXECUTABLE(itkZScoreTensorImageFilter itkZScoreTensorImageFilter.cxx)
+  TARGET_LINK_LIBRARIES(itkZScoreTensorImageFilter
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
 		
-#  IF (VTK_FOUND)
-#    LINK_LIBRARIES(ITKTensor vtkIO vtkCommon ${LAPACK_LIBRARIES})
-#  ELSE (VTK_FOUND)
-#    LINK_LIBRARIES(ITKTensor ${LAPACK_LIBRARIES})
-#  ENDIF (VTK_FOUND)
+  # A tensor statistics calculator 
+  ADD_EXECUTABLE(itkAverageStdTensorImageFilter itkAverageStdTensorImageFilter.cxx)
+  TARGET_LINK_LIBRARIES(itkAverageStdTensorImageFilter
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
 
+  # A library to read a vtk tensor file
+  ADD_LIBRARY(VTKTensorImageIO STATIC itkVTKStructuredPointsTensorImageIO.cxx)
+  TARGET_LINK_LIBRARIES(VTKTensorImageIO
+  ITKCommon  
+  vtkIO
+  vtkCommon
+  )
 
-if( Boost_FOUND )
-  add_subdirectory(Hardi)
-endif( Boost_FOUND )
+  # An itk Sparse tensor diffusion appz
+  ADD_EXECUTABLE(itkSparseTensorsDiffusion itkSparseTensorsDiffusion.cxx)
+  TARGET_LINK_LIBRARIES(itkSparseTensorsDiffusion
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
 
-
-INSTALL(TARGETS ITKTensor 
-DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-COMPONENT RuntimeLibraries
-)
-
-
-# A simple program to average several images
-ADD_EXECUTABLE(itkAverageStdImageFilter itkAverageStdImageFilter.cxx)
-  
-# A simple program to warp an image
-add_executable(itkWarpImage itkWarpImage.cxx)
-
-# A simple program to resample an image
-add_executable(itkResampleImage itkResampleImage.cxx)
-
-# A B0 brain mask extractor
-add_executable(itkB0BrainMaskExtractor itkB0BrainMaskExtraction.cxx)
-
-# A program to apply a mask to an image
-add_executable(itkApplyMaskToImage itkApplyMaskToImages.cxx)
-
-# A 4D DWI reader
-add_executable(itkRead4DDWI itkRead4DDWI.cxx)
-
-# An image file converter
-add_executable(imconvert gipl2ana.cxx)
-
-# A vector field converter
-add_executable(itkStanleyToITK itkStanleyVectorFieldToITKVectorField.cxx)
-
-add_executable(vtkConsolidateFiberBundle vtkConsolidateFiberBundle.cxx)
-
-# An anisotropic filter for tensor field
-add_executable(itkTensorAnisotropicFilter itkTensorAnisotropicFilter.cxx)
-
-# An ITK dti estimator
-add_executable(itkDTIEstimator itkDTIEstimator.cxx)
-
-# This program removes NPT (Non-Positive Tensors)
-add_executable(itkRemoveNPT itkRemoveNPT.cxx)
-
-# This program Flips tensors around an axis
-add_executable(itkFlipTensors itkFlipTensors.cxx)
-
-add_executable(itkAddNoiseToTensors itkAddNoiseToTensors.cxx)
-
-ADD_EXECUTABLE(itkNormalizeTensors itkNormalizeTensorImage.cxx)
-
-# A Log-Euclidean BFGS dti estimator
-ADD_EXECUTABLE(itkDTIEstimatorWithBFGS itkDTIEstimatorWithBFGS.cxx)
-
-
-TARGET_LINK_LIBRARIES(itkAverageStdImageFilter
-ITKCommon
-ITKIO
-)
-
-TARGET_LINK_LIBRARIES(itkWarpImage
-ITKCommon
-ITKIO
-# LinearAlgebra
-)
-  
-TARGET_LINK_LIBRARIES(itkResampleImage
-ITKCommon
-ITKIO
-# LinearAlgebra
-)
-  
-TARGET_LINK_LIBRARIES(itkB0BrainMaskExtractor
-ITKCommon
-ITKIO
-# LinearAlgebra
-)
-
-TARGET_LINK_LIBRARIES(itkApplyMaskToImage
-ITKTensor
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
-  
-TARGET_LINK_LIBRARIES(itkRead4DDWI
-ITKCommon
-ITKIO
-# LinearAlgebra
-)
-  
-TARGET_LINK_LIBRARIES(imconvert
-ITKCommon
-ITKIO
-# mipsItkImageIO
-# LinearAlgebra
-)
-
-TARGET_LINK_LIBRARIES(itkStanleyToITK
-ITKCommon
-ITKIO
-# LinearAlgebra
-)
-  
-TARGET_LINK_LIBRARIES(vtkConsolidateFiberBundle
-vtkIO
-# LinearAlgebra
-)
-
-TARGET_LINK_LIBRARIES(itkTensorAnisotropicFilter
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
-
-TARGET_LINK_LIBRARIES(itkDTIEstimator
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
-
-TARGET_LINK_LIBRARIES(itkRemoveNPT
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
-
-TARGET_LINK_LIBRARIES(itkFlipTensors
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
-
-TARGET_LINK_LIBRARIES(itkAddNoiseToTensors
-ITKCommon
-ITKStatistics
-ITKIO
-vtkIO
-# InrimageNG
-)
-
-TARGET_LINK_LIBRARIES(itkNormalizeTensors
-ITKCommon
-ITKStatistics
-ITKIO
-vtkIO
-# InrimageNG
-)
-
-TARGET_LINK_LIBRARIES(itkDTIEstimatorWithBFGS
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
-  
-# A Log-Euclidean dti estimator
-ADD_EXECUTABLE(itkLogEuclideanDTIEstimator itkLogEuclideanDTIEstimator.cxx)
-
-TARGET_LINK_LIBRARIES(itkLogEuclideanDTIEstimator
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
-
-# A Tensors to DWI converter
-ADD_EXECUTABLE(itkWarpTensorImage itkWarpTensorImage.cxx)
-TARGET_LINK_LIBRARIES(itkWarpTensorImage
-ITKTensor
-ITKCommon
-# InrimageNG
-ITKIO
-vtkIO
-)
-
-# A Tensor Gaussian smoother
-ADD_EXECUTABLE(itkGaussianTensorImageFilter itkGaussianTensorImageFilter.cxx)
-TARGET_LINK_LIBRARIES(itkGaussianTensorImageFilter
-ITKTensor
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
-
-# A tensor z-score calculator 
-ADD_EXECUTABLE(itkZScoreTensorImageFilter itkZScoreTensorImageFilter.cxx)
-TARGET_LINK_LIBRARIES(itkZScoreTensorImageFilter
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
+  # A RBF Tensor Interpolator
+  ADD_EXECUTABLE(itkRBFTensorInterpolation itkRBFTensorInterpolation.cxx)
 		
-# A tensor statistics calculator 
-ADD_EXECUTABLE(itkAverageStdTensorImageFilter itkAverageStdTensorImageFilter.cxx)
-TARGET_LINK_LIBRARIES(itkAverageStdTensorImageFilter
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
+  TARGET_LINK_LIBRARIES(itkRBFTensorInterpolation
+  ITKCommon
+  # InrimageNG
+  ITKIO
+  vtkIO
+  vtkCommon
+  )
 
-# A library to read a vtk tensor file
-ADD_LIBRARY(VTKTensorImageIO STATIC itkVTKStructuredPointsTensorImageIO.cxx)
-TARGET_LINK_LIBRARIES(VTKTensorImageIO
-ITKCommon  
-vtkIO
-vtkCommon
-)
-
-# An itk Sparse tensor diffusion appz
-ADD_EXECUTABLE(itkSparseTensorsDiffusion itkSparseTensorsDiffusion.cxx)
-TARGET_LINK_LIBRARIES(itkSparseTensorsDiffusion
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
-
-# A RBF Tensor Interpolator
-ADD_EXECUTABLE(itkRBFTensorInterpolation itkRBFTensorInterpolation.cxx)
+  # A RBF Rotation Matrix Interpolator
+  ADD_EXECUTABLE(itkRBFRotationMatrixInterpolation itkRBFRotationMatrixInterpolation.cxx)
 		
-TARGET_LINK_LIBRARIES(itkRBFTensorInterpolation
-ITKCommon
-# InrimageNG
-ITKIO
-vtkIO
-vtkCommon
-)
+  TARGET_LINK_LIBRARIES(itkRBFRotationMatrixInterpolation
+  ITKCommon
+  # InrimageNG
+  ITKIO
+  vtkIO
+  vtkCommon
+  )
 
-# A RBF Rotation Matrix Interpolator
-ADD_EXECUTABLE(itkRBFRotationMatrixInterpolation itkRBFRotationMatrixInterpolation.cxx)
-		
-TARGET_LINK_LIBRARIES(itkRBFRotationMatrixInterpolation
-ITKCommon
-# InrimageNG
-ITKIO
-vtkIO
-vtkCommon
-)
+  ADD_EXECUTABLE(itkNormalizedGaussianTensorInterpolation itkNormalizedGaussianTensorInterpolation.cxx)
+  TARGET_LINK_LIBRARIES(itkNormalizedGaussianTensorInterpolation
+  ITKCommon
+  # InrimageNG
+  ITKIO
+  vtkIO
+  vtkCommon
+  )
 
-ADD_EXECUTABLE(itkNormalizedGaussianTensorInterpolation itkNormalizedGaussianTensorInterpolation.cxx)
-TARGET_LINK_LIBRARIES(itkNormalizedGaussianTensorInterpolation
-ITKCommon
-# InrimageNG
-ITKIO
-vtkIO
-vtkCommon
-)
+  ADD_EXECUTABLE(itkFiberTracking mipsFiberTracking.cxx)
 
-ADD_EXECUTABLE(itkFiberTracking mipsFiberTracking.cxx)
+  TARGET_LINK_LIBRARIES(itkFiberTracking
+  ITKTensor
+  vtkIO
+  vtkCommon
+  ${ITK_LIBRARIES}
+  # InrimageNG
+  )
 
-TARGET_LINK_LIBRARIES(itkFiberTracking
-ITKTensor
-ITKIO
-vtkIO
-vtkCommon
-${ITK_LIBRARIES}
-# InrimageNG
-)
+  ADD_EXECUTABLE(VTK2Fib VTK2Fib.cxx)
 
-ADD_EXECUTABLE(VTK2Fib VTK2Fib.cxx)
+  TARGET_LINK_LIBRARIES(VTK2Fib
+  ITKTensor
+  vtkIO
+  vtkCommon
+  ${ITK_LIBRARIES}
+  )
 
-TARGET_LINK_LIBRARIES(VTK2Fib
-ITKTensor
-vtkIO
-vtkCommon
-${ITK_LIBRARIES}
-)
+  ADD_EXECUTABLE(itkWarpFiberBundle itkWarpFiberBundle.cxx)
 
-ADD_EXECUTABLE(itkWarpFiberBundle itkWarpFiberBundle.cxx)
+  TARGET_LINK_LIBRARIES(itkWarpFiberBundle
+  vtkIO
+  vtkCommon
+  vtkRendering
+  # LinearAlgebra
+  ${ITK_LIBRARIES}
+  )
 
-TARGET_LINK_LIBRARIES(itkWarpFiberBundle
-vtkIO
-vtkCommon
-vtkRendering
-# LinearAlgebra
-${ITK_LIBRARIES}
-)
+  # A Hessian calculator
+  ADD_EXECUTABLE(itkHessianTensorImageFilter itkHessianTensorImageFilter.cxx)
 
-# A Hessian calculator
-ADD_EXECUTABLE(itkHessianTensorImageFilter itkHessianTensorImageFilter.cxx)
+  TARGET_LINK_LIBRARIES(itkHessianTensorImageFilter
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
 
-TARGET_LINK_LIBRARIES(itkHessianTensorImageFilter
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
+  # A Nrrd file format converter
+  ADD_EXECUTABLE(itkNrrdToTensor itkNeerdToTensor.cxx)
+  TARGET_LINK_LIBRARIES(itkNrrdToTensor
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
 
-# A Nrrd file format converter
-ADD_EXECUTABLE(itkNrrdToTensor itkNeerdToTensor.cxx)
-TARGET_LINK_LIBRARIES(itkNrrdToTensor
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
+  # A program to resample tensors
+  ADD_EXECUTABLE(itkResampleTensorImage itkResampleTensorImage.cxx)
 
-# A program to resample tensors
-ADD_EXECUTABLE(itkResampleTensorImage itkResampleTensorImage.cxx)
+  TARGET_LINK_LIBRARIES(itkResampleTensorImage
+  ITKTensor
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
 
-TARGET_LINK_LIBRARIES(itkResampleTensorImage
-ITKTensor
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
+  # A 2nd program to resample tensors
+  ADD_EXECUTABLE(itkResampleTensorImage2 itkResampleTensorImage2.cxx)
 
-# A 2nd program to resample tensors
-ADD_EXECUTABLE(itkResampleTensorImage2 itkResampleTensorImage2.cxx)
+  TARGET_LINK_LIBRARIES(itkResampleTensorImage2
+  ITKTensor
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
 
-TARGET_LINK_LIBRARIES(itkResampleTensorImage2
-ITKTensor
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
+  # A tensor to scalar function calculator
+  ADD_EXECUTABLE(itkTensorToScalar itkTensorToScalar.cxx)
 
-# A tensor to scalar function calculator
-ADD_EXECUTABLE(itkTensorToScalar itkTensorToScalar.cxx)
+  TARGET_LINK_LIBRARIES(itkTensorToScalar
+  ITKCommon
+  ITKIO
+  vtkIO
+  # InrimageNG
+  )
 
-TARGET_LINK_LIBRARIES(itkTensorToScalar
-ITKCommon
-ITKIO
-vtkIO
-# InrimageNG
-)
+  # A Tensors to DWI converter
+  ADD_EXECUTABLE(itkTensorsToDWI itkTensorsToDWI.cxx)
 
-# A Tensors to DWI converter
-ADD_EXECUTABLE(itkTensorsToDWI itkTensorsToDWI.cxx)
+  TARGET_LINK_LIBRARIES(itkTensorsToDWI
+  ITKCommon
+  # InrimageNG
+  ITKIO
+  vtkIO
+  )
 
-TARGET_LINK_LIBRARIES(itkTensorsToDWI
-ITKCommon
-# InrimageNG
-ITKIO
-vtkIO
-)
+  ADD_EXECUTABLE(itkGenerateSyntheticTensorField generateSyntheticTensorField.cxx)
+
+  TARGET_LINK_LIBRARIES(itkGenerateSyntheticTensorField
+  ITKTensor
+  ${ITK_LIBRARIES}
+  vtkIO
+  )
 
 
-if(TTK_USE_MIPS)
+if (TTK_USE_MIPS)
  # An Inria to VTK tensor file format converter 
   ADD_EXECUTABLE(inr2vtk mipsInrimageToVTK.cxx)
   TARGET_LINK_LIBRARIES(inr2vtk
-  ITKCommon
-  vtkIO
-  InrimageNG
+    ITKCommon
+    vtkIO
+    InrimageNG
   )
 
   # A VTK tensor file format to Inria converter 
@@ -448,61 +488,59 @@ if(TTK_USE_MIPS)
     ITKCommon
     vtkIO
     InrimageNG
-    )
-endif(TTK_USE_MIPS)
+  )
+endif (TTK_USE_MIPS)
 
 
-#   # A Tensors to DWI converter
-	#   ADD_EXECUTABLE(itkMultiResolutionTensorFilter
-	#   itkMultiResolutionTensorFilter.cxx
-	#   )
-	#   TARGET_LINK_LIBRARIES(itkMultiResolutionTensorFilter
-	#   ITKCommon
-	#   InrimageNG
-	#   ITKIO
-	#   )
+# A Tensors to DWI converter
+#   ADD_EXECUTABLE(itkMultiResolutionTensorFilter
+#   itkMultiResolutionTensorFilter.cxx
+#   )
+#   TARGET_LINK_LIBRARIES(itkMultiResolutionTensorFilter
+#   ITKCommon
+#   InrimageNG
+#   ITKIO
+#   )
 
 
 #  IF(VTK_FOUND)
 		
-#   A tensor field gradient magnitude calculator
-#	   ADD_EXECUTABLE(itkGradientMagnitudeTensorImageFilter
-#	   itkGradientMagnitudeTensorImageFilter.cxx
-#	   )
-#     TARGET_LINK_LIBRARIES(itkGradientMagnitudeTensorImageFilter
-#	   InrimageNG
-#	   ITKCommon
-#	   ITKIO
-#	   )
+# A tensor field gradient magnitude calculator
+#   ADD_EXECUTABLE(itkGradientMagnitudeTensorImageFilter
+#   itkGradientMagnitudeTensorImageFilter.cxx
+#   )
+#   TARGET_LINK_LIBRARIES(itkGradientMagnitudeTensorImageFilter
+#   InrimageNG
+#   ITKCommon
+#   ITKIO
+#   )
 
-    # A Tensor derivative Gaussian filter
-    #ADD_EXECUTABLE(itkMultiscaleGaussianDerivativeTensorImageFilter
-    #itkMultiscaleGaussianDerivativeTensorImageFilter.cxx
-    #)
-    #TARGET_LINK_LIBRARIES(itkMultiscaleGaussianDerivativeTensorImageFilter
-    #ITKCommon
-    #InrimageNG
-    #ITKIO
-    #)
-
-
-ADD_EXECUTABLE(itkGenerateSyntheticTensorField generateSyntheticTensorField.cxx)
-
-TARGET_LINK_LIBRARIES(itkGenerateSyntheticTensorField
-ITKTensor
-${ITK_LIBRARIES}
-#${LAPACK_LIBRARIES}
-vtkIO
-)
+# A Tensor derivative Gaussian filter
+#   ADD_EXECUTABLE(itkMultiscaleGaussianDerivativeTensorImageFilter
+#   itkMultiscaleGaussianDerivativeTensorImageFilter.cxx
+#   )
+#   TARGET_LINK_LIBRARIES(itkMultiscaleGaussianDerivativeTensorImageFilter
+#   ITKCommon
+#   InrimageNG
+#   ITKIO
+#   )
 
 
-file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
-file(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
-install(FILES ${__files1} ${__files2} ${__files3}
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/include
-  COMPONENT Development
-)
+
+  file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+  file(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
+  install(FILES ${__files1} ${__files2} ${__files3}
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+    COMPONENT Development
+  )
+
+
+
+
+
+
+SET(TTK_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "TTK_DIR variable if required")
 
 
 
@@ -525,31 +563,17 @@ INSTALL_FILES(/lib .cmake
  ${TTK_BINARY_DIR}/UseTTK
 )
 
+
+
 #-----------------------------------------------------------------------------
 # Add compiler flags TTK needs to work on this platform.  This must be
 # done AFTER the call to CMAKE_EXPORT_BUILD_SETTINGS.
 SET(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   ${TTK_REQUIRED_C_FLAGS}")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TTK_REQUIRED_CXX_FLAGS}")
 
-# IF(ITK_FOUND)
-
-	#   IF(USE_MKL AND MKL_FOUND)
-	#      INCLUDE_DIRECTORIES(${MKL_INCLUDE_DIRS})
-	#      LINK_DIRECTORIES(${MKL_LINK_DIRS})
-	#      LINK_LIBRARIES(${MKL_LIBRARIES})
-	#      ADD_DEFINITIONS(-DMKL_IN_USE)
-	#   ENDIF(USE_MKL AND MKL_FOUND)
-
-	#   IF(USE_ACML AND ACML_FOUND)
-	#    INCLUDE_DIRECTORIES(${ACML_INCLUDE_DIRS})
-	#    LINK_DIRECTORIES(${ACML_LINK_DIRS})
-	#    LINK_LIBRARIES(${ACML_LIBRARIES})
-	#    ADD_DEFINITIONS(-DACML_IN_USE)
-	#   ENDIF(USE_ACML AND ACML_FOUND)
-  
 
 else( ITK_FOUND AND VTK_FOUND )
 
-message(WARNING "ITK or VTK was not set, TensorToolKit will not be built.")
+  message(WARNING "ITK or VTK was not set, TTK will not be built.")
 
 endif( ITK_FOUND AND VTK_FOUND )

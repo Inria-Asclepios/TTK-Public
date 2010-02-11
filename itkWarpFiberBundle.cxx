@@ -178,6 +178,7 @@ int main (int narg, char* arg[])
   vtkPolyDataWriter* writer2 = vtkPolyDataWriter::New();
   writer2->SetFileName ( "bundle_fusion.vtk" );
   writer2->SetInput ( appender->GetOutput() );
+  writer2->SetFileTypeToBinary();
   writer2->Write();
 
 
@@ -185,6 +186,7 @@ int main (int narg, char* arg[])
   vtkPolyDataWriter* writer = vtkPolyDataWriter::New();
   writer->SetFileName ( file_out );
   writer->SetInput ( bundle );
+  writer->SetFileTypeToBinary();
   writer->Write();
   
 

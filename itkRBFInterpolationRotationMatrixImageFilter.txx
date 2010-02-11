@@ -4,7 +4,7 @@
 #include <itkImageRegionIterator.h>
 #include <itkImageRegionConstIteratorWithIndex.h>
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
 #include <mkl_lapack.h>
 #else
 #include <vnl/algo/vnl_matrix_inverse.h>
@@ -38,7 +38,7 @@ namespace itk
 
 	unsigned int N = numMatrices+1;
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     ScalarType *H;
     ScalarType *T;    
         
@@ -52,14 +52,14 @@ namespace itk
 
     for( unsigned int j=0;j<numMatrices;j++)
     {
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
       H[j] = 1.0;
 #else
       H(j,0) = 1.0;
 #endif
     }
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     H[numMatrices]=0.0;
 #else
     H(numMatrices,0) = 0.0;
@@ -73,14 +73,14 @@ namespace itk
       for(unsigned int i=0; i<numMatrices; i++)
       {
         PointType xi = m_Points[i];
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
         H[ j*N + i ] = this->h(xi,xj, m_Sigma, m_Gamma);
 #else
         H(j,i) = this->h(xj,xi, m_Sigma, m_Gamma);
 #endif
       }
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
       H[ j*N + numMatrices ] = 1.0;
 #else
       H(j,numMatrices) = 0.0;
@@ -88,7 +88,7 @@ namespace itk
       
     }
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
 
     /*
     // display H:
@@ -111,14 +111,14 @@ namespace itk
       for( unsigned int j=0; j<numMatrices; j++)
       {
         VectorType W = this->RotationMatrixToVector ( m_RotationMatrices[j] ); // - vMean;
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
         T[ i*(N) + j ] = W[i];
 #else
         T(i,j) = W[i];
 #endif
       }
       
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
       T[ i*N + numMatrices ] = 0.0;
 #else
       T(i,numMatrices) = 0.0;
@@ -128,7 +128,7 @@ namespace itk
     
     m_L = GeneralMatrixType ( N, 3, 0.0 );
     
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     // 1. LU factorization of H :
     int m = N;
     int n = N;
@@ -460,7 +460,7 @@ namespace itk
     unsigned int numMatrices = matrices.size();
 	unsigned int N = numMatrices+1;
 	
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     ScalarType *H;
     ScalarType *T;    
         
@@ -474,14 +474,14 @@ namespace itk
 
     for( unsigned int j=0;j<numMatrices;j++)
     {
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
       H[j] = 1.0;
 #else
       H(j,0) = 1.0;
 #endif
     }
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     H[numMatrices]=0.0;
 #else
     H(numMatrices,0) = 0.0;
@@ -495,14 +495,14 @@ namespace itk
       for(unsigned int i=0; i<numMatrices; i++)
       {
         PointType xi = points[i];
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
         H[ j*N + i ] = Self::h(xi,xj, sigma, gamma);
 #else
         H(j,i) = Self::h(xj,xi, sigma, gamma);
 #endif
       }
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
       H[ j*N + numMatrices ] = 1.0;
 #else
       H(j,numMatrices) = 0.0;
@@ -510,7 +510,7 @@ namespace itk
       
     }
 
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
 
     /*
     // display H:
@@ -533,14 +533,14 @@ namespace itk
       for( unsigned int j=0; j<numMatrices; j++)
       {
         VectorType W = Self::RotationMatrixToVector ( matrices[j] ); // - vMean;
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
         T[ i*(N) + j ] = W[i];
 #else
         T(i,j) = W[i];
 #endif
       }
       
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
       T[ i*N + numMatrices ] = 0.0;
 #else
       T(i,numMatrices) = 0.0;
@@ -550,7 +550,7 @@ namespace itk
     
    GeneralMatrixType L = GeneralMatrixType ( N, 3, 0.0 );
     
-#ifdef MKL_IN_USE
+#ifdef TTK_USE_MKL
     // 1. LU factorization of H :
     int m = N;
     int n = N;

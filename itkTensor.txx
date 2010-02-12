@@ -9,7 +9,8 @@
 #include "itkObject.h"
 
 #include <math.h>
-//#include <cmath>
+
+#include "ttkConfigure.h"
 
 #ifdef TTK_USE_MKL
   #include <mkl_lapack.h>

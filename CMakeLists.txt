@@ -1,12 +1,38 @@
-project(TTK)
-
-
 cmake_minimum_required(VERSION 2.4)
 IF(COMMAND cmake_policy)
   cmake_policy(VERSION 2.4)
   cmake_policy(SET CMP0005 OLD)
   cmake_policy(SET CMP0003 NEW)
 ENDIF(COMMAND cmake_policy)
+
+
+project(TTK)
+
+
+# On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
+# warnings
+IF(WIN32)
+  IF(NOT BORLAND)
+    IF(NOT CYGWIN)
+      IF(NOT MINGW)
+        IF(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
+          ADD_DEFINITIONS(
+            -D_CRT_FAR_MAPPINGS_NO_DEPRECATE
+            -D_CRT_IS_WCTYPE_NO_DEPRECATE
+            -D_CRT_MANAGED_FP_NO_DEPRECATE
+            -D_CRT_NONSTDC_NO_DEPRECATE
+            -D_CRT_SECURE_NO_DEPRECATE
+            -D_CRT_SECURE_NO_DEPRECATE_GLOBALS
+            -D_CRT_SETERRORMODE_BEEP_SLEEP_NO_DEPRECATE
+            -D_CRT_TIME_FUNCTIONS_NO_DEPRECATE
+            -D_CRT_VCCLRIT_NO_DEPRECATE
+            -D_SCL_SECURE_NO_DEPRECATE
+            )
+        ENDIF(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
+      ENDIF(NOT MINGW)
+    ENDIF(NOT CYGWIN)
+  ENDIF(NOT BORLAND)
+ENDIF(WIN32)
 
 
 SET(EXECUTABLE_OUTPUT_PATH 
@@ -117,7 +143,6 @@ if( ITK_FOUND AND VTK_FOUND )
   )
   TARGET_LINK_LIBRARIES(ITKTensor
   ITKCommon
-  ${TTK_LAPACK_LIBRARIES}
   )
 	
 
@@ -233,6 +258,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkDTIEstimator
@@ -240,6 +266,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkRemoveNPT
@@ -247,6 +274,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkFlipTensors
@@ -262,6 +290,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkNormalizeTensors
@@ -270,6 +299,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkDTIEstimatorWithBFGS
@@ -277,6 +307,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
   
   # A Log-Euclidean dti estimator
@@ -287,6 +318,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A Tensors to DWI converter
@@ -297,6 +329,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A Tensor Gaussian smoother
@@ -316,6 +349,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 		
   # A tensor statistics calculator 
@@ -325,6 +359,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A library to read a vtk tensor file
@@ -344,6 +379,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A RBF Tensor Interpolator
@@ -355,6 +391,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   vtkCommon
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A RBF Rotation Matrix Interpolator
@@ -365,6 +402,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   vtkCommon
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   ADD_EXECUTABLE(itkNormalizedGaussianTensorInterpolation itkNormalizedGaussianTensorInterpolation.cxx)
@@ -374,6 +412,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   vtkCommon
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   ADD_EXECUTABLE(itkFiberTracking mipsFiberTracking.cxx)
@@ -384,6 +423,7 @@ if( ITK_FOUND AND VTK_FOUND )
   vtkCommon
   ${MIPS_LIBRARIES}
   ${ITK_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   ADD_EXECUTABLE(VTK2Fib VTK2Fib.cxx)
@@ -413,6 +453,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A Nrrd file format converter
@@ -433,6 +474,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A 2nd program to resample tensors
@@ -444,6 +486,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A tensor to scalar function calculator
@@ -454,6 +497,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A Tensors to DWI converter

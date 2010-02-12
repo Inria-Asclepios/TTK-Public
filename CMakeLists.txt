@@ -102,9 +102,9 @@ if( ITK_FOUND AND VTK_FOUND )
   )
 
   if (NOT WIN32)
-    if (ITK_BUILD_SHARED_LIBS)
+    if (ITK_BUILD_SHARED)
       set (TTK_TENSOR_BUILD_TYPE SHARED)
-    endif (ITK_BUILD_SHARED_LIBS)
+    endif (ITK_BUILD_SHARED)
   endif (NOT WIN32)
 
   add_library(ITKTensor ${TTK_TENSOR_BUILD_TYPE}

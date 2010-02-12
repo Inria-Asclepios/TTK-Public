@@ -20,17 +20,31 @@ namespace itk
       throw itk::ExceptionObject(__FILE__,__LINE__, message);
     }
 
-    // creation of the gradient matrix:
+    // creation of the gradient matrix
+    // the internal gradient list contains only non-zero gradients
+    m_InternalGradientList.clear();
     unsigned int n = m_GradientList.size();
+    for (unsigned int i=0; i<n; i++)
+    {
+      GradientType g = m_GradientList[i];
+      if (g.GetNorm()>0.001)
+	m_InternalGradientList.push_back (g);
+    }
+
+    if( n<6 )
+    {
+      throw ExceptionObject (__FILE__,__LINE__,"At least 6 non-zero gradients are required");
+    }
+    
+    n = m_InternalGradientList.size();
     
     m_G   = InternalMatrixType(6, n, 0.0);
     m_IG2 = InternalMatrixType(6, 6, 0.0);
     
     for( unsigned int j=0; j<n; j++ )
       {
-	GradientType g = m_GradientList[j];
-        if( !g.GetNorm()==0.0 )
-          g.Normalize();
+	GradientType g = m_InternalGradientList[j];
+	g.Normalize();
 	VectorType Gn = this->Matrix2Vec( this->TensorProduct(g) );
 	for(int i=0; i<6; i++)
 	  m_G(i,j) = Gn[i];
@@ -64,12 +78,15 @@ namespace itk
 
     // create a list of iterators for each input
     std::vector<IteratorInputType> ListOfInputIterators;
-    for(int i=0;i<n;i++)
+    for(int i=0; i<n; i++)
     {
 	IteratorInputType it(this->GetInput(i),outputRegionForThread);
 	ListOfInputIterators.push_back(it);
     }
 
+    int nonZeroGradientCount = (int)(m_InternalGradientList.size());
+
+    
     if( threadId==0 )
       this->UpdateProgress (0.0);
     
@@ -82,31 +99,57 @@ namespace itk
       
       OutputPixelType out( static_cast<ScalarType>( 0.0 ) );      
       InputPixelType b0 = ListOfInputIterators[0].Get();
+      int nB0 = 1;
  
       // threshold b0
       if(b0>m_BST)
       {
 	
-        InternalMatrixType B(n-1,1);
-        for(int i=1;i<n;i++)
-        {
-          ScalarType bi = ListOfInputIterators[i].Get();
-          if( bi<0.001 )
-            bi = 0.001;
-          
-          B(i-1,0) = log( b0  / bi );
-        }
-        
+        InternalMatrixType B(nonZeroGradientCount, 1);
+	int gradCount = 0;
 
+	// any occurence of a null gradient will be considered as a B0
+	// and averaged to have an average B0
+        for(int i=1; i<n; i++)
+        {
+	  if (m_GradientList[i-1].GetNorm()>0.001 )
+	  {	    
+	    ScalarType bi = ListOfInputIterators[i].Get();
+	    if( bi<0.001 )
+	      bi = 0.001;
+	    
+	    //B(i-1,0) = log( b0  / bi );
+	    B(gradCount++, 0) = bi;
+	  }
+	  else
+	  {  
+	    b0 += ListOfInputIterators[i].Get();
+	    nB0++;
+	  }          
+        }
+
+	b0 /= (ScalarType)(nB0);
+
+	for (int i=0; i<nonZeroGradientCount; i++)
+	{
+	  // it happens that diffusion is greater than the B0: contribution of such gradient is canceled
+	  if (b0>B (i,0))
+	    B (i,0) = log ( b0 / B (i,0) );
+	  else
+	    B (i,0) = 0.0;
+	}
+
+	
         InternalMatrixType D = m_IG2*m_G*B;
-        
+
+	
         out.SetNthComponent( 0, static_cast<ScalarType>( D(0,0) ));
         out.SetNthComponent( 1, static_cast<ScalarType>( a*D(1,0) ));
         out.SetNthComponent( 2, static_cast<ScalarType>( D(2,0) ));
         out.SetNthComponent( 3, static_cast<ScalarType>( a*D(3,0) ));
         out.SetNthComponent( 4, static_cast<ScalarType>( a*D(4,0) ));
         out.SetNthComponent( 5, static_cast<ScalarType>( D(5,0)) );
-
+	
       }
 
       if( threadId==0 )

@@ -99,6 +99,7 @@ namespace itk
     void operator=(const Self&);
 
     GradientListType m_GradientList;
+    GradientListType m_InternalGradientList;
     ScalarType m_BST;
     
     InternalMatrixType m_G;

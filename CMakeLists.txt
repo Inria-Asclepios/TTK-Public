@@ -83,7 +83,7 @@ endif(TTK_USE_ACML)
 
 ### Use Mips? ###
 
-set(MIPS_LIBRARIES
+set(TTK_MIPS_LIBRARIES
 )
 
 option(TTK_USE_MIPS OFF "Use MIPS and make TTK compatible with inrimage file format (discouraged)")
@@ -92,7 +92,7 @@ if(TTK_USE_MIPS)
   find_package(MIPS REQUIRED)
   include(${MIPS_USE_FILE})
  
-  set(MIPS_LIBRARIES 
+  set(TTK_MIPS_LIBRARIES 
   mipsItkImageIO 
   InrimageNG 
   LinearAlgebra 
@@ -212,13 +212,13 @@ if( ITK_FOUND AND VTK_FOUND )
   TARGET_LINK_LIBRARIES(itkWarpImage
   ITKCommon
   ITKIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   )
   
   TARGET_LINK_LIBRARIES(itkResampleImage
   ITKCommon
   ITKIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   )
   
   TARGET_LINK_LIBRARIES(itkB0BrainMaskExtractor
@@ -231,7 +231,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   )
   
   TARGET_LINK_LIBRARIES(itkRead4DDWI
@@ -242,7 +242,7 @@ if( ITK_FOUND AND VTK_FOUND )
   TARGET_LINK_LIBRARIES(imconvert
   ITKCommon
   ITKIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkStanleyToITK
@@ -258,7 +258,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -266,7 +266,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -274,7 +274,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -282,7 +282,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkAddNoiseToTensors
@@ -290,7 +290,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKStatistics
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -299,7 +299,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKStatistics
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -307,7 +307,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
   
@@ -318,14 +318,14 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
   # A Tensors to DWI converter
   ADD_EXECUTABLE(itkWarpTensorImage itkWarpTensorImage.cxx)
   TARGET_LINK_LIBRARIES(itkWarpTensorImage
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ITKTensor
   ITKCommon
   ITKIO
@@ -340,7 +340,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -350,7 +350,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 		
@@ -360,7 +360,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -380,7 +380,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -388,7 +388,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ADD_EXECUTABLE(itkRBFTensorInterpolation itkRBFTensorInterpolation.cxx)
 		
   TARGET_LINK_LIBRARIES(itkRBFTensorInterpolation
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ITKCommon
   ITKIO
   vtkIO
@@ -409,7 +409,7 @@ if( ITK_FOUND AND VTK_FOUND )
 
   ADD_EXECUTABLE(itkNormalizedGaussianTensorInterpolation itkNormalizedGaussianTensorInterpolation.cxx)
   TARGET_LINK_LIBRARIES(itkNormalizedGaussianTensorInterpolation
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ITKCommon
   ITKIO
   vtkIO
@@ -423,7 +423,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKTensor
   vtkIO
   vtkCommon
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${ITK_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
@@ -434,7 +434,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKTensor
   vtkIO
   vtkCommon
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${ITK_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
@@ -455,7 +455,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -465,7 +465,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   )
 
   # A program to resample tensors
@@ -476,7 +476,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -488,7 +488,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -499,7 +499,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -509,7 +509,7 @@ if( ITK_FOUND AND VTK_FOUND )
   TARGET_LINK_LIBRARIES(itkTensorsToDWI
   ITKCommon
   ITKIO
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   vtkIO
   )
 
@@ -519,7 +519,7 @@ if( ITK_FOUND AND VTK_FOUND )
   vtkIO
   ITKTensor
   ${ITK_LIBRARIES}  
-  ${MIPS_LIBRARIES}
+  ${TTK_MIPS_LIBRARIES}
   ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -531,7 +531,7 @@ if (TTK_USE_MIPS)
   TARGET_LINK_LIBRARIES(inr2vtk
     ITKCommon
     vtkIO
-    ${MIPS_LIBRARIES}
+    ${TTK_MIPS_LIBRARIES}
   )
 
   # A VTK tensor file format to Inria converter 
@@ -539,7 +539,7 @@ if (TTK_USE_MIPS)
   TARGET_LINK_LIBRARIES(vtk2inr
     ITKCommon
     vtkIO
-    ${MIPS_LIBRARIES}
+    ${TTK_MIPS_LIBRARIES}
   )
 
 endif (TTK_USE_MIPS)
@@ -563,7 +563,7 @@ endif (TTK_USE_MIPS)
 #   itkGradientMagnitudeTensorImageFilter.cxx
 #   )
 #   TARGET_LINK_LIBRARIES(itkGradientMagnitudeTensorImageFilter
-#   ${MIPS_LIBRARIES}
+#   ${TTK_MIPS_LIBRARIES}
 #   ITKCommon
 #   ITKIO
 #   )
@@ -574,7 +574,7 @@ endif (TTK_USE_MIPS)
 #   )
 #   TARGET_LINK_LIBRARIES(itkMultiscaleGaussianDerivativeTensorImageFilter
 #   ITKCommon
-#   ${MIPS_LIBRARIES}
+#   ${TTK_MIPS_LIBRARIES}
 #   ITKIO
 #   )
 

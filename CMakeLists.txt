@@ -100,6 +100,7 @@ if( ITK_FOUND AND VTK_FOUND )
 
   set(TTK_TENSOR_BUILD_TYPE
   )
+
   if (NOT WIN32)
     if (ITK_BUILD_SHARED_LIBS)
       set (TTK_TENSOR_BUILD_TYPE SHARED)
@@ -180,19 +181,18 @@ if( ITK_FOUND AND VTK_FOUND )
   TARGET_LINK_LIBRARIES(itkWarpImage
   ITKCommon
   ITKIO
-  # LinearAlgebra
+  ${MIPS_LIBRARIES}
   )
   
   TARGET_LINK_LIBRARIES(itkResampleImage
   ITKCommon
   ITKIO
-  # LinearAlgebra
+  ${MIPS_LIBRARIES}
   )
   
   TARGET_LINK_LIBRARIES(itkB0BrainMaskExtractor
   ITKCommon
   ITKIO
-  # LinearAlgebra
   )
 
   TARGET_LINK_LIBRARIES(itkApplyMaskToImage
@@ -200,59 +200,55 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
   
   TARGET_LINK_LIBRARIES(itkRead4DDWI
   ITKCommon
   ITKIO
-  # LinearAlgebra
   )
   
   TARGET_LINK_LIBRARIES(imconvert
   ITKCommon
   ITKIO
-  # mipsItkImageIO
-  # LinearAlgebra
+  ${MIPS_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkStanleyToITK
   ITKCommon
   ITKIO
-  # LinearAlgebra
   )
   
   TARGET_LINK_LIBRARIES(vtkConsolidateFiberBundle
   vtkIO
-  # LinearAlgebra
   )
 
   TARGET_LINK_LIBRARIES(itkTensorAnisotropicFilter
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkDTIEstimator
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkRemoveNPT
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkFlipTensors
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkAddNoiseToTensors
@@ -260,7 +256,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKStatistics
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkNormalizeTensors
@@ -268,14 +264,14 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKStatistics
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   TARGET_LINK_LIBRARIES(itkDTIEstimatorWithBFGS
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
   
   # A Log-Euclidean dti estimator
@@ -285,15 +281,15 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   # A Tensors to DWI converter
   ADD_EXECUTABLE(itkWarpTensorImage itkWarpTensorImage.cxx)
   TARGET_LINK_LIBRARIES(itkWarpTensorImage
+  ${MIPS_LIBRARIES}
   ITKTensor
   ITKCommon
-  # InrimageNG
   ITKIO
   vtkIO
   )
@@ -305,7 +301,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   # A tensor z-score calculator 
@@ -314,7 +310,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 		
   # A tensor statistics calculator 
@@ -323,11 +319,13 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   # A library to read a vtk tensor file
-  ADD_LIBRARY(VTKTensorImageIO STATIC itkVTKStructuredPointsTensorImageIO.cxx)
+  ADD_LIBRARY(VTKTensorImageIO ${TTK_TENSOR_BUILD_TYPE}
+   itkVTKStructuredPointsTensorImageIO.cxx
+   )
   TARGET_LINK_LIBRARIES(VTKTensorImageIO
   ITKCommon  
   vtkIO
@@ -340,15 +338,15 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   # A RBF Tensor Interpolator
   ADD_EXECUTABLE(itkRBFTensorInterpolation itkRBFTensorInterpolation.cxx)
 		
   TARGET_LINK_LIBRARIES(itkRBFTensorInterpolation
+  ${MIPS_LIBRARIES}
   ITKCommon
-  # InrimageNG
   ITKIO
   vtkIO
   vtkCommon
@@ -359,7 +357,6 @@ if( ITK_FOUND AND VTK_FOUND )
 		
   TARGET_LINK_LIBRARIES(itkRBFRotationMatrixInterpolation
   ITKCommon
-  # InrimageNG
   ITKIO
   vtkIO
   vtkCommon
@@ -367,8 +364,8 @@ if( ITK_FOUND AND VTK_FOUND )
 
   ADD_EXECUTABLE(itkNormalizedGaussianTensorInterpolation itkNormalizedGaussianTensorInterpolation.cxx)
   TARGET_LINK_LIBRARIES(itkNormalizedGaussianTensorInterpolation
+  ${MIPS_LIBRARIES}
   ITKCommon
-  # InrimageNG
   ITKIO
   vtkIO
   vtkCommon
@@ -380,8 +377,8 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKTensor
   vtkIO
   vtkCommon
+  ${MIPS_LIBRARIES}
   ${ITK_LIBRARIES}
-  # InrimageNG
   )
 
   ADD_EXECUTABLE(VTK2Fib VTK2Fib.cxx)
@@ -390,6 +387,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKTensor
   vtkIO
   vtkCommon
+  ${MIPS_LIBRARIES}
   ${ITK_LIBRARIES}
   )
 
@@ -399,7 +397,6 @@ if( ITK_FOUND AND VTK_FOUND )
   vtkIO
   vtkCommon
   vtkRendering
-  # LinearAlgebra
   ${ITK_LIBRARIES}
   )
 
@@ -410,7 +407,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   # A Nrrd file format converter
@@ -419,7 +416,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   # A program to resample tensors
@@ -430,7 +427,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   # A 2nd program to resample tensors
@@ -441,7 +438,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   # A tensor to scalar function calculator
@@ -451,7 +448,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKCommon
   ITKIO
   vtkIO
-  # InrimageNG
+  ${MIPS_LIBRARIES}
   )
 
   # A Tensors to DWI converter
@@ -459,27 +456,29 @@ if( ITK_FOUND AND VTK_FOUND )
 
   TARGET_LINK_LIBRARIES(itkTensorsToDWI
   ITKCommon
-  # InrimageNG
   ITKIO
+  ${MIPS_LIBRARIES}
   vtkIO
   )
 
   ADD_EXECUTABLE(itkGenerateSyntheticTensorField generateSyntheticTensorField.cxx)
 
   TARGET_LINK_LIBRARIES(itkGenerateSyntheticTensorField
-  ITKTensor
-  ${ITK_LIBRARIES}
   vtkIO
+  ITKTensor
+  ${ITK_LIBRARIES}  
+  ${MIPS_LIBRARIES}
   )
 
 
 if (TTK_USE_MIPS)
+
  # An Inria to VTK tensor file format converter 
   ADD_EXECUTABLE(inr2vtk mipsInrimageToVTK.cxx)
   TARGET_LINK_LIBRARIES(inr2vtk
     ITKCommon
     vtkIO
-    InrimageNG
+    ${MIPS_LIBRARIES}
   )
 
   # A VTK tensor file format to Inria converter 
@@ -487,8 +486,9 @@ if (TTK_USE_MIPS)
   TARGET_LINK_LIBRARIES(vtk2inr
     ITKCommon
     vtkIO
-    InrimageNG
+    ${MIPS_LIBRARIES}
   )
+
 endif (TTK_USE_MIPS)
 
 
@@ -510,7 +510,7 @@ endif (TTK_USE_MIPS)
 #   itkGradientMagnitudeTensorImageFilter.cxx
 #   )
 #   TARGET_LINK_LIBRARIES(itkGradientMagnitudeTensorImageFilter
-#   InrimageNG
+#   ${MIPS_LIBRARIES}
 #   ITKCommon
 #   ITKIO
 #   )
@@ -521,7 +521,7 @@ endif (TTK_USE_MIPS)
 #   )
 #   TARGET_LINK_LIBRARIES(itkMultiscaleGaussianDerivativeTensorImageFilter
 #   ITKCommon
-#   InrimageNG
+#   ${MIPS_LIBRARIES}
 #   ITKIO
 #   )
 

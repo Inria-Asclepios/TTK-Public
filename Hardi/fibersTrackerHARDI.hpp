@@ -71,7 +71,8 @@ namespace AnatConnectivity {
     //typedef std::vector<DiffusionStudy::GradientType> GradientListType;
     typedef std::vector<GradientType> GradientListType;
     
-    typedef itk::VectorImage<ScalarType, 3>    ODFImageType;
+    //typedef itk::VectorImage<ScalarType, 3>    ODFImageType;
+    typedef itk::VectorImage<float, 3>         ODFImageType;
     typedef typename ODFImageType::PixelType   ODFType;
 
     typedef itk::ImageRegionConstIteratorWithIndex<ODFImageType> ODFIteratorType;

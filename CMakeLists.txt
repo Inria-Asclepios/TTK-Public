@@ -37,23 +37,22 @@ if (TTK_USE_MKL AND TTK_USE_ACML)
   message(FATAL_ERROR "Both TTK_USE_MKL and TTK_USE_ACML are set to ON, only one can be used at the same time")
 endif (TTK_USE_MKL AND TTK_USE_ACML)
 
-set(LAPACK_LIBRARIES
+set(TTK_LAPACK_LIBRARIES
 )
 
 if (TTK_USE_MKL)
   find_package(MKL REQUIRED)  
-  set(LAPACK_LIBRARIES
+  set(TTK_LAPACK_LIBRARIES
   ${MKL_LIBRARIES}
   )
 endif(TTK_USE_MKL)
 
 if (TTK_USE_ACML)
   find_package(ACML REQUIRED)
-  set(LAPACK_LIBRARIES
+  set(TTK_LAPACK_LIBRARIES
   ${ACML_LIBRARY}
   )
 endif(TTK_USE_ACML)
-
 
 
 ### Use Mips? ###
@@ -112,7 +111,7 @@ if( ITK_FOUND AND VTK_FOUND )
   )
   TARGET_LINK_LIBRARIES(ITKTensor
   ITKCommon
-  ${LAPACK_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 	
 

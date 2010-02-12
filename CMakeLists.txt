@@ -143,6 +143,7 @@ if( ITK_FOUND AND VTK_FOUND )
   )
   TARGET_LINK_LIBRARIES(ITKTensor
   ITKCommon
+  ${TTK_LAPACK_LIBRARIES}
   )
 	
 
@@ -340,6 +341,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKIO
   vtkIO
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   # A tensor z-score calculator 
@@ -434,6 +436,7 @@ if( ITK_FOUND AND VTK_FOUND )
   vtkCommon
   ${MIPS_LIBRARIES}
   ${ITK_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
   ADD_EXECUTABLE(itkWarpFiberBundle itkWarpFiberBundle.cxx)
@@ -517,6 +520,7 @@ if( ITK_FOUND AND VTK_FOUND )
   ITKTensor
   ${ITK_LIBRARIES}  
   ${MIPS_LIBRARIES}
+  ${TTK_LAPACK_LIBRARIES}
   )
 
 

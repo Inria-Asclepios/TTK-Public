@@ -106,6 +106,12 @@ if( ITK_FOUND AND VTK_FOUND )
     endif (ITK_BUILD_SHARED)
   endif (NOT WIN32)
 
+
+  # set TTK_DIR so it can be used by subprojects
+  SET(TTK_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "TTK_DIR variable to be used by subprojects")
+
+
+
   add_library(ITKTensor ${TTK_TENSOR_BUILD_TYPE}
   itkNumericTraitsTensorPixel2.cxx
   )
@@ -535,11 +541,6 @@ endif (TTK_USE_MIPS)
   )
 
 
-
-
-
-
-SET(TTK_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "TTK_DIR variable if required")
 
 
 

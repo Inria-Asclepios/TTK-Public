@@ -36,6 +36,8 @@ SET(TTK_USE_MIPS       "@TTK_USE_MIPS@")
 
 # Some libraries variables useful to keep.
 SET(ITK_DIR          "@ITK_DIR@")
+find_package(ITK)
+include(${ITK_USE_FILE})
 SET(VTK_DIR          "@VTK_DIR@")
 SET(MIPS_DIR         "@MIPS_DIR@")
 SET(TTK_USE_MIPS     "@TTK_USE_MIPS@")

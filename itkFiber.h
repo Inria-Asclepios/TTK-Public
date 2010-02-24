@@ -1,6 +1,9 @@
 #ifndef _itk_Fibers_h_
 #define _itk_Fibers_h_
 
+#include <itkPoint.h>
+#include <itkVector.h>
+#include <ostream>
 
 namespace itk
 {
@@ -10,7 +13,7 @@ namespace itk
    */
 
   template <  class T , unsigned int NDimension >
-    class ITK_EXPORT Fiber
+    class Fiber
   {
 
   public:

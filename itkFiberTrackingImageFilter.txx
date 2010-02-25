@@ -10,6 +10,8 @@
 #include <itkImageRegionConstIterator.h>
 #include <itkImageRegionConstIteratorWithIndex.h>
 
+#include "itkProgressReporter.h"
+
 namespace itk
 {
   
@@ -90,8 +92,7 @@ namespace itk
   FiberTrackingImageFilter< TInputImage, TOutputImage >
   ::ThreadedGenerateData(const OutputImageRegionType & outputRegion,int threadId)
   {
-
-
+      
     typedef ZeroFluxNeumannBoundaryCondition<TOutputImage>                   BoundaryConditionType;
     typedef ConstNeighborhoodIterator<InputImageType,BoundaryConditionType>  NIType;
     typedef ImageRegionConstIteratorWithIndex<InputImageType>                InputIteratorType;
@@ -99,9 +100,9 @@ namespace itk
     typedef ImageRegionIteratorWithIndex<ImageType>                          ImageIteratorType;
     
 
-    unsigned long numPixels = outputRegion.GetNumberOfPixels() / (unsigned long)( this->GetSampling() );
-    unsigned long step      = numPixels/1000;
-    unsigned long progress  = 0;
+    //unsigned long numPixels = outputRegion.GetNumberOfPixels() / (unsigned long)( this->GetSampling() );
+    //unsigned long step      = numPixels/1000;
+    //unsigned long progress  = 0;
 
         
     InputIteratorType itIn (this->GetInput(),  this->GetInput()->GetLargestPossibleRegion());
@@ -119,21 +120,24 @@ namespace itk
 
     long numFibers = 0;
     long numSeeds = 0;
-    
-    if(threadId==0)
-    {
+
+    ProgressReporter progressReporter (this, threadId, outputRegion.GetNumberOfPixels(), 1000);
+
+    /*
+      if(threadId==0)
+      {
       this->UpdateProgress (0.0);
-    }
-    
+      }
+    */
     
     while(!itOut.IsAtEnd())
     {
-      
+      /*
       if( this->GetAbortGenerateData() )
       {        
         throw itk::ProcessAborted(__FILE__,__LINE__);
       }
-
+      */
       
       IndexType  index = itOut.GetIndex();
       ContinuousIndexType myCIndex;
@@ -207,19 +211,23 @@ namespace itk
       {
         itFiberSeeds.Set ( static_cast<ScalarType>(255.0) );
       }
-      
 
+
+      progressReporter.CompletedPixel();
+
+      
       itOut.Set (Fiber);
       ++itIn;
       ++itOut;
-      ++progress;
+      //++progress;
       ++itFiberSeeds;
 
       if( !m_SeedImage.IsNull() )
       {
         ++itSeed;
       }
-      
+
+      /*
       if( threadId==0 )
       {
         if( step && (progress%step)==0 )
@@ -227,7 +235,7 @@ namespace itk
           this->UpdateProgress ( (double)progress/double(numPixels) );
         }
       }
-
+      */
       
       for( int i=0; i<this->GetSampling()-1; i++ )
       {
@@ -238,9 +246,10 @@ namespace itk
         ++itIn;
         OutputPixelType NullFiber;
         itOut.Set (NullFiber);
-        ++itOut;                
+        ++itOut;
+
+	progressReporter.CompletedPixel();
       }
-      
       
     }
 
@@ -251,11 +260,13 @@ namespace itk
       std::cout << "Total number of non-null fibers: " << numFibers << std::endl;
     }
     */
-    
+
+    /*
     if( threadId==0 )
     {
       this->UpdateProgress (1.0);
     }
+    */
     
   }
 

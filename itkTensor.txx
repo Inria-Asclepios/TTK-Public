@@ -254,7 +254,7 @@ namespace itk
   Tensor<T, NDimension>
   ::GetNorm( void ) const
   {
-    return RealValueType( sqrt( double(this->GetSquaredNorm()) ));
+    return RealValueType( vcl_sqrt( double(this->GetSquaredNorm()) ));
   }
 
 
@@ -321,6 +321,10 @@ namespace itk
   Tensor<T,NDimension>
   ::Log (void) const
   {
+    if (!this->IsFinite())
+    {
+      throw ExceptionObject (__FILE__,__LINE__,"Tensor is not finite");
+    }
     Self result;
 #if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
@@ -351,7 +355,7 @@ namespace itk
         //std::cerr << (*this) << std::endl;        // not thread safe
         throw itk::ExceptionObject (__FILE__,__LINE__,"Error: negative eigenvalue encountered.");
       }
-      ev[i] = log (ev[i]);
+      ev[i] = vcl_log (ev[i]);
     }
 
 
@@ -385,7 +389,7 @@ namespace itk
         //std::cerr << (*this) << std::endl;        // not thread safe
         throw itk::ExceptionObject (__FILE__,__LINE__,"Error: negative eigenvalue encountered.");
       }
-      eig.D[i] = log (eig.D[i]);
+      eig.D[i] = vcl_log (eig.D[i]);
     }
 
     result.SetVnlMatrix ( eig.recompose() );
@@ -402,6 +406,10 @@ namespace itk
   Tensor<T,NDimension>
   ::Exp (void) const
   {
+    if (!this->IsFinite())
+    {
+      throw ExceptionObject (__FILE__,__LINE__,"Tensor is not finite");
+    }
     Self result;
 #if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
@@ -426,7 +434,7 @@ namespace itk
 
     // exponential of the eigenvalues:
     for(unsigned int i=0;i<NDimension;i++)
-      ev[i] = exp (ev[i]);
+      ev[i] = vcl_exp (ev[i]);
 
     // reconstitute the tensor
     for(unsigned int j=0;j<NDimension;j++)
@@ -452,7 +460,7 @@ namespace itk
     typedef vnl_symmetric_eigensystem< T >  SymEigenSystemType;
     SymEigenSystemType eig(this->GetVnlMatrix());
     for(unsigned int i=0;i<NDimension;i++)
-      eig.D[i] = exp (eig.D[i]);
+      eig.D[i] = vcl_exp (eig.D[i]);
     result.SetVnlMatrix ( eig.recompose() );
 
 #endif
@@ -466,7 +474,10 @@ namespace itk
   Tensor<T,NDimension>
   ::Pow (double n) const
   {
-
+    if (!this->IsFinite())
+    {
+      throw ExceptionObject (__FILE__,__LINE__,"Tensor is not finite");
+    }
     Self result;
 #if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
@@ -491,7 +502,7 @@ namespace itk
 
     // power of the eigenvalues:
     for(unsigned int i=0;i<NDimension;i++)
-      ev[i] = pow (ev[i], n);
+      ev[i] = vcl_pow (ev[i], n);
 
     // reconstitute the tensor
     for(unsigned int j=0;j<NDimension;j++)
@@ -517,7 +528,7 @@ namespace itk
     typedef vnl_symmetric_eigensystem< T >  SymEigenSystemType;
     SymEigenSystemType eig (this->GetVnlMatrix());
     for(unsigned int i=0;i<NDimension;i++)
-      eig.D[i] = static_cast<T> (pow (static_cast<double>(eig.D[i]), n));
+      eig.D[i] = static_cast<T> (vcl_pow (static_cast<double>(eig.D[i]), n));
     result.SetVnlMatrix ( eig.recompose() );
 
 #endif
@@ -557,7 +568,10 @@ namespace itk
   Tensor<T,NDimension>
   ::GetEigenvalue (unsigned int n) const
   {
-
+    if (!this->IsFinite())
+    {
+      throw ExceptionObject (__FILE__,__LINE__,"Tensor is not finite");
+    }
     T result;
 #if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
@@ -606,6 +620,10 @@ namespace itk
   Tensor<T,NDimension>
   ::GetEigenvector (unsigned int n) const
   {
+    if (!this->IsFinite())
+    {
+      throw ExceptionObject (__FILE__,__LINE__,"Tensor is not finite");
+    }
     VectorType result;
 #if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
@@ -686,7 +704,10 @@ namespace itk
   Tensor<T,NDimension>
   ::IsPositive () const
   {
-
+    if (!this->IsFinite())
+    {
+      throw ExceptionObject (__FILE__,__LINE__,"Tensor is not finite");
+    }
     bool result = true;
 #if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
@@ -736,7 +757,10 @@ namespace itk
   Tensor<T,NDimension>
   ::IsNegative () const
   {
-
+    if (!this->IsFinite())
+    {
+      throw ExceptionObject (__FILE__,__LINE__,"Tensor is not finite");
+    }
     bool result = true;
 #if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
@@ -854,7 +878,7 @@ namespace itk
       tmp = 1.0;
 
     ValueType fa = static_cast<ValueType>
-      ( sqrt ( 1.5* ( 1.0  - tmp  )) );
+      ( vcl_sqrt ( 1.5* ( 1.0  - tmp  )) );
 
     return fa;
   }
@@ -876,7 +900,7 @@ namespace itk
 
     vnl_matrix<ValueType> TOT = lt*lt*EYE + L*L - lt*static_cast<ValueType>(2.0)*L;
 
-    ValueType ga = static_cast<ValueType>( sqrt ( vnl_trace (TOT) ) );
+    ValueType ga = static_cast<ValueType>( vcl_sqrt ( vnl_trace (TOT) ) );
 
     return ga;
   }
@@ -894,7 +918,7 @@ namespace itk
     ValueType t  = vnl_trace(M);
     ValueType t2 = vnl_trace(M*M);
 
-    ValueType ra = static_cast<ValueType>( sqrt ( t2/t - t/3.0 ) );
+    ValueType ra = static_cast<ValueType>( vcl_sqrt ( t2/t - t/3.0 ) );
 
     return ra;
   }
@@ -927,7 +951,10 @@ namespace itk
   Tensor<T,NDimension>
   ::DifferentialExp (const Self& G) const
   {
-
+    if (!this->IsFinite())
+    {
+      throw ExceptionObject (__FILE__,__LINE__,"Tensor is not finite");
+    }
     Self Result;
 #if defined (TTK_USE_MKL) || defined (TTK_USE_ACML)
     char job = 'V';
@@ -1004,9 +1031,9 @@ namespace itk
     double diff = static_cast<double>( s1-s2 );
     double EPS = 0.00001;
     if( fabs ( diff ) < EPS )
-      s =  exp (s1)*(1 + diff/2.0 + diff*diff/6.0  );
+      s =  vcl_exp (s1)*(1 + diff/2.0 + diff*diff/6.0  );
     else
-      s = ( exp (s1) - exp (s2) )/(s1 - s2);
+      s = ( vcl_exp (s1) - vcl_exp (s2) )/(s1 - s2);
 
     return s;
 
@@ -1019,7 +1046,7 @@ namespace itk
   ::SetNthComponentAsVector ( int c, const ComponentType& v )
   {
 
-    ValueType factor = 1.0/sqrt (2.0);
+    ValueType factor = 1.0/vcl_sqrt (2.0);
     for( unsigned int i=0;i<NDimension;i++)
     {
       if ( c == (int)(i*(i+1)/2 + i) )
@@ -1039,7 +1066,7 @@ namespace itk
   ::GetNthComponentAsVector ( int c ) const
   {
 
-    ValueType factor = sqrt (2.0);
+    ValueType factor = vcl_sqrt (2.0);
     for( unsigned int i=0;i<NDimension;i++)
     {
       if ( c == (int)(i*(i+1)/2 + i) )

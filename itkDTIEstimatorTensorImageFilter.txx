@@ -4,6 +4,7 @@
 
 #include <itkImageRegionIterator.h>
 #include <itkImageRegionConstIterator.h>
+#include <cstdio>
 
 namespace itk
 {
@@ -16,7 +17,7 @@ namespace itk
   
     if( m_GradientList.size()+1 != this->GetNumberOfInputs() ) {
       char message[512];
-      sprintf (message, "Error: The lengths of the gradient list (%d) and number of inputs (%d) does not match.", m_GradientList.size()+1, this->GetNumberOfInputs());
+      sprintf (message, "Error: The lengths of the gradient list (%u) and number of inputs (%u) does not match.",(int)(m_GradientList.size()+1), (int)(this->GetNumberOfInputs()));
       throw itk::ExceptionObject(__FILE__,__LINE__, message);
     }
 

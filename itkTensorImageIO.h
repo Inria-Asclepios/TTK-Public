@@ -44,6 +44,8 @@ namespace itk
     typedef typename TensorImageType::RegionType  RegionType;
     typedef typename TensorImageType::SpacingType SpacingType;
     typedef typename TensorImageType::PointType   PointType;
+    typedef typename TensorImageType::DirectionType DirectionType;
+    
 
 
 	static const unsigned int DegreesOfFreedom = TensorDimension*(TensorDimension+1)/2;

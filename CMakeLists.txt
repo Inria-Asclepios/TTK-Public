@@ -524,6 +524,49 @@ if( ITK_FOUND AND VTK_FOUND )
   )
 
 
+
+  ADD_EXECUTABLE(itkAddGaussianNoiseToTensorDWIs
+    itkAddGaussianNoiseToTensorDWIs.cxx
+  )      
+  TARGET_LINK_LIBRARIES(itkAddGaussianNoiseToTensorDWIs
+    ITKCommon
+    ITKStatistics
+    ITKIO
+    ITKTensor
+    vtkIO
+    ${TTK_MIPS_LIBRARIES}
+    ${TTK_LAPACK_LIBRARIES}
+  )
+  
+  ADD_EXECUTABLE(itkBoostTensorAnisotropy
+    itkBoostTensorAnisotropy.cxx
+  )      
+  TARGET_LINK_LIBRARIES(itkBoostTensorAnisotropy
+    ITKCommon
+    ITKIO
+    ITKTensor
+    vtkIO
+    ${TTK_MIPS_LIBRARIES}
+    ${TTK_LAPACK_LIBRARIES}
+  )
+  
+
+  ADD_EXECUTABLE(itkTensorsToVTKUnstructuredGrid
+    itkTensorsToVTKUnstructuredGrid.cxx
+  )      
+  TARGET_LINK_LIBRARIES(itkTensorsToVTKUnstructuredGrid
+    ITKNumerics
+    ITKCommon
+    ITKIO
+    ITKTensor
+    vtkIO
+    vtkFiltering
+    vtkCommon
+    ${TTK_MIPS_LIBRARIES}
+    ${TTK_LAPACK_LIBRARIES}
+  )
+
+
 if (TTK_USE_MIPS)
 
  # An Inria to VTK tensor file format converter 

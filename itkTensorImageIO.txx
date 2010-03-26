@@ -139,6 +139,22 @@ namespace itk
     m_Output->SetSpacing (spacing);
     m_Output->SetOrigin (origin);
 
+    // we only use the rotational part of the
+    // inrimage transformation matrix, as the translation is in the origin.
+    // note that we take the Transformation matrix instead of the rotation instance
+    // of the inrimage as the rotation instance is in voxel coordinates.
+    // Note also that it SHOULD be a rigid rotation matrix,
+    // in theory its det. should be 1...
+    
+    yav::Matrix4x4<double> matrix = tens->getTransformationMatrix();
+    DirectionType direction;
+    
+    for (unsigned int i=0; i<3; i++)
+      for (unsigned int j=0; j<3; j++)
+	direction[i][j] = matrix[i][j];
+    
+    m_Output->SetDirection(direction);
+
     try
     {
       m_Output->Allocate();      
@@ -214,6 +230,7 @@ namespace itk
     
     if( !reader->IsFileStructuredPoints() )
     {
+      reader->Delete();      
       throw itk::ExceptionObject(__FILE__,__LINE__,"Error: File is not a VTK structured points.");
     }
     
@@ -238,9 +255,10 @@ namespace itk
     
     typename TensorImageType::RegionType region;
     typename TensorImageType::IndexType index = {{0,0,0}};
+    
     region.SetSize(size);
     region.SetIndex(index);
-
+    
     m_Output->SetRegions(region);
     m_Output->SetSpacing(spacing);
     m_Output->SetOrigin(origin);
@@ -252,6 +270,7 @@ namespace itk
     catch(itk::ExceptionObject &e)
     {
       std::cerr << e << std::endl;
+      reader->Delete();
       throw itk::ExceptionObject(__FILE__,__LINE__,"Error during memory allocation");
     }
     
@@ -1171,6 +1190,23 @@ namespace itk
     orig[1] = origin[1];
     orig[2] = origin[2];
     inr->setTranslation(orig);
+
+    
+    // we only use the rotational part of the
+    // inrimage transformation matrix, as the translation is in the origin.
+    // note that we take the Transformation matrix instead of the rotation instance
+    // of the inrimage as the rotation instance is in voxel coordinates.
+    // Note also that it SHOULD be a rigid rotation matrix,
+    // in theory its det. should be 1...
+    
+    DirectionType direction = m_Input->GetDirection();
+    yav::Rotation3D matrix;    
+    
+    for (unsigned int i=0; i<3; i++)
+      for (unsigned int j=0; j<3; j++)
+	matrix[i][j] = direction[i][j];
+    
+    inr->setRotation(matrix);
     
     // Get the buffer
     double* buffer = (double*)inr->getData();

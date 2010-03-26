@@ -91,48 +91,53 @@ int main( int narg, char* arg[])
   TransformType::Pointer transform = TransformType::New();
 
   TransformType::MatrixType       matrix;
-  TransformType::OutputVectorType translation;
+  
+  TransformType::OutputVectorType translation (0.0);
 
   std::ifstream buffer (mat);
   if( buffer.fail() )
   {
     std::cerr << "Error: Cannot open file " << mat << std::endl;
-    exit (-1);
+    matrix.SetIdentity();
   }
-
-  // skip the first 12 floats
-  char junk [512];
-	for( unsigned int i=0; i<12; i++)
-	{
-		buffer >> junk;
-	}
-  
+  else
+  {
+    
+    
+    // skip the first 12 floats
+    char junk [512];
+    for( unsigned int i=0; i<12; i++)
+    {
+      buffer >> junk;
+    }
+    
     for( unsigned int i=0 ;i<3; i++)
     {
       buffer >> matrix (i,0);
       buffer >> matrix (i,1);
       buffer >> matrix (i,2);
     }
-	
-	for( unsigned int i=0; i<3; i++)
-	{
-	  buffer >> translation[i];
-	}
-
-    transform->SetMatrix (matrix);
-    transform->SetTranslation (translation);
-
-	TransformType::Pointer inv_transform = TransformType::New();
-    transform->GetInverse(inv_transform);
-
-	transform = inv_transform;
-
-	std::cout << " Done." << std::endl;
-
-
-	typedef itk::ResampleImageFilter<ImageType, ImageType> FilterType;
-	FilterType::Pointer filter = FilterType::New();
-
+    
+    for( unsigned int i=0; i<3; i++)
+    {
+      buffer >> translation[i];
+    }
+  }
+  
+  transform->SetMatrix (matrix);
+  transform->SetTranslation (translation);
+  
+  TransformType::Pointer inv_transform = TransformType::New();
+  transform->GetInverse(inv_transform);
+  
+  transform = inv_transform;
+  
+  std::cout << " Done." << std::endl;
+  
+  
+  typedef itk::ResampleImageFilter<ImageType, ImageType> FilterType;
+  FilterType::Pointer filter = FilterType::New();
+  
   typedef itk::LinearInterpolateImageFunction<ImageType, ScalarType>  InterpolatorType;
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
   
@@ -140,8 +145,9 @@ int main( int narg, char* arg[])
   filter->SetInput ( reader->GetOutput() );
   filter->SetOutputOrigin( reader2->GetOutput()->GetOrigin() );
   filter->SetOutputSpacing( reader2->GetOutput()->GetSpacing() );
+  filter->SetOutputDirection (reader2->GetOutput()->GetDirection());
   filter->SetSize( reader2->GetOutput()->GetLargestPossibleRegion().GetSize() );
-
+  
   filter->SetTransform( transform );
 
   std::cout << "Resampling...";

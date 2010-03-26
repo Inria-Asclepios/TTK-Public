@@ -92,7 +92,7 @@ int main(int narg, char* arg[])
       reader->Read();
       success = true;
     }
-    catch(itk::ExceptionObject &e)
+    catch(itk::ExceptionObject &)
     {
       std::cerr << "cannot read with TensorIO"<< std::endl;
     }

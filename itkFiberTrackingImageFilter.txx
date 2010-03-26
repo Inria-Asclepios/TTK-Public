@@ -129,9 +129,10 @@ namespace itk
       this->UpdateProgress (0.0);
       }
     */
-    
+
     while(!itOut.IsAtEnd())
     {
+      
       /*
       if( this->GetAbortGenerateData() )
       {        
@@ -170,7 +171,7 @@ namespace itk
         seed = itSeed.Get()>0.0?false:true;
       }
       
-      if( !T.IsZero() && T.GetFA()>=this->GetFAThreshold() && seed)
+      if( T.IsFinite() && !T.IsZero() && T.GetFA()>=this->GetFAThreshold() && seed )
       {
         numSeeds++;
         
@@ -276,7 +277,6 @@ namespace itk
   FiberTrackingImageFilter<TInputImage, TOutputImage>::
   GetFiberInDirection (ContinuousIndexType cindex, VectorType vin, int firstPoint)
   {
-
     OutputPixelType FiberForward;
 
     typename InputImageType::ConstPointer image = this->GetInput();
@@ -294,6 +294,7 @@ namespace itk
     while ( 1 )
     {
       InputPixelType T = this->InterpolateTensorAt ( cindex );
+      
       if( T.IsZero() || T.GetFA()<m_FAThreshold2  )
       {
         break;
@@ -314,7 +315,7 @@ namespace itk
       }
       
     }
-    
+
     return FiberForward;
     
   }
@@ -334,6 +335,10 @@ namespace itk
       if( this->GetUseTriLinearInterpolation() && !T.IsZero() )
       {
         T = T.Exp();
+	if (!T.IsFinite())
+	{
+	  T = static_cast<InputScalarType>(0.0);
+	}
       }      
       return T;      
     }
@@ -353,7 +358,7 @@ namespace itk
   GetOutputDirection (const VectorType& vin, const TensorType& T)
   {
     // does not check if T is null or not
-    
+
     // get the major eigenvector of the tensor
     VectorType v1;
     try
@@ -366,7 +371,7 @@ namespace itk
       throw itk::ExceptionObject (__FILE__,__LINE__,
                                   "Error in FiberTrackingImageFilter::ThreadedGenerateData()");
     }
-    
+
     // in case: reorientate v1 to be in the same direction that vin:
     ScalarType way = v1*vin;
     if( way<0.0 )
@@ -377,17 +382,18 @@ namespace itk
     // Diffusion term
     TensorType TT=T/T.GetEigenvalue (2);
     VectorType vout = TT*vin;
+
     //vout.Normalize();
     // linear coefficient
     double cl = T.GetCl();
-    
+
     // new propagation vector
     vout = v1*cl + ( vin*( 1.0-m_Smoothness ) + vout*m_Smoothness ) * (1.0-cl);
     if ( !vout.GetNorm()==0.0 )
     {
       vout.Normalize();
     }
-    
+
     return vout;
     
   }
@@ -445,7 +451,7 @@ namespace itk
   FiberTrackingImageFilter<TInputImage, TOutputImage>::
   FourthOderRungeKuttaIntegration (const PointType& pos, const VectorType& v, const TensorType& junk)
   {
-    
+
     VectorType k1, k2, k3, k4;
     PointType p;
     TensorType T;
@@ -514,7 +520,7 @@ namespace itk
     }
 
     return pos+(k1+2.0*k2+2.0*k3+k4)/6.0;
-    
+
   }
   
 

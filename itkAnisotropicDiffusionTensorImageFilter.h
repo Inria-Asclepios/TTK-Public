@@ -73,18 +73,27 @@ namespace itk
 
     /** Methods for the Anisotropic function */
     void SetTimeStep (const TimeStepType &t)
-    {m_Function->SetTimeStep (t);}
+    {
+      m_Function->SetTimeStep (t);
+      this->Modified();
+    }
     const TimeStepType & GetTimeStep (void) const
     {return m_Function->GetTimeStep();}
 
     void SetKappa (double k)
-    {m_Function->SetKappa (k);}
-    double GetKappa (void)
-    {return m_Function->GetKappa();}
+    {
+      m_Function->SetKappa (k);
+      this->Modified();
+    }
+    double GetKappa (void) const
+    { return m_Function->GetKappa(); }
 
     void SetLambda (double l)
-    {m_Function->SetLambda (l);}
-    double GetLambda (void)
+    {
+      m_Function->SetLambda (l);
+      this->Modified();
+    }
+    double GetLambda (void) const
     {return m_Function->GetLambda();}    
 
 

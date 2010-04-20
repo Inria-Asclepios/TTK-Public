@@ -61,7 +61,7 @@ namespace itk
     for( dim = 0; dim < ImageDimension; dim++ )
     {
 #if ITK_MAJOR_VERSION>3 || (ITK_MQJOR_VERSION==3 && ITK_MINOR_VERSION>=16)
-baseIndex[dim] = Math::Floor( index[dim] );
+      baseIndex[dim] = Math::Floor( index[dim] );
 #else
       baseIndex[dim] = (long)( index[dim] );
 #endif
@@ -119,19 +119,25 @@ baseIndex[dim] = Math::Floor( index[dim] );
       }
       
       // get neighbor value only if overlap is not zero
-      // Moreover, one do not interpolate with null tensors.
+      // Moreover, one does not interpolate with null tensors.
       if( overlap )
       {
         RealType T = static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) );
         if( !T.IsZero() )
         {
-          value += overlap * static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) );
-          totalOverlap += static_cast<ScalarType>(overlap);
+          value += T * overlap;
+          totalOverlap += overlap;
         }
       }
+
+      if( totalOverlap == 1.0 )
+       {
+	// finished
+	break;
+       }
       
     }
-
+    /*
     if( totalOverlap!=NumericTraits<ScalarType>::Zero )
     {
       if( !value.IsZero() )
@@ -139,8 +145,8 @@ baseIndex[dim] = Math::Floor( index[dim] );
         return static_cast<OutputType>( value )/totalOverlap;
       }
     }
-
-	return ( static_cast<OutputType>( value ) );
+    */
+    return ( static_cast<OutputType>( value ) );
 }
 
 } // end namespace itk

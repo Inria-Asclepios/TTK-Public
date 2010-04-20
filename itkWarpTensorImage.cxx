@@ -42,7 +42,8 @@ itk::Object::GlobalWarningDisplayOff();
   int reostrat = cl.follow(0,2,"-t","-T");
   
 
-  typedef double                                ScalarType;  
+  //typedef double                                ScalarType;
+  typedef float                                 ScalarType;  
   typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
   typedef IOType::TensorImageType               TensorImageType;
   typedef Vector<ScalarType, 3>                 VectorType;
@@ -115,6 +116,7 @@ std::cout << " Done." << std::endl;
    warper->SetOutputOrigin( Deformation->GetOrigin() );
    warper->SetOutputDirection( Deformation->GetDirection() );
    warper->SetDeformationField( Deformation );
+   warper->SetNumberOfThreads (1);
 
    switch (reostrat)
    {
@@ -134,49 +136,49 @@ std::cout << " Done." << std::endl;
       break;
    }
 
-      std::cout << "Warping: " << std::flush;
+   std::cout << "Warping: " << std::flush;
    try
    {
-	warper->Update();
+     warper->Update();
    }
-catch( itk::ExceptionObject &e)
-  {
-	  std::cerr << e;
-	  return -1;
-  }
-std::cout << " Done." << std::endl;
+   catch( itk::ExceptionObject &e)
+   {
+     std::cerr << e;
+     return -1;
+   }
+   std::cout << " Done." << std::endl;
+   
+   
+   std::cout << "Exping..." << std::endl;
+   ExpFilterType::Pointer exper = ExpFilterType::New();
+   exper->SetInput ( warper->GetOutput() );
+   try
+   {
+     exper->Update();
+   }
+   catch( itk::ExceptionObject &e)
+   {
+     std::cerr << e;
+     return -1;
+   }
+   std::cout << " Done." << std::endl; 
 
- 
- std::cout << "Exping..." << std::endl;
- ExpFilterType::Pointer exper = ExpFilterType::New();
- exper->SetInput ( warper->GetOutput() );
- try
- {
-   exper->Update();
- }
- catch( itk::ExceptionObject &e)
- {
-   std::cerr << e;
-   return -1;
- }
- std::cout << " Done." << std::endl; 
- 
-  
-std::cout << "Writing: " << output << std::flush;
-IOType::Pointer writer = IOType::New();
-writer->SetInput( exper->GetOutput() );
-writer->SetFileName( output );
-
-try
-{
-	writer->Write();
-}
-catch( itk::ExceptionObject &e)
-  {
-	  std::cerr << e;
-	  return -1;
-  }
-std::cout << " Done." << std::endl;
-
-	return 0;
+   
+   std::cout << "Writing: " << output << std::flush;
+   IOType::Pointer writer = IOType::New();
+   writer->SetInput( exper->GetOutput() );
+   writer->SetFileName( output );
+   
+   try
+   {
+     writer->Write();
+   }
+   catch( itk::ExceptionObject &e)
+   {
+     std::cerr << e;
+     return -1;
+   }
+   std::cout << " Done." << std::endl;
+   
+   return 0;
 }

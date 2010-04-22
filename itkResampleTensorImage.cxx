@@ -4,6 +4,9 @@
 #include "itkAffineTensorTransform.h"
 #include "itkTensorLinearInterpolateImageFunction.h"
 #include "itkTensorImageIO.h"
+#include <itkTransformFileReader.h>
+#include <itkTransformFactory.h>
+#include <itkMatrixOffsetTransformBase.h>
 
 #include "GetPot.h"
 
@@ -16,7 +19,8 @@
 void PrintHelp(const char* exec)
 {
   std::cout << "Usage: " << std::endl;
-  std::cout << exec << " <-i input> <-m matrix> <-b 0/1> <-r file> <-t threads> <-o output>" << std::endl;
+  std::cout << exec << " <-i input> <-m matrix> <-r file> <-t threads> <-o output>" << std::endl;
+  //std::cout << exec << " <-i input> <-m matrix> <-b 0/1> <-r file> <-t threads> <-o output>" << std::endl;
   exit(0);
 }
 
@@ -43,7 +47,7 @@ int main(int argc, char* argv[])
   const char* outFile = cl.follow("NoFile",2,"-O","-o");
   const char* mat = cl.follow("NoFile",2,"-m","-M");
   const char* ref = cl.follow("NoFile",2,"-r","-R");
-  const bool bal = cl.follow (false, 2, "-b", "-B");
+  //const bool bal = cl.follow (false, 2, "-b", "-B");
   const bool le = cl.follow (1,2,"-l","-L");
   const int threads = cl.follow(1,2,"-t","-T");
   
@@ -81,6 +85,8 @@ int main(int argc, char* argv[])
   
   TensorImageType::Pointer tensors = myIO->GetOutput();
 
+
+
   // log:
 
   if( le )
@@ -106,11 +112,14 @@ int main(int argc, char* argv[])
   
 
 
-  
-  typedef itk::AffineTensorTransform< double, 3 >  TransformType;
-  TransformType::Pointer transform = TransformType::New();
+
+  // read the affine matrix
+  std::cout << "Reading: " << mat;
+  typedef itk::AffineTensorTransform< ScalarType, 3 >         TensorTransformType;
+  typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;
 
 
+  /*
   // read the affine matrix
   std::ifstream buffer (mat);
   if( buffer.fail() )
@@ -183,7 +192,37 @@ int main(int argc, char* argv[])
   std::cout << translation << std::endl;
   
   std::cout << transform << std::endl;
+  */
+
+
+  TransformType::Pointer transform = 0;
+  {
+    itk::TransformFactory< TransformType >::RegisterTransform ();
+    
+    typedef itk::TransformFileReader TransformReaderType;
+    TransformReaderType::Pointer reader = TransformReaderType::New();
+    reader->SetFileName ( mat );
+    try
+    {
+      reader->Update();
+    }
+    catch (itk::ExceptionObject &e)
+    {
+      std::cerr << e;
+      return -1;
+    }
+    transform = dynamic_cast<TransformType*>( reader->GetTransformList()->front().GetPointer() );
+  }
   
+  std::cout << " Done." << std::endl;
+
+
+  TensorTransformType::Pointer tensor_transform = TensorTransformType::New();
+  tensor_transform->SetMatrix ( transform->GetMatrix() );
+  tensor_transform->SetTranslation ( transform->GetTranslation() );
+
+  std::cout << tensor_transform << std::endl;
+
 
   FilterType::Pointer filter = FilterType::New();
 
@@ -217,9 +256,11 @@ int main(int argc, char* argv[])
   ImageType::Pointer reference = io2->GetOutput();
   ImageType::SpacingType spacing = reference->GetSpacing();
   ImageType::PointType   origin  = reference->GetOrigin();
+  ImageType::DirectionType  direction  = reference->GetDirection();
   ImageType::SizeType size =   reference->GetLargestPossibleRegion().GetSize();
   filter->SetOutputOrigin( origin );
   filter->SetOutputSpacing( spacing );
+  filter->SetOutputDirection( direction );
   filter->SetSize( size );
 
   /*
@@ -251,9 +292,8 @@ int main(int argc, char* argv[])
   transform->Translate( translation2, false );
   */
 
-  
-  
-  filter->SetTensorTransform( transform );
+    
+  filter->SetTensorTransform( tensor_transform );
 
   try
   {

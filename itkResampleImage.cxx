@@ -10,6 +10,9 @@
 #include <itkLinearInterpolateImageFunction.h>
 #include <itkImage.h>
 #include <itkAffineTransform.h>
+#include <itkTransformFileReader.h>
+#include <itkTransformFactory.h>
+#include <itkMatrixOffsetTransformBase.h>
 
 #ifdef TTK_USE_MIPS
 #include "mipsInrimageImageIOFactory.h"
@@ -87,13 +90,17 @@ int main( int narg, char* arg[])
   
   // read the affine matrix
   std::cout << "Reading: " << mat;
-  typedef itk::AffineTransform< ScalarType, 3 >  TransformType;
-  TransformType::Pointer transform = TransformType::New();
+  typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;
 
+
+  //TransformType::Pointer transform = TransformType::New();
+
+
+  /*
   TransformType::MatrixType       matrix;
-  
   TransformType::OutputVectorType translation (0.0);
 
+  
   std::ifstream buffer (mat);
   if( buffer.fail() )
   {
@@ -131,8 +138,31 @@ int main( int narg, char* arg[])
   transform->GetInverse(inv_transform);
   
   transform = inv_transform;
+  */
+
+
+  TransformType::Pointer transform = 0;
+  {
+    itk::TransformFactory< TransformType >::RegisterTransform ();
+    
+    typedef itk::TransformFileReader TransformReaderType;
+    TransformReaderType::Pointer reader = TransformReaderType::New();
+    reader->SetFileName ( mat );
+    try
+    {
+      reader->Update();
+    }
+    catch (itk::ExceptionObject &e)
+    {
+      std::cerr << e;
+      return -1;
+    }
+    transform = dynamic_cast<TransformType*>( reader->GetTransformList()->front().GetPointer() );
+  }
   
   std::cout << " Done." << std::endl;
+
+  std::cout << transform << std::endl;
   
   
   typedef itk::ResampleImageFilter<ImageType, ImageType> FilterType;

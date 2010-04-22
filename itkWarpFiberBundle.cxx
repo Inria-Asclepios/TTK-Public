@@ -115,28 +115,28 @@ int main (int narg, char* arg[])
     transform = dynamic_cast<LinearTransformType*>( reader->GetTransformList()->front().GetPointer() );
   }
   
-  
 
-  vtkPolyData* new_bundle = vtkPolyData::New();
-  new_bundle->DeepCopy (bundle);
-  
+  vtkPoints* points = bundle->GetPoints();
 
-  //vtkPoints* points = bundle->GetPoints();
-  vtkPoints* new_points = new_bundle->GetPoints();
-  vtkUnsignedCharArray* new_colors = vtkUnsignedCharArray::New();
-  new_colors->SetNumberOfComponents( 4 );
-  new_colors->SetNumberOfTuples(new_points->GetNumberOfPoints());
+  /*
+    vtkPolyData* new_bundle = vtkPolyData::New();
+    new_bundle->DeepCopy (bundle);
+    vtkPoints* new_points = new_bundle->GetPoints();
+    vtkUnsignedCharArray* new_colors = vtkUnsignedCharArray::New();
+    new_colors->SetNumberOfComponents( 4 );
+    new_colors->SetNumberOfTuples(new_points->GetNumberOfPoints());
 
-  vtkUnsignedCharArray* colors = vtkUnsignedCharArray::New();
-  colors->SetNumberOfComponents( 4 );
-  colors->SetNumberOfTuples(new_points->GetNumberOfPoints());
+    vtkUnsignedCharArray* colors = vtkUnsignedCharArray::New();
+    colors->SetNumberOfComponents( 4 );
+    colors->SetNumberOfTuples(new_points->GetNumberOfPoints());
 
-  double n_color[4] = {0,0,255,255};
-  double color[4] = {255,0,0,255};
-  for( int i=0; i<new_points->GetNumberOfPoints(); i++ )
+    double n_color[4] = {0,0,255,255};
+    double color[4] = {255,0,0,255};
+  */
+  for( int i=0; i</*new_*/points->GetNumberOfPoints(); i++ )
   {
     double pt[3];
-    new_points->GetPoint ( i, pt);
+    points->GetPoint ( i, pt);
     
     VectorImageType::PointType pt_i;
     pt_i[0] = pt[0];
@@ -160,43 +160,46 @@ int main (int narg, char* arg[])
     pt[1] = pt_n[1];
     pt[2] = pt_n[2];
     
-    new_points->SetPoint (i, pt);
-    new_colors->SetTuple (i, n_color);
-    colors->SetTuple (i, color);
+    points->SetPoint (i, pt);
+    //new_colors->SetTuple (i, n_color);
+    //colors->SetTuple (i, color);
   }
   
 
-  bundle->GetPointData()->SetScalars (colors);
-  new_bundle->GetPointData()->SetScalars ( new_colors );
+  //bundle->GetPointData()->SetScalars (colors);
+  //new_bundle->GetPointData()->SetScalars ( new_colors );
 
+  /*
   vtkAppendPolyData* appender = vtkAppendPolyData::New();
   appender->AddInput ( bundle );
   appender->AddInput ( new_bundle );
   appender->Update();
-
-
+  */
+  /*
   vtkPolyDataWriter* writer2 = vtkPolyDataWriter::New();
   writer2->SetFileName ( "bundle_fusion.vtk" );
   writer2->SetInput ( appender->GetOutput() );
   writer2->SetFileTypeToBinary();
   writer2->Write();
+  */
 
-
-  bundle->SetPoints (new_points);
+  //bundle->SetPoints (new_points);
   vtkPolyDataWriter* writer = vtkPolyDataWriter::New();
   writer->SetFileName ( file_out );
   writer->SetInput ( bundle );
   writer->SetFileTypeToBinary();
   writer->Write();
   
-
+  /*
   new_bundle->Delete();
   new_colors->Delete();
   colors->Delete();
-  reader->Delete();
-  writer->Delete();
   appender->Delete();
   writer2->Delete();
+  */
+
+  reader->Delete();
+  writer->Delete();
   
   return 0;
 }

@@ -629,7 +629,7 @@ namespace itk
       throw itk::ExceptionObject(__FILE__,__LINE__,message);
     }
     
-    typedef itk::Vector<float, DegreesOfFreedom>                   VectorType;
+    typedef itk::Vector<double, DegreesOfFreedom>     VectorType;
     typedef itk::Image <VectorType, ImageDimension>   VectorImageType;
     
     typedef itk::ImageFileReader<VectorImageType> ReaderType;
@@ -690,7 +690,7 @@ namespace itk
       
       for( unsigned int j=0; j<DegreesOfFreedom; j++)
       {
-        tensor[j] = vec[j];
+        tensor[j] = static_cast<typename TensorType::ValueType>(vec[j]);
       }
       
       itOut.Set (tensor);
@@ -734,7 +734,7 @@ namespace itk
       throw itk::ExceptionObject(__FILE__,__LINE__,message);
     }
     
-    typedef itk::Vector<float, DegreesOfFreedom>                   VectorType;
+    typedef itk::Vector<double, DegreesOfFreedom>     VectorType;
     typedef itk::Image <VectorType, ImageDimension>   VectorImageType;
     
     typedef itk::ImageFileReader<VectorImageType> ReaderType;
@@ -795,7 +795,7 @@ namespace itk
       
       for( unsigned int j=0; j<DegreesOfFreedom; j++)
       {
-        tensor[j] = vec[j];
+        tensor[j] = static_cast<typename TensorType::ValueType>(vec[j]);
       }
       
       itOut.Set (tensor);
@@ -1062,8 +1062,8 @@ namespace itk
   ::WriteNifti (const char* filename)
   {	
     
-    typedef itk::Vector<float, DegreesOfFreedom>       VectorType;
-    typedef itk::Image<VectorType, ImageDimension>     VectorImageType;
+    typedef itk::Vector<double, DegreesOfFreedom>    VectorType;
+    typedef itk::Image<VectorType, ImageDimension>   VectorImageType;
 
     typename VectorImageType::Pointer myTensorImage = VectorImageType::New();
     
@@ -1103,7 +1103,7 @@ namespace itk
 	  
       for( unsigned int i=0; i<DegreesOfFreedom; i++)
       {
-        vec[i] = static_cast<float>(tensor[i]);
+        vec[i] = static_cast<double>(tensor[i]);
       }
       
       itOut.Set (vec);

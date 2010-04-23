@@ -60,7 +60,7 @@ namespace itk
     
     for( dim = 0; dim < ImageDimension; dim++ )
     {
-#if ITK_MAJOR_VERSION>3 || (ITK_MQJOR_VERSION==3 && ITK_MINOR_VERSION>=16)
+#if ITK_VERSION_MAJOR>3 || (ITK_VERSION_MAJOR==3 && ITK_VERSION_MINOR>=16)
       baseIndex[dim] = Math::Floor( index[dim] );
 #else
       baseIndex[dim] = (long)( index[dim] );
@@ -137,7 +137,7 @@ namespace itk
        }
       
     }
-    
+
     if( totalOverlap!=NumericTraits<ScalarType>::Zero )
     {
       if( !value.IsZero() )

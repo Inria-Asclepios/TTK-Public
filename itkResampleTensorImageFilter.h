@@ -140,6 +140,7 @@ namespace itk
     {
       this->SetOutputOrigin ( Image->GetOrigin() );
       this->SetOutputSpacing ( Image->GetSpacing() );
+	  this->SetOutputDirection ( Image->GetDirection() );
       this->SetSize ( Image->GetLargestPossibleRegion().GetSize() );
     }
     

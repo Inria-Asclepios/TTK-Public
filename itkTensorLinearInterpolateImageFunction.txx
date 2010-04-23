@@ -137,7 +137,7 @@ namespace itk
        }
       
     }
-    /*
+    
     if( totalOverlap!=NumericTraits<ScalarType>::Zero )
     {
       if( !value.IsZero() )
@@ -145,7 +145,7 @@ namespace itk
         return static_cast<OutputType>( value )/totalOverlap;
       }
     }
-    */
+    
     return ( static_cast<OutputType>( value ) );
 }
 

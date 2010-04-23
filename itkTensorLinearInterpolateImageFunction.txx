@@ -57,7 +57,7 @@ namespace itk
      */
     signed long baseIndex[ImageDimension];
     double distance[ImageDimension];
-    
+
     for( dim = 0; dim < ImageDimension; dim++ )
     {
 #if ITK_VERSION_MAJOR>3 || (ITK_VERSION_MAJOR==3 && ITK_VERSION_MINOR>=16)
@@ -127,7 +127,7 @@ namespace itk
         {
           value += T * overlap;
           totalOverlap += overlap;
-        }
+        }	  
       }
 
       if( totalOverlap == 1.0 )
@@ -138,14 +138,15 @@ namespace itk
       
     }
 
+    /*    
     if( totalOverlap!=NumericTraits<ScalarType>::Zero )
     {
       if( !value.IsZero() )
       {
         return static_cast<OutputType>( value )/totalOverlap;
       }
-    }
-    
+      }
+    */
     return ( static_cast<OutputType>( value ) );
 }
 

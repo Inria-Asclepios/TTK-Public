@@ -94,6 +94,10 @@ namespace itk
     /**  Method to transform a Tensor. NEW!! */
     virtual OutputTensorType TransformTensor (const InputTensorType &) const
     { return OutputTensorType(); }
+		
+	/**  Method to transform a Tensor. NEW!! */
+	virtual OutputTensorType TransformTensorReverse (const InputTensorType &) const
+	{ return OutputTensorType(); }
     
     /** Set the transformation parameters and update internal transformation.
      * SetParameters gives the transform the option to set it's

@@ -269,7 +269,7 @@ namespace itk
         PixelType pixval;
         OutputType value = m_TensorInterpolator->EvaluateAtContinuousIndex(inputIndex);
 
-        value = m_TensorTransform->TransformTensor (value);
+        value = m_TensorTransform->TransformTensorReverse (value);
         
         pixval = static_cast<PixelType>( value );
     

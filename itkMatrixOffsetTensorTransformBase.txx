@@ -277,13 +277,24 @@ namespace itk
   ::TransformTensor(const InputTensorType &tensor) const 
   {
     // rotate w.r.t the rigid part of the transform
-    //std::cout << m_Rigid << std::endl;
     OutputTensorType TENS;
     TENS.SetVnlMatrix ( tensor.ApplyMatrix ( m_Rigid.GetTranspose() ) );
-    //std::cout << TENS << std::endl;
-    //getchar();
-    return TENS;
-    
+    return TENS;    
+  }
+  
+  
+  // Transform a Tensor
+  template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  typename MatrixOffsetTensorTransformBase<TScalarType,
+                                           NInputDimensions,
+                                           NOutputDimensions>::OutputTensorType
+  MatrixOffsetTensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>
+  ::TransformTensorReverse(const InputTensorType &tensor) const 
+  {
+    // rotate w.r.t the rigid part of the transform
+    OutputTensorType TENS;
+    TENS.SetVnlMatrix ( tensor.ApplyMatrix ( m_Rigid.GetVnlMatrix() ) );
+    return TENS;    
   }
 
   // Transform a Tensor with Finiste Strain (FS) reorientation strategy
@@ -295,13 +306,9 @@ namespace itk
   ::TransformTensorWithFS(const InputTensorType &tensor) const 
   {
     // rotate w.r.t the rigid part of the transform
-    //std::cout << m_Rigid << std::endl;
     OutputTensorType TENS;
     TENS.SetVnlMatrix ( tensor.ApplyMatrix ( m_Rigid.GetTranspose() ) );
-    //std::cout << TENS << std::endl;
-    //getchar();
     return TENS;
-    
   }
 
 

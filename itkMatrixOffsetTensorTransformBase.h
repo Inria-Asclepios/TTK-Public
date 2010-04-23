@@ -186,6 +186,7 @@ namespace itk
     OutputVnlVectorType InverseTransformVector(const InputVnlVectorType & vector) const;   
     OutputCovariantVectorType TransformCovariantVector(const InputCovariantVectorType &vector) const;
     OutputTensorType    TransformTensor (const InputTensorType& tensor) const;
+	OutputTensorType    TransformTensorReverse (const InputTensorType& tensor) const;
     OutputTensorType    TransformTensorWithFS (const InputTensorType& tensor) const;
     OutputTensorType    TransformTensorWithPPD (const InputTensorType& tensor) const;
   

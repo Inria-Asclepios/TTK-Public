@@ -5,7 +5,6 @@ IF(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 ENDIF(COMMAND cmake_policy)
 
-add_subdirectory(IPF)
 
 project(TTK)
 
@@ -52,9 +51,6 @@ SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
 find_package(ITK)
 find_package(VTK)
 find_package(Boost)
-
-find_package(IPF)
-include(${IPF_USE_FILE})
 
 
 ### Use MKL or ACML ###
@@ -117,6 +113,13 @@ set(TTK_REQUIRED_CXX_FLAGS)
 
 
 if( ITK_FOUND AND VTK_FOUND )
+
+
+  add_subdirectory(IPF)
+  find_package(IPF)
+  include(${IPF_USE_FILE})
+
+
 
   include(${ITK_USE_FILE})
   include(${VTK_USE_FILE})

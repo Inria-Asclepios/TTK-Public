@@ -54,6 +54,20 @@ namespace itk
      * ImageFunction::IsInsideBuffer() can be used to check bounds before
      * calling the method. */
     virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
+
+    /**
+       Normalize the interpolation (default: OFF). Normalization is used when the sum of
+       weights in less than one. Without normalization, a Log-Eucldiean interpolation
+       will behave like we were interpolating with a null log-tensor, which is an identity
+       tensor in the real space, which can be problematic.
+       On the contrary, normalization forces the resulting tensor to be of the size of its
+       neighbors, thus always creating new values on the image boundary, which can be also
+       problematic. Depending on the siutation, one would prefer to normalize or not the
+       interpolation.
+     */
+    itkSetMacro (Normalize, int);
+    itkGetMacro (Normalize, int);
+    itkBooleanMacro (Normalize);
     
     protected:
     TensorLinearInterpolateImageFunction();
@@ -65,7 +79,9 @@ namespace itk
     void operator=( const Self& ); //purposely not implemented
     
     /** Number of neighbors used in the interpolation */
-    static const unsigned long  m_Neighbors;  
+    static const unsigned long  m_Neighbors;
+
+    int m_Normalize;
     
     };
   

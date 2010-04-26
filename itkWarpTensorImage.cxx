@@ -7,6 +7,7 @@
 #include "itkWarpTensorImageFilter.h"
 #include "itkLogTensorImageFilter.h"
 #include "itkExpTensorImageFilter.h"
+#include "itkTensorLinearInterpolateImageFunction.h"
 
 #include "ttkConfigure.h"
 
@@ -104,10 +105,15 @@ itk::Object::GlobalWarningDisplayOff();
  
   DeformationFieldType::Pointer Deformation = reader3->GetOutput();
 
-std::cout << " Done." << std::endl;
+  std::cout << " Done." << std::endl;
 
 
-	// warp the result
+  typedef itk::TensorLinearInterpolateImageFunction<TensorImageType, double> InterpolatorType;
+  InterpolatorType::Pointer interpolator = InterpolatorType::New();
+  interpolator->NormalizeOn();
+  
+
+  // warp the result
    typedef itk::WarpTensorImageFilter
       < TensorImageType, TensorImageType, DeformationFieldType >  WarperType;
    WarperType::Pointer warper = WarperType::New();
@@ -116,6 +122,7 @@ std::cout << " Done." << std::endl;
    warper->SetOutputOrigin( Deformation->GetOrigin() );
    warper->SetOutputDirection( Deformation->GetDirection() );
    warper->SetDeformationField( Deformation );
+   warper->SetInterpolator ( interpolator );
    warper->SetNumberOfThreads (1);
 
    switch (reostrat)

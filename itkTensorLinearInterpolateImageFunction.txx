@@ -24,7 +24,7 @@ namespace itk
   TensorLinearInterpolateImageFunction< TInputImage, TCoordRep >
   ::TensorLinearInterpolateImageFunction()
   {
-    
+    m_Normalize = 0;
   }
   
   
@@ -138,15 +138,18 @@ namespace itk
       
     }
 
-    /*    
+
+    if (m_Normalize)
+    {
     if( totalOverlap!=NumericTraits<ScalarType>::Zero )
     {
       if( !value.IsZero() )
       {
         return static_cast<OutputType>( value )/totalOverlap;
       }
-      }
-    */
+    }
+    }
+    
     return ( static_cast<OutputType>( value ) );
 }
 

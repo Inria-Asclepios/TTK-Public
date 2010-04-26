@@ -50,6 +50,9 @@ ${IPF_INCLUDE_DIRS_SOURCE_TREE}
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
+# set IPF_DIR so it can be used by subprojects
+SET(IPF_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "IPF_DIR variable to be used by subprojects")
+
 set(LIBRARY_STYLE)
 if (ITK_BUILD_SHARED)
   set (LIBRARY_STYLE "SHARED")

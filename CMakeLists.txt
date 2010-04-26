@@ -5,6 +5,7 @@ IF(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 ENDIF(COMMAND cmake_policy)
 
+add_subdirectory(IPF)
 
 project(TTK)
 
@@ -52,6 +53,8 @@ find_package(ITK)
 find_package(VTK)
 find_package(Boost)
 
+find_package(IPF)
+include(${IPF_USE_FILE})
 
 
 ### Use MKL or ACML ###
@@ -59,9 +62,11 @@ find_package(Boost)
 option(TTK_USE_MKL  OFF "Use MKL to solve eigensystems")
 option(TTK_USE_ACML OFF "Use ACML to solve eigensystems")
 
+
 if (TTK_USE_MKL AND TTK_USE_ACML)
   message(FATAL_ERROR "Both TTK_USE_MKL and TTK_USE_ACML are set to ON, only one can be used at the same time")
 endif (TTK_USE_MKL AND TTK_USE_ACML)
+
 
 set(TTK_LAPACK_LIBRARIES
 )
@@ -116,6 +121,8 @@ if( ITK_FOUND AND VTK_FOUND )
   include(${ITK_USE_FILE})
   include(${VTK_USE_FILE})
 
+
+
   include(${TTK_SOURCE_DIR}/ttkIncludeDirectories.cmake)
   include_directories(
     ${TTK_INCLUDE_DIRS_BUILD_TREE}
@@ -158,6 +165,41 @@ if( ITK_FOUND AND VTK_FOUND )
   )
 
 
+
+  set(TTK_COMMAND_SRCS
+    itkWarpTensorImageCommand.cxx
+    itkWarpTensorImageCommandFactory.cxx
+    itkNPTRemoverCommand.cxx
+    itkNPTRemoverCommandFactory.cxx
+  )
+
+
+  add_library(ttkCommands ${LIBRARY_STYLE}
+    ${TTK_COMMAND_SRCS}
+  )
+
+  target_link_libraries(ttkCommands
+    ${TTK_MIPS_LIBRARIES}
+    ITKTensor
+    ITKCommon
+    ITKIO
+    vtkIO
+    ${TTK_LAPACK_LIBRARIES}
+  )
+
+  add_executable(ttk
+    ttk.cxx
+  )
+
+  target_link_libraries(ttk
+    ttkCommands
+    ITKProgramFactory
+    ${ITK_LIBRARIES}
+  )
+  
+
+
+
   # A simple program to average several images
   add_executable(itkAverageStdImageFilter itkAverageStdImageFilter.cxx)
   
@@ -191,7 +233,7 @@ if( ITK_FOUND AND VTK_FOUND )
   add_executable(itkDTIEstimator itkDTIEstimator.cxx)
 
   # This program removes NPT (Non-Positive Tensors)
-  add_executable(itkRemoveNPT itkRemoveNPT.cxx)
+  # add_executable(itkRemoveNPT itkRemoveNPT.cxx)
 
   # This program Flips tensors around an axis
   add_executable(itkFlipTensors itkFlipTensors.cxx)
@@ -270,13 +312,13 @@ if( ITK_FOUND AND VTK_FOUND )
   ${TTK_LAPACK_LIBRARIES}
   )
 
-  TARGET_LINK_LIBRARIES(itkRemoveNPT
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_MIPS_LIBRARIES}
-  ${TTK_LAPACK_LIBRARIES}
-  )
+#  TARGET_LINK_LIBRARIES(itkRemoveNPT
+#  ITKCommon
+#  ITKIO
+#  vtkIO
+#  ${TTK_MIPS_LIBRARIES}
+#  ${TTK_LAPACK_LIBRARIES}
+#  )
 
   TARGET_LINK_LIBRARIES(itkFlipTensors
   ITKCommon
@@ -323,15 +365,15 @@ if( ITK_FOUND AND VTK_FOUND )
   )
 
   # A Tensors to DWI converter
-  ADD_EXECUTABLE(itkWarpTensorImage itkWarpTensorImage.cxx)
-  TARGET_LINK_LIBRARIES(itkWarpTensorImage
-  ${TTK_MIPS_LIBRARIES}
-  ITKTensor
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_LAPACK_LIBRARIES}
-  )
+  # ADD_EXECUTABLE(itkWarpTensorImage itkWarpTensorImage.cxx)
+  # TARGET_LINK_LIBRARIES(itkWarpTensorImage
+  # ${TTK_MIPS_LIBRARIES}
+  # ITKTensor
+  # ITKCommon
+  # ITKIO
+  # vtkIO
+  # ${TTK_LAPACK_LIBRARIES}
+ #  )
 
   # A Tensor Gaussian smoother
   ADD_EXECUTABLE(itkGaussianTensorImageFilter itkGaussianTensorImageFilter.cxx)
@@ -630,7 +672,6 @@ endif (TTK_USE_MIPS)
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include
     COMPONENT Development
   )
-
 
 
 

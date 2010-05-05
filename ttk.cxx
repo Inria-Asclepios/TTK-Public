@@ -17,8 +17,12 @@ int main (int narg, char *args[])
   
   
   if (narg<2) {
-    std::cout << "TTK - The Tensor ToolKit\n";
+	  std::cout << "\n";
+    std::cout << "TTK - The Tensor ToolKit - Copyright 2010 - INRIA, France\n";
+	std::cout << "\n";
+	  std::cout << "Author: Pierre Fillard (Pierre.Fillard@inria.fr)\n";
     std::cout << "\n";
+	  std::cout << "\n";
     std::cout << "Available commands:\n";
     std::cout << "\n";
     itk::CommandObjectFactory::PrintHelp( std::cout, 0 );

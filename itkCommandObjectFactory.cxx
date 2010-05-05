@@ -64,7 +64,7 @@ void CommandObjectFactory::PrintHelp(std::ostream &os, Indent indent)
     CommandObjectBase* command = dynamic_cast<CommandObjectBase*>(i->GetPointer());
     if(command)
     {
-      os << indent << command->GetCommandName() << ":\t";
+      os << indent << "\t " << command->GetCommandName() << "...";
       os << indent << command->GetShortDescription() << "\n";
 			os << "\n";
     }

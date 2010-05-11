@@ -174,6 +174,8 @@ if( ITK_FOUND AND VTK_FOUND )
     itkWarpTensorImageCommandFactory.cxx
     itkNPTRemoverCommand.cxx
     itkNPTRemoverCommandFactory.cxx
+    itkTensorFlipCommand.cxx
+    itkTensorFlipCommandFactory.cxx
   )
 
 
@@ -239,7 +241,7 @@ if( ITK_FOUND AND VTK_FOUND )
   # add_executable(itkRemoveNPT itkRemoveNPT.cxx)
 
   # This program Flips tensors around an axis
-  add_executable(itkFlipTensors itkFlipTensors.cxx)
+  # add_executable(itkFlipTensors itkFlipTensors.cxx)
 
   add_executable(itkAddNoiseToTensors itkAddNoiseToTensors.cxx)
 
@@ -323,12 +325,12 @@ if( ITK_FOUND AND VTK_FOUND )
 #  ${TTK_LAPACK_LIBRARIES}
 #  )
 
-  TARGET_LINK_LIBRARIES(itkFlipTensors
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_MIPS_LIBRARIES}
-  )
+#  TARGET_LINK_LIBRARIES(itkFlipTensors
+#  ITKCommon
+#  ITKIO
+#  vtkIO
+#  ${TTK_MIPS_LIBRARIES}
+#  )
 
   TARGET_LINK_LIBRARIES(itkAddNoiseToTensors
   ITKCommon

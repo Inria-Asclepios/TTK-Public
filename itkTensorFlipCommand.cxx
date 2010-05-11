@@ -1,3 +1,5 @@
+#include "itkTensorFlipCommand.h"
+
 #include "itkFlipTensorImageFilter.h"
 
 #include "itkTensorImageIO.h"
@@ -7,24 +9,28 @@
 #include <itkImageFileReader.h>
 #include <itkImage.h>
 
-void PrintHelp(const char* exec)
-{
+namespace itk {
 
-  std::cout << exec << ": " << std::endl;
-  std::cout << "-i [tensor field]" << std::endl;
-  std::cout << "-a [axis to flip]" << std::endl;
-  std::cout << "-o [Output file]" << std::endl;
-  exit(0);
+	TensorFlipCommand::TensorFlipCommand()
+	{
+	    m_ShortDescription = "Flip tensors w.r.t. x, y or z axis";
+		m_LongDescription = "Usage: flip\n";
+		m_LongDescription += "<-i input> <-a 0/1/2: axis (X: 0, Y: 1, Z: 2)> <-o output>\n\n";
+		m_LongDescription += m_ShortDescription;		
+	}
+	
+	TensorFlipCommand::~TensorFlipCommand()
+	{}
+	
+	int TensorFlipCommand::Execute(int narg, const char *arg[])
+	{
 
-}
-
-
-int main(int narg, char *arg[])
-{
-
-  GetPot   cl(narg, arg); // argument parser
+  GetPot   cl(narg, const_cast<char**>(arg) ); // argument parser
   if( cl.size() == 1 || cl.search(2, "--help", "-h") )
-    PrintHelp(cl[0]);
+  {
+	  std::cout << this->GetLongDescription() << std::endl;
+      return -1;
+  }		
   
   const bool IsInputPresent    = cl.search(2,"-i","-I");
   const bool IsOutputPresent   = cl.search(2,"-o","-O");
@@ -74,7 +80,7 @@ int main(int narg, char *arg[])
   catch(itk::ExceptionObject &e)
   {
     std::cerr << e;
-    exit(-1);
+    return -1;
   }
   std::cout << "Done." << std::endl;
   
@@ -90,10 +96,12 @@ int main(int narg, char *arg[])
   catch(itk::ExceptionObject &e)
     {
       std::cerr << e;
-      exit(-1);
+      return -1;
     }
   std::cout << "Done." << std::endl;
   
   return 0;
+
+}
 
 }

@@ -1,5 +1,6 @@
 #include "itkWarpTensorImageCommandFactory.h"
 #include "itkNPTRemoverCommandFactory.h"
+#include "itkTensorFlipCommandFactory.h"
 
 #include "itkCommandObjectFactory.h"
 
@@ -14,6 +15,7 @@ int main (int narg, char *args[])
 
   itk::WarpTensorImageCommandFactory::RegisterOneFactory();
   itk::NPTRemoverCommandFactory::RegisterOneFactory();
+  itk::TensorFlipCommandFactory::RegisterOneFactory();
   
   
   if (narg<2) {

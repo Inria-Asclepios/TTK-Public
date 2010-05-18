@@ -19,6 +19,8 @@
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
+#include <string.h>
+
 namespace itk
 {
 

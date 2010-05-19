@@ -87,7 +87,9 @@ endif(TTK_USE_ACML)
 set(TTK_MIPS_LIBRARIES
 )
 
-option(TTK_USE_MIPS OFF "Use MIPS and make TTK compatible with inrimage file format (discouraged)")
+option(TTK_USE_MIPS OFF "Use MIPS and make TTK compatible with inrimage file format
+(discouraged)")
+option(TTK_USE_HARDI OFF "Compile the Hardi extension of the TTK")
 
 if(TTK_USE_MIPS)
   find_package(MIPS REQUIRED)
@@ -156,11 +158,11 @@ if( ITK_FOUND AND VTK_FOUND )
   ${TTK_LAPACK_LIBRARIES}
   )
 	
-
+if(TTK_USE_HARDI)
   if( Boost_FOUND )
     add_subdirectory(Hardi)
   endif( Boost_FOUND )
-
+endif(TTK_USE_HARDI)
 
   INSTALL(TARGETS ITKTensor 
   DESTINATION ${CMAKE_INSTALL_PREFIX}/lib

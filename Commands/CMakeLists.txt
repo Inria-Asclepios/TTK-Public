@@ -44,9 +44,9 @@
 
   target_link_libraries(ttkCommands
     ${TTK_MIPS_LIBRARIES}
+    ITKProgramFactory
     ITKTensor
-    ITKCommon
-    ITKIO
+    ${ITK_LIBRARIES}
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
   )

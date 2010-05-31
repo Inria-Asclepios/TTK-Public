@@ -1,5 +1,5 @@
 if(TTK_USE_HARDI)
-  find_package(Boost)
+  find_package(Boost REQUIRED)
   include_directories (${Boost_INCLUDE_DIR})
   if( Boost_FOUND )
     add_subdirectory(Hardi)

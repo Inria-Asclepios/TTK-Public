@@ -173,6 +173,7 @@ if( ITK_FOUND AND VTK_FOUND )
 
 
   add_subdirectory(Common)
+  add_subdirectory(Algorithms)
   add_subdirectory(Commands)
   
 

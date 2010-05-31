@@ -33,8 +33,8 @@ ${TTK_INCLUDE_DIRS_BUILD_TREE}
 ${TTK_SOURCE_DIR}
 ${TTK_SOURCE_DIR}/Common
 ${TTK_SOURCE_DIR}/Algorithms
+${TTK_SOURCE_DIR}/Algorithms/Hardi
 ${TTK_SOURCE_DIR}/Commands
-${TTK_SOURCE_DIR}/Hardi
 )
 
 

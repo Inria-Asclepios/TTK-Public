@@ -4,5 +4,11 @@
 #cmakedefine TTK_USE_MIPS
 #cmakedefine TTK_USE_MKL
 #cmakedefine TTK_USE_ACML
+#cmakedefine TTK_USE_HARDI
+
+#define TTK_VERSION_MAJOR @TTK_VERSION_MAJOR@
+#define TTK_VERSION_MINOR @TTK_VERSION_MINOR@
+#define TTK_VERSION_BUILD @TTK_VERSION_BUILD@
+#define TTK_VERSION "@TTK_VERSION@"
 
 #endif

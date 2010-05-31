@@ -14,6 +14,8 @@
 #include "itkHessianTensorImageCalculatorCommandFactory.h"
 #include "itkResampleTensorImageCommandFactory.h"
 #include "itkResampleTensorImage2CommandFactory.h"
+#include "itkTensorToScalarCommandFactory.h"
+#include "itkTensorsToDWICommandFactory.h"
 
 #include "itkCommandObjectFactory.h"
 
@@ -42,6 +44,8 @@ int main (int narg, char *args[])
   itk::HessianTensorImageCalculatorCommandFactory::RegisterOneFactory();
   itk::ResampleTensorImageCommandFactory::RegisterOneFactory();
   itk::ResampleTensorImage2CommandFactory::RegisterOneFactory();
+  itk::TensorToScalarCommandFactory::RegisterOneFactory();
+  itk::TensorsToDWICommandFactory::RegisterOneFactory();
   
   
   if (narg<2) {

@@ -31,6 +31,10 @@
     itkResampleTensorImageCommandFactory.cxx
     itkResampleTensorImage2Command.cxx
     itkResampleTensorImage2CommandFactory.cxx
+    itkTensorToScalarCommand.cxx
+    itkTensorToScalarCommandFactory.cxx
+    itkTensorsToDWICommand.cxx
+    itkTensorsToDWICommandFactory.cxx
   )
 
 
@@ -61,12 +65,6 @@
   # ADD_LIBRARY(VTKTensorImageIO ${TTK_TENSOR_BUILD_TYPE}
   # itkVTKStructuredPointsTensorImageIO.cxx
   # )
- 
-  # A tensor to scalar function calculator
-  ADD_EXECUTABLE(itkTensorToScalar itkTensorToScalar.cxx)
-
-  # A Tensors to DWI converter
-  ADD_EXECUTABLE(itkTensorsToDWI itkTensorsToDWI.cxx)
 
   ADD_EXECUTABLE(itkGenerateSyntheticTensorField generateSyntheticTensorField.cxx)
 
@@ -102,6 +100,8 @@
   add_executable(itkStanleyToITK itkStanleyVectorFieldToITKVectorField.cxx)
 
 
+
+
   # ttk utils
 
   # A B0 brain mask extractor
@@ -111,7 +111,6 @@
 
   # A RBF Rotation Matrix Interpolator
   ADD_EXECUTABLE(itkRBFRotationMatrixInterpolation itkRBFRotationMatrixInterpolation.cxx)
-
 
 
   # A simple program to average several images
@@ -393,21 +392,21 @@
 #  )
 
 
-  TARGET_LINK_LIBRARIES(itkTensorToScalar
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_MIPS_LIBRARIES}
-  ${TTK_LAPACK_LIBRARIES}
-  )
+#  TARGET_LINK_LIBRARIES(itkTensorToScalar
+#  ITKCommon
+#  ITKIO
+#  vtkIO
+#  ${TTK_MIPS_LIBRARIES}
+#  ${TTK_LAPACK_LIBRARIES}
+#  )
 
 
-  TARGET_LINK_LIBRARIES(itkTensorsToDWI
-  ITKCommon
-  ITKIO
-  ${TTK_MIPS_LIBRARIES}
-  vtkIO
-  )
+#  TARGET_LINK_LIBRARIES(itkTensorsToDWI
+#  ITKCommon
+#  ITKIO
+#  ${TTK_MIPS_LIBRARIES}
+#  vtkIO
+#  )
 
   TARGET_LINK_LIBRARIES(itkGenerateSyntheticTensorField
   vtkIO

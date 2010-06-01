@@ -172,6 +172,43 @@
   ITKCommon
   ITKIO
   )
+
+
+  install(TARGETS ttkCommands
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    )
+
+  install(TARGETS ttk
+    BUNDLE DESTINATION bin
+    RUNTIME DESTINATION bin
+    )
+
+
+  install(TARGETS ttkConvertCommands
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    )
+
+  install(TARGETS ttk-convert
+    BUNDLE DESTINATION bin
+    RUNTIME DESTINATION bin
+    )
+
+
+  install(TARGETS ttkUtilCommands
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    )
+
+  install(TARGETS ttk-utils
+    BUNDLE DESTINATION bin
+    RUNTIME DESTINATION bin
+    )
+
  
 
   file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")

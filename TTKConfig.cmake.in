@@ -21,6 +21,7 @@ SET(TTK_REQUIRED_CXX_FLAGS "@TTK_REQUIRED_CXX_FLAGS@")
 # The TTK version number
 SET(TTK_VERSION_MAJOR "@TTK_VERSION_MAJOR@")
 SET(TTK_VERSION_MINOR "@TTK_VERSION_MINOR@")
+SET(TTK_VERSION_BUILD "@TTK_VERSION_BUILD@")
 
 # The location of the UseTTK.cmake file.
 SET(TTK_USE_FILE "@TTK_USE_FILE@")
@@ -32,18 +33,21 @@ SET(TTK_BUILD_SETTINGS_FILE "@TTK_BUILD_SETTINGS_FILE@")
 # SET(TTK_BUILD_SHARED "@BUILD_SHARED_LIBS@")
 
 # TTK Configuration options.
-SET(TTK_USE_MIPS       "@TTK_USE_MIPS@")
-
-# Some libraries variables useful to keep.
-SET(ITK_DIR          "@ITK_DIR@")
-find_package(ITK)
-include(${ITK_USE_FILE})
-SET(VTK_DIR          "@VTK_DIR@")
-SET(MIPS_DIR         "@MIPS_DIR@")
 SET(TTK_USE_MIPS     "@TTK_USE_MIPS@")
 SET(TTK_USE_MKL      "@TTK_USE_MKL@")
 SET(TTK_USE_ACML     "@TTK_USE_ACML@")
+SET(TTK_USE_HARDI    "@TTK_USE_HARDI@")
+
+# Some libraries variables useful to keep.
+SET(ITK_DIR          "@ITK_DIR@")
+# find_package(ITK)
+# include(${ITK_USE_FILE})
+SET(VTK_DIR          "@VTK_DIR@")
+# find_package(VTK)
+# include(${VTK_USE_FILE})
+SET(MIPS_DIR         "@MIPS_DIR@")
 SET(MKL_DIR          "@MKL_DIR@")
 SET(ACML_DIR         "@ACML_DIR@")
 SET(TTK_LAPACK_LIBRARIES "@TTK_LAPACK_LIBRARIES@")
 SET(TTK_MIPS_LIBRARIES   "@TTK_MIPS_LIBRARIES@")
+SET(Boost_INCLUDE_DIR    "@Boost_INCLUDE_DIR@")

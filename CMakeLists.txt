@@ -80,8 +80,8 @@ set(EXECUTABLE_INSTALL_OUTPUT_PATH ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUN
 ## #################################################################
 
 
-find_package(ITK)
-find_package(VTK)
+find_package(ITK REQUIRED)
+find_package(VTK REQUIRED)
 
 
 ## #################################################################
@@ -133,9 +133,15 @@ if(TTK_USE_MIPS)
 endif(TTK_USE_MIPS)
 
 
+# -----------------------------------------------------------------------------
+# Header file used to pass CMake settings to the source code
+# -----------------------------------------------------------------------------
 configure_file(${PROJECT_SOURCE_DIR}/ttkConfigure.h.in
                ${PROJECT_BINARY_DIR}/ttkConfigure.h CONFIGURE IMMEDIATE)
 
+install_files(/include FILES 
+  ${TTK_BINARY_DIR}/ttkConfigure.h
+  )
 
 set(TTK_REQUIRED_C_FLAGS)
 set(TTK_REQUIRED_CXX_FLAGS)
@@ -169,12 +175,6 @@ endif (NOT WIN32)
 SET(TTK_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "TTK_DIR variable to be used by subprojects")
 
 
-add_subdirectory(Common)
-add_subdirectory(Algorithms)
-add_subdirectory(Commands)
-  
-
-
 #-----------------------------------------------------------------------------
 # Help other projects use TTK.
 
@@ -189,9 +189,10 @@ CMAKE_EXPORT_BUILD_SETTINGS(${TTK_BUILD_SETTINGS_FILE})
 # Create the TTKConfig.cmake file containing the TTK configuration.
 INCLUDE (${TTK_SOURCE_DIR}/ttkGenerateTTKConfig.cmake)
 
-INSTALL_FILES(/lib .cmake
- ${TTK_BINARY_DIR}/TTKBuildSettings
- ${TTK_BINARY_DIR}/UseTTK
+INSTALL_FILES(/lib FILES
+ ${TTK_BINARY_DIR}/TTKBuildSettings.cmake
+ ${TTK_BINARY_DIR}/UseTTK.cmake
+ ${TTK_BINARY_DIR}/Utilities/TTKConfig.cmake
 )
 
 
@@ -201,3 +202,10 @@ INSTALL_FILES(/lib .cmake
 # done AFTER the call to CMAKE_EXPORT_BUILD_SETTINGS.
 SET(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   ${TTK_REQUIRED_C_FLAGS}")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TTK_REQUIRED_CXX_FLAGS}")
+
+
+add_subdirectory(Common)
+add_subdirectory(Algorithms)
+add_subdirectory(Commands)
+
+

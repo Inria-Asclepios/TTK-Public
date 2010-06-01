@@ -35,6 +35,20 @@
     itkTensorToScalarCommandFactory.cxx
     itkTensorsToDWICommand.cxx
     itkTensorsToDWICommandFactory.cxx
+    itkSyntheticTensorFieldGeneratorCommand.cxx
+    itkSyntheticTensorFieldGeneratorCommandFactory.cxx
+    itkAddGaussianNoiseToDWICommand.cxx
+    itkAddGaussianNoiseToDWICommandFactory.cxx
+    itkBoostTensorAnisotropyCommand.cxx
+    itkBoostTensorAnisotropyCommandFactory.cxx
+    itkDTIEstimatorWithBFGSCommand.cxx
+    itkDTIEstimatorWithBFGSCommandFactory.cxx
+    itkLogEuclideanDTIEstimatorCommand.cxx
+    itkLogEuclideanDTIEstimatorCommandFactory.cxx
+    itkTensorZScoreCalculatorCommand.cxx
+    itkTensorZScoreCalculatorCommandFactory.cxx
+    itkAverageStdTensorCalculatorCommand.cxx
+    itkAverageStdTensorCalculatorCommandFactory.cxx
   )
 
 
@@ -60,42 +74,45 @@
     ITKProgramFactory
     ${ITK_LIBRARIES}
   )
- 
- # A library to read a vtk tensor file
-  # ADD_LIBRARY(VTKTensorImageIO ${TTK_TENSOR_BUILD_TYPE}
-  # itkVTKStructuredPointsTensorImageIO.cxx
-  # )
-
-  ADD_EXECUTABLE(itkGenerateSyntheticTensorField generateSyntheticTensorField.cxx)
-
-  ADD_EXECUTABLE(itkAddGaussianNoiseToTensorDWIs  itkAddGaussianNoiseToTensorDWIs.cxx)      
-
-  ADD_EXECUTABLE(itkBoostTensorAnisotropy itkBoostTensorAnisotropy.cxx)      
-
-  # A Log-Euclidean BFGS dti estimator
-  ADD_EXECUTABLE(itkDTIEstimatorWithBFGS itkDTIEstimatorWithBFGS.cxx)
-
-  # A Log-Euclidean dti estimator
-  ADD_EXECUTABLE(itkLogEuclideanDTIEstimator itkLogEuclideanDTIEstimator.cxx)
-
-  # A tensor z-score calculator 
-  ADD_EXECUTABLE(itkZScoreTensorImageFilter itkZScoreTensorImageFilter.cxx)
-
-  # A tensor statistics calculator 
-  ADD_EXECUTABLE(itkAverageStdTensorImageFilter itkAverageStdTensorImageFilter.cxx)
-
 
 
 
   # ttk convert
 
-  ADD_EXECUTABLE(itkTensorsToVTKUnstructuredGrid itkTensorsToVTKUnstructuredGrid.cxx)
+  set(TTK-CONVERT_COMMAND_SRCS
+    itkTensorConverterCommand.cxx
+    itkTensorConverterCommandFactory.cxx
+    itkVTKFibersToITKGroupSpatialObjectCommand.cxx
+    itkVTKFibersToITKGroupSpatialObjectCommandFactory.cxx
+    itkTensorsToVTKUnstructuredGridCommand.cxx
+    itkTensorsToVTKUnstructuredGridCommandFactory.cxx
+    itkImageConverterCommand.cxx
+    itkImageConverterCommandFactory.cxx
+  )
 
-  # A Nrrd file format converter
-  ADD_EXECUTABLE(itkNrrdToTensor itkNeerdToTensor.cxx)
+  add_library(ttkConvertCommands ${TTK_BUILD_TYPE}
+    ${TTK-CONVERT_COMMAND_SRCS}
+  )
 
-  ADD_EXECUTABLE(VTK2Fib VTK2Fib.cxx)
+  target_link_libraries(ttkConvertCommands
+    ${TTK_MIPS_LIBRARIES}
+    ITKProgramFactory
+    ITKTensor
+    ${ITK_LIBRARIES}
+    vtkIO
+    ${TTK_LAPACK_LIBRARIES}
+  )
 
+  add_executable(ttk-convert
+    ttk-convert.cxx
+  )
+
+  target_link_libraries(ttk-convert
+    ttkConvertCommands
+    ITKProgramFactory
+    ${ITK_LIBRARIES}
+  )
+ 
   # A vector field converter
   add_executable(itkStanleyToITK itkStanleyVectorFieldToITKVectorField.cxx)
 
@@ -104,8 +121,35 @@
 
   # ttk utils
 
-  # A B0 brain mask extractor
-  add_executable(itkB0BrainMaskExtractor itkB0BrainMaskExtraction.cxx)
+  set(TTK-UTILS_COMMAND_SRCS
+    itkDWIBrainMaskExtractorCommand.cxx
+    itkDWIBrainMaskExtractorCommandFactory.cxx
+  )
+
+  add_library(ttkUtilCommands ${TTK_BUILD_TYPE}
+    ${TTK-UTILS_COMMAND_SRCS}
+  )
+
+  target_link_libraries(ttkUtilCommands
+    ${TTK_MIPS_LIBRARIES}
+    ITKProgramFactory
+    ITKTensor
+    ${ITK_LIBRARIES}
+    vtkIO
+    ${TTK_LAPACK_LIBRARIES}
+  )
+
+  add_executable(ttk-utils
+    ttk-utils.cxx
+  )
+
+  target_link_libraries(ttk-utils
+    ttkUtilCommands
+    ITKProgramFactory
+    ${ITK_LIBRARIES}
+  )
+
+
 
   add_executable(vtkConsolidateFiberBundle vtkConsolidateFiberBundle.cxx)
 
@@ -128,8 +172,6 @@
   # A 4D DWI reader
   add_executable(itkRead4DDWI itkRead4DDWI.cxx)
 
-  # An image file converter
-  add_executable(imconvert gipl2ana.cxx)
 
 
 
@@ -150,10 +192,10 @@
   ${TTK_MIPS_LIBRARIES}
   )
   
-  TARGET_LINK_LIBRARIES(itkB0BrainMaskExtractor
-  ITKCommon
-  ITKIO
-  )
+#  TARGET_LINK_LIBRARIES(itkB0BrainMaskExtractor
+#  ITKCommon
+#  ITKIO
+#  )
 
   TARGET_LINK_LIBRARIES(itkApplyMaskToImage
   ITKTensor
@@ -168,11 +210,11 @@
   ITKIO
   )
   
-  TARGET_LINK_LIBRARIES(imconvert
-  ITKCommon
-  ITKIO
-  ${TTK_MIPS_LIBRARIES}
-  )
+#  TARGET_LINK_LIBRARIES(imconvert
+#  ITKCommon
+#  ITKIO
+#  ${TTK_MIPS_LIBRARIES}
+#  )
 
   TARGET_LINK_LIBRARIES(itkStanleyToITK
   ITKCommon
@@ -182,134 +224,7 @@
   TARGET_LINK_LIBRARIES(vtkConsolidateFiberBundle
   vtkIO
   )
-
-#  TARGET_LINK_LIBRARIES(itkTensorAnisotropicFilter
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-#  TARGET_LINK_LIBRARIES(itkDTIEstimator
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-#  TARGET_LINK_LIBRARIES(itkRemoveNPT
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-#  TARGET_LINK_LIBRARIES(itkFlipTensors
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  )
-
-#  TARGET_LINK_LIBRARIES(itkAddNoiseToTensors
-#  ITKCommon
-#  ITKStatistics
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-#  TARGET_LINK_LIBRARIES(itkNormalizeTensors
-#  ITKCommon
-#  ITKStatistics
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-  TARGET_LINK_LIBRARIES(itkDTIEstimatorWithBFGS
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_MIPS_LIBRARIES}
-  ${TTK_LAPACK_LIBRARIES}
-  )
-  
-
-  TARGET_LINK_LIBRARIES(itkLogEuclideanDTIEstimator
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_MIPS_LIBRARIES}
-  ${TTK_LAPACK_LIBRARIES}
-  )
-
-  # A Tensors to DWI converter
-  # ADD_EXECUTABLE(itkWarpTensorImage itkWarpTensorImage.cxx)
-  # TARGET_LINK_LIBRARIES(itkWarpTensorImage
-  # ${TTK_MIPS_LIBRARIES}
-  # ITKTensor
-  # ITKCommon
-  # ITKIO
-  # vtkIO
-  # ${TTK_LAPACK_LIBRARIES}
- #  )
-
-#  TARGET_LINK_LIBRARIES(itkGaussianTensorImageFilter
-#  ITKTensor
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-  TARGET_LINK_LIBRARIES(itkZScoreTensorImageFilter
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_MIPS_LIBRARIES}
-  ${TTK_LAPACK_LIBRARIES}
-  )
-		
-  TARGET_LINK_LIBRARIES(itkAverageStdTensorImageFilter
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_MIPS_LIBRARIES}
-  ${TTK_LAPACK_LIBRARIES}
-  )
-
-#  TARGET_LINK_LIBRARIES(VTKTensorImageIO
-#  ITKCommon  
-#  vtkIO
-#  vtkCommon
-#  )
-
-#  TARGET_LINK_LIBRARIES(itkSparseTensorsDiffusion
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-		
-#  TARGET_LINK_LIBRARIES(itkRBFTensorInterpolation
-#  ${TTK_MIPS_LIBRARIES}
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  vtkCommon
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-		
+	
   TARGET_LINK_LIBRARIES(itkRBFRotationMatrixInterpolation
   ITKCommon
   ITKIO
@@ -318,17 +233,8 @@
   ${TTK_LAPACK_LIBRARIES}
   )
 
-#  TARGET_LINK_LIBRARIES(itkNormalizedGaussianTensorInterpolation
-#  ${TTK_MIPS_LIBRARIES}
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  vtkCommon
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
 
-
-#  TARGET_LINK_LIBRARIES(itkFiberTracking
+#  TARGET_LINK_LIBRARIES(VTK2Fib
 #  ITKTensor
 #  vtkIO
 #  vtkCommon
@@ -338,117 +244,24 @@
 #  )
 
 
-  TARGET_LINK_LIBRARIES(VTK2Fib
-  ITKTensor
-  vtkIO
-  vtkCommon
-  ${TTK_MIPS_LIBRARIES}
-  ${ITK_LIBRARIES}
-  ${TTK_LAPACK_LIBRARIES}
-  )
-
-
-#  TARGET_LINK_LIBRARIES(itkWarpFiberBundle
-#  vtkIO
-#  vtkCommon
-#  vtkRendering
-#  ${ITK_LIBRARIES}
-#  )
-
-
-#  TARGET_LINK_LIBRARIES(itkHessianTensorImageFilter
+#  TARGET_LINK_LIBRARIES(itkNrrdToTensor
 #  ITKCommon
 #  ITKIO
 #  vtkIO
 #  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
 #  )
 
-  TARGET_LINK_LIBRARIES(itkNrrdToTensor
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_MIPS_LIBRARIES}
-  )
-
-
-#  TARGET_LINK_LIBRARIES(itkResampleTensorImage
-#  ITKTensor
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
+#  TARGET_LINK_LIBRARIES(itkTensorsToVTKUnstructuredGrid
+#    ITKNumerics
+#    ITKCommon
+#    ITKIO
+#    ITKTensor
+#    vtkIO
+#    vtkFiltering
+#    vtkCommon
+#    ${TTK_MIPS_LIBRARIES}
+#    ${TTK_LAPACK_LIBRARIES}
 #  )
-
-
-#  TARGET_LINK_LIBRARIES(itkResampleTensorImage2
-#  ITKTensor
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-
-#  TARGET_LINK_LIBRARIES(itkTensorToScalar
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-
-#  TARGET_LINK_LIBRARIES(itkTensorsToDWI
-#  ITKCommon
-#  ITKIO
-#  ${TTK_MIPS_LIBRARIES}
-#  vtkIO
-#  )
-
-  TARGET_LINK_LIBRARIES(itkGenerateSyntheticTensorField
-  vtkIO
-  ITKTensor
-  ${ITK_LIBRARIES}  
-  ${TTK_MIPS_LIBRARIES}
-  ${TTK_LAPACK_LIBRARIES}
-  )
-
-
-
-  TARGET_LINK_LIBRARIES(itkAddGaussianNoiseToTensorDWIs
-    ITKCommon
-    ITKStatistics
-    ITKIO
-    ITKTensor
-    vtkIO
-    ${TTK_MIPS_LIBRARIES}
-    ${TTK_LAPACK_LIBRARIES}
-  )
-  
-  TARGET_LINK_LIBRARIES(itkBoostTensorAnisotropy
-    ITKCommon
-    ITKIO
-    ITKTensor
-    vtkIO
-    ${TTK_MIPS_LIBRARIES}
-    ${TTK_LAPACK_LIBRARIES}
-  )
-  
-
-  TARGET_LINK_LIBRARIES(itkTensorsToVTKUnstructuredGrid
-    ITKNumerics
-    ITKCommon
-    ITKIO
-    ITKTensor
-    vtkIO
-    vtkFiltering
-    vtkCommon
-    ${TTK_MIPS_LIBRARIES}
-    ${TTK_LAPACK_LIBRARIES}
-  )
 
 
 if (TTK_USE_MIPS)
@@ -504,6 +317,7 @@ endif (TTK_USE_MIPS)
 #   ${TTK_MIPS_LIBRARIES}
 #   ITKIO
 #   )
+
 
 file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
   file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")

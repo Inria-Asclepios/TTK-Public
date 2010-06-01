@@ -16,6 +16,13 @@
 #include "itkResampleTensorImage2CommandFactory.h"
 #include "itkTensorToScalarCommandFactory.h"
 #include "itkTensorsToDWICommandFactory.h"
+#include "itkSyntheticTensorFieldGeneratorCommandFactory.h"
+#include "itkAddGaussianNoiseToDWICommandFactory.h"
+#include "itkBoostTensorAnisotropyCommandFactory.h"
+#include "itkDTIEstimatorWithBFGSCommandFactory.h"
+#include "itkLogEuclideanDTIEstimatorCommandFactory.h"
+#include "itkTensorZScoreCalculatorCommandFactory.h"
+#include "itkAverageStdTensorCalculatorCommandFactory.h"
 
 #include "itkCommandObjectFactory.h"
 
@@ -46,6 +53,13 @@ int main (int narg, char *args[])
   itk::ResampleTensorImage2CommandFactory::RegisterOneFactory();
   itk::TensorToScalarCommandFactory::RegisterOneFactory();
   itk::TensorsToDWICommandFactory::RegisterOneFactory();
+  itk::SyntheticTensorFieldGeneratorCommandFactory::RegisterOneFactory();
+  itk::AddGaussianNoiseToDWICommandFactory::RegisterOneFactory();
+  itk::BoostTensorAnisotropyCommandFactory::RegisterOneFactory();
+  itk::DTIEstimatorWithBFGSCommandFactory::RegisterOneFactory();
+  itk::LogEuclideanDTIEstimatorCommandFactory::RegisterOneFactory();
+  itk::TensorZScoreCalculatorCommandFactory::RegisterOneFactory();
+  itk::AverageStdTensorCalculatorCommandFactory::RegisterOneFactory();
   
   
   if (narg<2) {

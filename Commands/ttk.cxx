@@ -11,6 +11,7 @@
 #include "itkTensorNormalizedGaussianInterpolationCommandFactory.h"
 #include "itkFiberTrackingCommandFactory.h"
 #include "itkWarpFibersCommandFactory.h"
+#include "itkTensorGradientMagnitudeCalculatorCommandFactory.h"
 #include "itkHessianTensorImageCalculatorCommandFactory.h"
 #include "itkResampleTensorImageCommandFactory.h"
 #include "itkResampleTensorImage2CommandFactory.h"
@@ -23,6 +24,7 @@
 #include "itkLogEuclideanDTIEstimatorCommandFactory.h"
 #include "itkTensorZScoreCalculatorCommandFactory.h"
 #include "itkAverageStdTensorCalculatorCommandFactory.h"
+#include "itkNormalize2TensorsCommandFactory.h"
 
 #include "itkCommandObjectFactory.h"
 
@@ -42,12 +44,14 @@ int main (int narg, char *args[])
   itk::AddGaussianNoiseToTensorsCommandFactory::RegisterOneFactory();
   itk::TensorAnisotropicFilteringCommandFactory::RegisterOneFactory();
   itk::NormalizeTensorsCommandFactory::RegisterOneFactory();
+  itk::Normalize2TensorsCommandFactory::RegisterOneFactory();
   itk::TensorGaussianFilteringCommandFactory::RegisterOneFactory();
   itk::SparseTensorsExtrapolationCommandFactory::RegisterOneFactory();
   itk::RBFTensorExtrapolationCommandFactory::RegisterOneFactory();
   itk::TensorNormalizedGaussianInterpolationCommandFactory::RegisterOneFactory();
   itk::FiberTrackingCommandFactory::RegisterOneFactory();
   itk::WarpFibersCommandFactory::RegisterOneFactory();
+  itk::TensorGradientMagnitudeCalculatorCommandFactory::RegisterOneFactory();
   itk::HessianTensorImageCalculatorCommandFactory::RegisterOneFactory();
   itk::ResampleTensorImageCommandFactory::RegisterOneFactory();
   itk::ResampleTensorImage2CommandFactory::RegisterOneFactory();

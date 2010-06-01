@@ -49,6 +49,10 @@
     itkTensorZScoreCalculatorCommandFactory.cxx
     itkAverageStdTensorCalculatorCommand.cxx
     itkAverageStdTensorCalculatorCommandFactory.cxx
+    itkTensorGradientMagnitudeCalculatorCommand.cxx
+    itkTensorGradientMagnitudeCalculatorCommandFactory.cxx
+    itkNormalize2TensorsCommand.cxx
+    itkNormalize2TensorsCommandFactory.cxx
   )
 
 
@@ -115,9 +119,7 @@
     ${ITK_LIBRARIES}
   )
  
-  # A vector field converter
-  add_executable(itkStanleyToITK itkStanleyVectorFieldToITKVectorField.cxx)
-
+ 
 
 
 
@@ -163,47 +165,16 @@
 
 
 
+  # A vector field converter
+  add_executable(itkStanleyToITK itkStanleyVectorFieldToITKVectorField.cxx)
+
   TARGET_LINK_LIBRARIES(itkStanleyToITK
   ITKCommon
   ITKIO
   )
  
 
-# A Tensors to DWI converter
-#   ADD_EXECUTABLE(itkMultiResolutionTensorFilter
-#   itkMultiResolutionTensorFilter.cxx
-#   )
-#   TARGET_LINK_LIBRARIES(itkMultiResolutionTensorFilter
-#   ITKCommon
-#   InrimageNG
-#   ITKIO
-#   )
-
-
-#  IF(VTK_FOUND)
-		
-# A tensor field gradient magnitude calculator
-#   ADD_EXECUTABLE(itkGradientMagnitudeTensorImageFilter
-#   itkGradientMagnitudeTensorImageFilter.cxx
-#   )
-#   TARGET_LINK_LIBRARIES(itkGradientMagnitudeTensorImageFilter
-#   ${TTK_MIPS_LIBRARIES}
-#   ITKCommon
-#   ITKIO
-#   )
-
-# A Tensor derivative Gaussian filter
-#   ADD_EXECUTABLE(itkMultiscaleGaussianDerivativeTensorImageFilter
-#   itkMultiscaleGaussianDerivativeTensorImageFilter.cxx
-#   )
-#   TARGET_LINK_LIBRARIES(itkMultiscaleGaussianDerivativeTensorImageFilter
-#   ITKCommon
-#   ${TTK_MIPS_LIBRARIES}
-#   ITKIO
-#   )
-
-
-file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
   file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
   file(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
   install(FILES ${__files1} ${__files2} ${__files3}

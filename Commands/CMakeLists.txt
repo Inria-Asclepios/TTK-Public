@@ -88,6 +88,8 @@
     itkTensorsToVTKUnstructuredGridCommandFactory.cxx
     itkImageConverterCommand.cxx
     itkImageConverterCommandFactory.cxx
+    itkConsolidateFiberBundleCommand.cxx
+    itkConsolidateFiberBundleCommandFactory.cxx
   )
 
   add_library(ttkConvertCommands ${TTK_BUILD_TYPE}
@@ -124,6 +126,16 @@
   set(TTK-UTILS_COMMAND_SRCS
     itkDWIBrainMaskExtractorCommand.cxx
     itkDWIBrainMaskExtractorCommandFactory.cxx
+    itkApplyMaskToImageCommand.cxx
+    itkApplyMaskToImageCommandFactory.cxx
+    itkResampleImageCommand.cxx
+    itkResampleImageCommandFactory.cxx
+    itkWarpImageCommand.cxx
+    itkWarpImageCommandFactory.cxx
+    itkAverageStdCalculatorCommand.cxx
+    itkAverageStdCalculatorCommandFactory.cxx
+    itkRBFRotationMatrixExtrapolationCommand.cxx
+    itkRBFRotationMatrixExtrapolationCommandFactory.cxx
   )
 
   add_library(ttkUtilCommands ${TTK_BUILD_TYPE}
@@ -151,139 +163,11 @@
 
 
 
-  add_executable(vtkConsolidateFiberBundle vtkConsolidateFiberBundle.cxx)
-
-  # A RBF Rotation Matrix Interpolator
-  ADD_EXECUTABLE(itkRBFRotationMatrixInterpolation itkRBFRotationMatrixInterpolation.cxx)
-
-
-  # A simple program to average several images
-  add_executable(itkAverageStdImageFilter itkAverageStdImageFilter.cxx)
-  
-  # A simple program to warp an image
-  add_executable(itkWarpImage itkWarpImage.cxx)
-
-  # A simple program to resample an image
-  add_executable(itkResampleImage itkResampleImage.cxx)
-
-  # A program to apply a mask to an image
-  add_executable(itkApplyMaskToImage itkApplyMaskToImages.cxx)
-
-  # A 4D DWI reader
-  add_executable(itkRead4DDWI itkRead4DDWI.cxx)
-
-
-
-
-  TARGET_LINK_LIBRARIES(itkAverageStdImageFilter
-  ITKCommon
-  ITKIO
-  )
-
-  TARGET_LINK_LIBRARIES(itkWarpImage
-  ITKCommon
-  ITKIO
-  ${TTK_MIPS_LIBRARIES}
-  )
-  
-  TARGET_LINK_LIBRARIES(itkResampleImage
-  ITKCommon
-  ITKIO
-  ${TTK_MIPS_LIBRARIES}
-  )
-  
-#  TARGET_LINK_LIBRARIES(itkB0BrainMaskExtractor
-#  ITKCommon
-#  ITKIO
-#  )
-
-  TARGET_LINK_LIBRARIES(itkApplyMaskToImage
-  ITKTensor
-  ITKCommon
-  ITKIO
-  vtkIO
-  ${TTK_MIPS_LIBRARIES}
-  )
-  
-  TARGET_LINK_LIBRARIES(itkRead4DDWI
-  ITKCommon
-  ITKIO
-  )
-  
-#  TARGET_LINK_LIBRARIES(imconvert
-#  ITKCommon
-#  ITKIO
-#  ${TTK_MIPS_LIBRARIES}
-#  )
-
   TARGET_LINK_LIBRARIES(itkStanleyToITK
   ITKCommon
   ITKIO
   )
-  
-  TARGET_LINK_LIBRARIES(vtkConsolidateFiberBundle
-  vtkIO
-  )
-	
-  TARGET_LINK_LIBRARIES(itkRBFRotationMatrixInterpolation
-  ITKCommon
-  ITKIO
-  vtkIO
-  vtkCommon
-  ${TTK_LAPACK_LIBRARIES}
-  )
-
-
-#  TARGET_LINK_LIBRARIES(VTK2Fib
-#  ITKTensor
-#  vtkIO
-#  vtkCommon
-#  ${TTK_MIPS_LIBRARIES}
-#  ${ITK_LIBRARIES}
-#  ${TTK_LAPACK_LIBRARIES}
-#  )
-
-
-#  TARGET_LINK_LIBRARIES(itkNrrdToTensor
-#  ITKCommon
-#  ITKIO
-#  vtkIO
-#  ${TTK_MIPS_LIBRARIES}
-#  )
-
-#  TARGET_LINK_LIBRARIES(itkTensorsToVTKUnstructuredGrid
-#    ITKNumerics
-#    ITKCommon
-#    ITKIO
-#    ITKTensor
-#    vtkIO
-#    vtkFiltering
-#    vtkCommon
-#    ${TTK_MIPS_LIBRARIES}
-#    ${TTK_LAPACK_LIBRARIES}
-#  )
-
-
-if (TTK_USE_MIPS)
-
- # An Inria to VTK tensor file format converter 
-  ADD_EXECUTABLE(inr2vtk mipsInrimageToVTK.cxx)
-  TARGET_LINK_LIBRARIES(inr2vtk
-    ITKCommon
-    vtkIO
-    ${TTK_MIPS_LIBRARIES}
-  )
-
-  # A VTK tensor file format to Inria converter 
-  ADD_EXECUTABLE(vtk2inr mipsVTKToInrimage.cxx)
-  TARGET_LINK_LIBRARIES(vtk2inr
-    ITKCommon
-    vtkIO
-    ${TTK_MIPS_LIBRARIES}
-  )
-
-endif (TTK_USE_MIPS)
-
+ 
 
 # A Tensors to DWI converter
 #   ADD_EXECUTABLE(itkMultiResolutionTensorFilter

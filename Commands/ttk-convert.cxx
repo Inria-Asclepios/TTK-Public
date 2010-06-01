@@ -2,6 +2,7 @@
 #include "itkVTKFibersToITKGroupSpatialObjectCommandFactory.h"
 #include "itkTensorsToVTKUnstructuredGridCommandFactory.h"
 #include "itkImageConverterCommandFactory.h"
+#include "itkConsolidateFiberBundleCommandFactory.h"
 
 #include "itkCommandObjectFactory.h"
 
@@ -18,6 +19,7 @@ int main (int narg, char *args[])
   itk::VTKFibersToITKGroupSpatialObjectCommandFactory::RegisterOneFactory();
   itk::TensorsToVTKUnstructuredGridCommandFactory::RegisterOneFactory();
   itk::ImageConverterCommandFactory::RegisterOneFactory();
+  itk::ConsolidateFiberBundleCommandFactory::RegisterOneFactory();
 
   if (narg<2) {
     std::cout << "\n";

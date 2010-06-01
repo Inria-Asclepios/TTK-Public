@@ -1,4 +1,9 @@
 #include "itkDWIBrainMaskExtractorCommandFactory.h"
+#include "itkApplyMaskToImageCommandFactory.h"
+#include "itkResampleImageCommandFactory.h"
+#include "itkWarpImageCommandFactory.h"
+#include "itkAverageStdCalculatorCommandFactory.h"
+#include "itkRBFRotationMatrixExtrapolationCommandFactory.h"
 
 #include "itkCommandObjectFactory.h"
 
@@ -12,6 +17,11 @@ int main (int narg, char *args[])
 {
 
   itk::DWIBrainMaskExtractorCommandFactory::RegisterOneFactory();
+  itk::ApplyMaskToImageCommandFactory::RegisterOneFactory();
+  itk::ResampleImageCommandFactory::RegisterOneFactory();
+  itk::WarpImageCommandFactory::RegisterOneFactory();
+  itk::AverageStdCalculatorCommandFactory::RegisterOneFactory();
+  itk::RBFRotationMatrixExtrapolationCommandFactory::RegisterOneFactory();
   
   if (narg<2) {
     std::cout << "\n";

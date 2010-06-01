@@ -141,40 +141,37 @@ set(TTK_REQUIRED_C_FLAGS)
 set(TTK_REQUIRED_CXX_FLAGS)
 
 
+add_subdirectory(IPF)
+find_package(IPF)
+include(${IPF_USE_FILE})
 
-if( ITK_FOUND AND VTK_FOUND )
+include(${ITK_USE_FILE})
+include(${VTK_USE_FILE})
 
-  add_subdirectory(IPF)
-  find_package(IPF)
-  include(${IPF_USE_FILE})
+include(${TTK_SOURCE_DIR}/ttkIncludeDirectories.cmake)
+include_directories(
+  ${TTK_INCLUDE_DIRS_BUILD_TREE}
+  ${TTK_INCLUDE_DIRS_SYSTEM}
+)
 
-  include(${ITK_USE_FILE})
-  include(${VTK_USE_FILE})
+set(TTK_BUILD_TYPE
+STATIC
+)
 
-  include(${TTK_SOURCE_DIR}/ttkIncludeDirectories.cmake)
-  include_directories(
-    ${TTK_INCLUDE_DIRS_BUILD_TREE}
-    ${TTK_INCLUDE_DIRS_SYSTEM}
-  )
-
-  set(TTK_BUILD_TYPE
-  STATIC
-  )
-
-  if (NOT WIN32)
-    if (ITK_BUILD_SHARED)
-      set (TTK_BUILD_TYPE SHARED)
-    endif (ITK_BUILD_SHARED)
-  endif (NOT WIN32)
+if (NOT WIN32)
+  if (ITK_BUILD_SHARED)
+    set (TTK_BUILD_TYPE SHARED)
+  endif (ITK_BUILD_SHARED)
+endif (NOT WIN32)
 
 
-  # set TTK_DIR so it can be used by subprojects
-  SET(TTK_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "TTK_DIR variable to be used by subprojects")
+# set TTK_DIR so it can be used by subprojects
+SET(TTK_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "TTK_DIR variable to be used by subprojects")
 
 
-  add_subdirectory(Common)
-  add_subdirectory(Algorithms)
-  add_subdirectory(Commands)
+add_subdirectory(Common)
+add_subdirectory(Algorithms)
+add_subdirectory(Commands)
   
 
 
@@ -204,10 +201,3 @@ INSTALL_FILES(/lib .cmake
 # done AFTER the call to CMAKE_EXPORT_BUILD_SETTINGS.
 SET(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   ${TTK_REQUIRED_C_FLAGS}")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TTK_REQUIRED_CXX_FLAGS}")
-
-
-else( ITK_FOUND AND VTK_FOUND )
-
-  message(WARNING "ITK or VTK was not set, TTK will not be built.")
-
-endif( ITK_FOUND AND VTK_FOUND )

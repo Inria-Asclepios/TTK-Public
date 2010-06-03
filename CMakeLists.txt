@@ -133,6 +133,12 @@ if(TTK_USE_MIPS)
 endif(TTK_USE_MIPS)
 
 
+if (TTK_USE_HARDI)
+  find_package(Boost REQUIRED)
+  include(${Boost_INCLUDE_DIR})
+endif (TTK_USE_HARDI)
+
+
 # -----------------------------------------------------------------------------
 # Header file used to pass CMake settings to the source code
 # -----------------------------------------------------------------------------

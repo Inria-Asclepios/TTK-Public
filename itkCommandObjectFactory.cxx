@@ -60,17 +60,29 @@ void CommandObjectFactory::PrintHelp(std::ostream &os, Indent indent)
 {
   std::list<LightObject::Pointer> allobjects =
     ObjectFactoryBase::CreateAllInstance("itkCommandObjectBase");
+
+  std::vector<std::string> commandNames;
+  
   for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
       i != allobjects.end(); ++i)
   {
     CommandObjectBase* command = dynamic_cast<CommandObjectBase*>(i->GetPointer());
     if(command)
     {
-      os << indent << "\t " << command->GetCommandName() << "...";
-      os << indent << command->GetShortDescription() << "\n";
-			os << "\n";
+      commandNames.push_back ( command->GetCommandName() );
     }
-  }	
+  }
+
+  std::sort (commandNames.begin(), commandNames.end());
+  for (unsigned int i=0; i<commandNames.size(); i++)
+  {
+    os << indent << "\t " << commandNames[i] << std::endl;
+    /*
+      << "...";
+      os << indent << command->GetShortDescription() << "\n";
+      os << "\n";
+    */
+  }  
 }
 	
 	

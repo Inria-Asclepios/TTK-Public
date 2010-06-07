@@ -75,6 +75,33 @@ set(RUNTIME_INSTALL_OUTPUT_PATH    ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUN
 set(EXECUTABLE_INSTALL_OUTPUT_PATH ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
 
 
+# -------------------------------------------------------------------------------------
+# Setup installation settings
+# -------------------------------------------------------------------------------------
+
+set(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT 0 CACHE BOOL "Do not install development")
+set(${PROJECT_NAME}_INSTALL_NO_RUNTIME     0 CACHE BOOL "Do not install runtime")
+
+set(${PROJECT_NAME}_INSTALL_NO_LIBRARIES)
+if(${PROJECT_NAME}_BUILD_SHARED_LIBS)
+  if(${PROJECT_NAME}_INSTALL_NO_RUNTIME AND ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+    set(${PROJECT_NAME}_INSTALL_NO_LIBRARIES 1)
+  endif(${PROJECT_NAME}_INSTALL_NO_RUNTIME AND ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+else(${PROJECT_NAME}_BUILD_SHARED_LIBS)
+  if(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+    set(${PROJECT_NAME}_INSTALL_NO_LIBRARIES 1)
+  else(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+    set(${PROJECT_NAME}_INSTALL_NO_LIBRARIES 0)
+  endif(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+endif(${PROJECT_NAME}_BUILD_SHARED_LIBS)
+
+
+mark_as_advanced(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT 
+  ${PROJECT_NAME}_INSTALL_NO_RUNTIME
+  ${PROJECT_NAME}_INSTALL_NO_LIBRARIES
+  )
+
+
 ## #################################################################
 ## Required dependencies
 ## #################################################################
@@ -138,9 +165,10 @@ endif(TTK_USE_MIPS)
 configure_file(${PROJECT_SOURCE_DIR}/ttkConfigure.h.in
                ${PROJECT_BINARY_DIR}/ttkConfigure.h CONFIGURE IMMEDIATE)
 
-install_files(/include FILES 
-  ${TTK_BINARY_DIR}/ttkConfigure.h
-  )
+if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+  install_files(/include FILES 
+    ${TTK_BINARY_DIR}/ttkConfigure.h)
+endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 
 set(TTK_REQUIRED_C_FLAGS)
 set(TTK_REQUIRED_CXX_FLAGS)
@@ -188,11 +216,13 @@ CMAKE_EXPORT_BUILD_SETTINGS(${TTK_BUILD_SETTINGS_FILE})
 # Create the TTKConfig.cmake file containing the TTK configuration.
 INCLUDE (${TTK_SOURCE_DIR}/ttkGenerateTTKConfig.cmake)
 
-INSTALL_FILES(/lib FILES
- ${TTK_BINARY_DIR}/TTKBuildSettings.cmake
- ${TTK_BINARY_DIR}/UseTTK.cmake
- ${TTK_BINARY_DIR}/Utilities/TTKConfig.cmake
-)
+if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+  INSTALL_FILES(/lib FILES
+   ${TTK_BINARY_DIR}/TTKBuildSettings.cmake
+   ${TTK_BINARY_DIR}/UseTTK.cmake
+   ${TTK_BINARY_DIR}/Utilities/TTKConfig.cmake
+  )
+endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 
 
 
@@ -212,10 +242,12 @@ add_subdirectory(Commands)
 #-----------------------------------------------------------------------------
 # Packing stuff
 #-----------------------------------------------------------------------------
-if (EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
-  set (CMAKE_INSTALL_MFC_LIBRARIES 1)
-  include (InstallRequiredSystemLibraries)
-endif (EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
+if(NOT ${PROJECT_NAME}_INSTALL_NO_RUNTIME)
+  if (EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
+    set (CMAKE_INSTALL_MFC_LIBRARIES 1)
+    include (InstallRequiredSystemLibraries)
+  endif (EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
+endif(NOT ${PROJECT_NAME}_INSTALL_NO_RUNTIME)
 
 
 set (CPACK_PACKAGE_NAME                 ${PROJECT_NAME})

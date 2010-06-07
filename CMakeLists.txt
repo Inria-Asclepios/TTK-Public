@@ -39,6 +39,32 @@ SET(LIBRARY_OUTPUT_PATH
  CACHE PATH "Single output directory for building all libraries."
 )
 
+# -------------------------------------------------------------------------------------
+# Setup installation settings
+# -------------------------------------------------------------------------------------
+
+set(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT 0 CACHE BOOL "Do not install development")
+set(${PROJECT_NAME}_INSTALL_NO_RUNTIME     0 CACHE BOOL "Do not install runtime")
+
+set(${PROJECT_NAME}_INSTALL_NO_LIBRARIES)
+if(${PROJECT_NAME}_BUILD_SHARED_LIBS)
+  if(${PROJECT_NAME}_INSTALL_NO_RUNTIME AND ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+    set(${PROJECT_NAME}_INSTALL_NO_LIBRARIES 1)
+  endif(${PROJECT_NAME}_INSTALL_NO_RUNTIME AND ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+else(${PROJECT_NAME}_BUILD_SHARED_LIBS)
+  if(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+    set(${PROJECT_NAME}_INSTALL_NO_LIBRARIES 1)
+  else(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+    set(${PROJECT_NAME}_INSTALL_NO_LIBRARIES 0)
+  endif(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+endif(${PROJECT_NAME}_BUILD_SHARED_LIBS)
+
+
+mark_as_advanced(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT 
+  ${PROJECT_NAME}_INSTALL_NO_RUNTIME
+  )
+
+
 set(IPF_REQUIRED_C_FLAGS)
 set(IPF_REQUIRED_CXX_FLAGS)
 
@@ -79,22 +105,28 @@ target_link_libraries(programFactoryTest
 ITKProgramFactory
 )
 
-file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
-install(FILES ${__files1} ${__files2}
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/include
-  COMPONENT Development
-)
+if (NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+  file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+  install(FILES ${__files1} ${__files2}
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+    COMPONENT Development
+  )
+endif (NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 	
-install(TARGETS ITKProgramFactory
-DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-COMPONENT RuntimeLibraries
-)
+if (NOT ${PROJECT_NAME}_INSTALL_NO_LIBRARIES)
+  install(TARGETS ITKProgramFactory
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+  COMPONENT RuntimeLibraries
+  )
+endif (NOT ${PROJECT_NAME}_INSTALL_NO_LIBRARIES)
 
-install(TARGETS programFactoryTest
-DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-COMPONENT RuntimeLibraries
-)
+# if (NOT ${PROJECT_NAME}_INSTALL_NO_RUNTIME)
+#  install(TARGETS programFactoryTest
+#  DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+#  COMPONENT RuntimeLibraries
+#  )
+# endif (NOT ${PROJECT_NAME}_INSTALL_NO_RUNTIME)
 
 #-----------------------------------------------------------------------------
 # Help other projects use IPF.
@@ -110,8 +142,10 @@ CMAKE_EXPORT_BUILD_SETTINGS(${IPF_BUILD_SETTINGS_FILE})
 # Create the IPFConfig.cmake file containing the IPF configuration.
 INCLUDE (${IPF_SOURCE_DIR}/ipfGenerateIPFConfig.cmake)
 
-INSTALL_FILES(/lib .cmake
- ${IPF_BINARY_DIR}/IPFBuildSettings
- ${IPF_BINARY_DIR}/UseIPF
- ${IPF_BINARY_DIR}/Utilities/IPFConfig
-)
+if (NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+  INSTALL_FILES(/lib .cmake
+   ${IPF_BINARY_DIR}/IPFBuildSettings
+   ${IPF_BINARY_DIR}/UseIPF
+   ${IPF_BINARY_DIR}/Utilities/IPFConfig
+  )
+endif (NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)

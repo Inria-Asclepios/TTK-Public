@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $RCSURL:$
+  Module:    $URL:$
   Language:  C++
   Date:      $Date$
   Version:   $Revision$

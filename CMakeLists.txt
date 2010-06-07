@@ -208,3 +208,54 @@ add_subdirectory(Algorithms)
 add_subdirectory(Commands)
 
 
+
+#-----------------------------------------------------------------------------
+# Packing stuff
+#-----------------------------------------------------------------------------
+if (EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
+  set (CMAKE_INSTALL_MFC_LIBRARIES 1)
+  include (InstallRequiredSystemLibraries)
+endif (EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
+
+
+set (CPACK_PACKAGE_NAME                 ${PROJECT_NAME})
+set (CPACK_SOURCE_PACKAGE_FILE_NAME    "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "TTK - The Tensor ToolKit")
+set (CPACK_PACKAGE_DESCRIPTION          ${PROJECT_NAME})
+
+set (CPACK_PACKAGE_VENDOR           "INRIA France")
+set (CPACK_NSIS_CONTACT             "Pierre Fillard <pierre.fillard@inria.fr>")
+set (CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
+set (CPACK_PACKAGE_VERSION_MAJOR    "${TTK_MAJOR_VERSION}")
+set (CPACK_PACKAGE_VERSION_MINOR    "${TTK_MINOR_VERSION}")
+set (CPACK_PACKAGE_VERSION_PATCH    "${TTK_BUILD_VERSION}")
+set (CPACK_RESOURCE_FILE_LICENSE    "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
+
+set (CPACK_PACKAGE_INSTALL_DIRECTORY "ttk-${TTK_MAJOR_VERSION}.${TTK_MINOR_VERSION}")
+
+set (CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME})
+if (${CMAKE_SYSTEM_NAME} MATCHES Windows)
+  if (CMAKE_CL_64)
+    set (CPACK_SYSTEM_NAME win64)
+  else (CMAKE_CL_64)
+    set (CPACK_SYSTEM_NAME win32)
+  endif (CMAKE_CL_64)
+endif (${CMAKE_SYSTEM_NAME} MATCHES Windows)
+
+set (CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${CPACK_SYSTEM_NAME}")
+
+if (WIN32 AND NOT UNIX)
+  # There is a bug in NSI that does not handle full unix paths properly.
+  # Make sure there is at least one set of four (4) backslashes.
+  #set (CPACK_PACKAGE_EXECUTABLES "CMakeSetup" "CMake")
+  #set (CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\CMakeSetup.exe")
+  set (CPACK_NSIS_DISPLAY_NAME "TTK - The TensorToolKit")
+  #set (CPACK_NSIS_HELP_LINK "http:\\\\\\\\")
+  #set (CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\")
+  set (CPACK_NSIS_MODIFY_PATH ON)
+else (WIN32 AND NOT UNIX)
+  #set (CPACK_STRIP_FILES "bin/ccmake;bin/cmake;bin/cpack;bin/ctest")
+  #set (CPACK_PACKAGE_EXECUTABLES "")
+endif (WIN32 AND NOT UNIX)
+
+include(CPack)

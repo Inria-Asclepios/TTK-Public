@@ -91,7 +91,6 @@ find_package(VTK REQUIRED)
 option(TTK_USE_MKL   OFF "Use MKL to solve eigensystems")
 option(TTK_USE_ACML  OFF "Use ACML to solve eigensystems")
 option(TTK_USE_MIPS  OFF "Use MIPS and make TTK compatible with inrimage file format (discouraged)")
-option(TTK_USE_HARDI OFF "Compile the Hardi extension of the TTK")
 
 
 if  (TTK_USE_MKL 
@@ -131,12 +130,6 @@ if(TTK_USE_MIPS)
   Basics 
   mipsZ)
 endif(TTK_USE_MIPS)
-
-
-if (TTK_USE_HARDI)
-  find_package(Boost REQUIRED)
-  include(${Boost_INCLUDE_DIR})
-endif (TTK_USE_HARDI)
 
 
 # -----------------------------------------------------------------------------

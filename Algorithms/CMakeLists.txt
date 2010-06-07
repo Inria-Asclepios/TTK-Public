@@ -1,7 +1,3 @@
-if(TTK_USE_HARDI)
-    add_subdirectory(Hardi)
-endif(TTK_USE_HARDI)
-
 file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
   file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
   file(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")

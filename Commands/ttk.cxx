@@ -1,7 +1,22 @@
+/*=========================================================================
+
+  Program:   Tensor ToolKit - TTK
+  Module:    $URL:$
+  Language:  C++
+  Date:      $Date:$
+  Version:   $Revision:$
+
+  Copyright (c) INRIA 2010. All rights reserved.
+  See LICENSE.txt for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 #include "itkWarpTensorImageCommandFactory.h"
 #include "itkNPTRemoverCommandFactory.h"
 #include "itkTensorFlipCommandFactory.h"
-#include "itkDTIEstimatorCommandFactory.h"
 #include "itkAddGaussianNoiseToTensorsCommandFactory.h"
 #include "itkTensorAnisotropicFilteringCommandFactory.h"
 #include "itkNormalizeTensorsCommandFactory.h"
@@ -9,7 +24,6 @@
 #include "itkSparseTensorsExtrapolationCommandFactory.h"
 #include "itkRBFTensorExtrapolationCommandFactory.h"
 #include "itkTensorNormalizedGaussianInterpolationCommandFactory.h"
-#include "itkFiberTrackingCommandFactory.h"
 #include "itkWarpFibersCommandFactory.h"
 #include "itkTensorGradientMagnitudeCalculatorCommandFactory.h"
 #include "itkHessianTensorImageCalculatorCommandFactory.h"
@@ -18,11 +32,7 @@
 #include "itkTensorToScalarCommandFactory.h"
 #include "itkTensorsToDWICommandFactory.h"
 #include "itkSyntheticTensorFieldGeneratorCommandFactory.h"
-#include "itkAddGaussianNoiseToDWICommandFactory.h"
 #include "itkBoostTensorAnisotropyCommandFactory.h"
-#include "itkDTIEstimatorWithBFGSCommandFactory.h"
-#include "itkLogEuclideanDTIEstimatorCommandFactory.h"
-#include "itkTensorZScoreCalculatorCommandFactory.h"
 #include "itkAverageStdTensorCalculatorCommandFactory.h"
 #include "itkNormalize2TensorsCommandFactory.h"
 
@@ -40,7 +50,6 @@ int main (int narg, char *args[])
   itk::WarpTensorImageCommandFactory::RegisterOneFactory();
   itk::NPTRemoverCommandFactory::RegisterOneFactory();
   itk::TensorFlipCommandFactory::RegisterOneFactory();
-  itk::DTIEstimatorCommandFactory::RegisterOneFactory();
   itk::AddGaussianNoiseToTensorsCommandFactory::RegisterOneFactory();
   itk::TensorAnisotropicFilteringCommandFactory::RegisterOneFactory();
   itk::NormalizeTensorsCommandFactory::RegisterOneFactory();
@@ -49,7 +58,6 @@ int main (int narg, char *args[])
   itk::SparseTensorsExtrapolationCommandFactory::RegisterOneFactory();
   itk::RBFTensorExtrapolationCommandFactory::RegisterOneFactory();
   itk::TensorNormalizedGaussianInterpolationCommandFactory::RegisterOneFactory();
-  itk::FiberTrackingCommandFactory::RegisterOneFactory();
   itk::WarpFibersCommandFactory::RegisterOneFactory();
   itk::TensorGradientMagnitudeCalculatorCommandFactory::RegisterOneFactory();
   itk::HessianTensorImageCalculatorCommandFactory::RegisterOneFactory();
@@ -58,11 +66,7 @@ int main (int narg, char *args[])
   itk::TensorToScalarCommandFactory::RegisterOneFactory();
   itk::TensorsToDWICommandFactory::RegisterOneFactory();
   itk::SyntheticTensorFieldGeneratorCommandFactory::RegisterOneFactory();
-  itk::AddGaussianNoiseToDWICommandFactory::RegisterOneFactory();
   itk::BoostTensorAnisotropyCommandFactory::RegisterOneFactory();
-  itk::DTIEstimatorWithBFGSCommandFactory::RegisterOneFactory();
-  itk::LogEuclideanDTIEstimatorCommandFactory::RegisterOneFactory();
-  itk::TensorZScoreCalculatorCommandFactory::RegisterOneFactory();
   itk::AverageStdTensorCalculatorCommandFactory::RegisterOneFactory();
   
   

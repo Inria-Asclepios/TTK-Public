@@ -1,0 +1,30 @@
+Copyright and licenses, condition of use
+
+Software TENSOR TOOLKIT ©INRIA 2010, version 1.0.0 hereinafter "the Software".
+
+The Software has been developed by the Asclepios team at INRIA (Institut National de
+Recherche en Informatique et Automatique).
+
+INRIA, Domaine de Voluceau, Rocquencourt - BP 105
+78153 Le Chesnay Cedex, FRANCE
+
+INRIA holds all the ownership rights on the Software. The Software registration with the
+Agence pour la Protection des Programmes (APP) is in progress.
+
+INRIA freely grants the non-exclusive right to use the Software for RESEARCH PURPOSES
+ONLY. Every user of the Software will communicate to the Asclepios team (pierre.fillard@inria.fr)
+their remarks as to the use of the Software. Please note that the Software implements the
+following patent: "Improved device for processing raw images or tensor images", Arsigny
+V., Pennec X., Fillard P., Ayache N., 2006.04.07, EP1866866, WO2006106242.
+
+THUS, NO COMMERCIAL USE, EXPLOITATION NOR DISTRIBUTION IS AUTHORIZED BY THIS LICENSE. IF
+SUCH USE IS DESIRED, PLEASE CONTACT THE TECH TRANSFER OFFICE (rev-ppi@sophia.inria.fr).
+
+THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INRIA OR THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, LOSS OF USE, DATA, OR PROFITS OR
+BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

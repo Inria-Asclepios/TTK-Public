@@ -5,8 +5,6 @@
     itkNPTRemoverCommandFactory.cxx
     itkTensorFlipCommand.cxx
     itkTensorFlipCommandFactory.cxx
-    itkDTIEstimatorCommand.cxx
-    itkDTIEstimatorCommandFactory.cxx
     itkAddGaussianNoiseToTensorsCommand.cxx
     itkAddGaussianNoiseToTensorsCommandFactory.cxx
     itkTensorAnisotropicFilteringCommand.cxx
@@ -21,8 +19,6 @@
     itkRBFTensorExtrapolationCommandFactory.cxx
     itkTensorNormalizedGaussianInterpolationCommand.cxx
     itkTensorNormalizedGaussianInterpolationCommandFactory.cxx
-    itkFiberTrackingCommand.cxx
-    itkFiberTrackingCommandFactory.cxx
     itkWarpFibersCommand.cxx
     itkWarpFibersCommandFactory.cxx
     itkHessianTensorImageCalculatorCommand.cxx
@@ -37,16 +33,8 @@
     itkTensorsToDWICommandFactory.cxx
     itkSyntheticTensorFieldGeneratorCommand.cxx
     itkSyntheticTensorFieldGeneratorCommandFactory.cxx
-    itkAddGaussianNoiseToDWICommand.cxx
-    itkAddGaussianNoiseToDWICommandFactory.cxx
     itkBoostTensorAnisotropyCommand.cxx
     itkBoostTensorAnisotropyCommandFactory.cxx
-    itkDTIEstimatorWithBFGSCommand.cxx
-    itkDTIEstimatorWithBFGSCommandFactory.cxx
-    itkLogEuclideanDTIEstimatorCommand.cxx
-    itkLogEuclideanDTIEstimatorCommandFactory.cxx
-    itkTensorZScoreCalculatorCommand.cxx
-    itkTensorZScoreCalculatorCommandFactory.cxx
     itkAverageStdTensorCalculatorCommand.cxx
     itkAverageStdTensorCalculatorCommandFactory.cxx
     itkTensorGradientMagnitudeCalculatorCommand.cxx

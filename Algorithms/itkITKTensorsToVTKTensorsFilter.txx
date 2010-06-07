@@ -1,16 +1,16 @@
 /*=========================================================================
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkITKTensorsToVTKTensorsFilter.txx,v $
+  Program:   Tensor ToolKit - TTK
+  Module:    $URL:$
   Language:  C++
-  Date:      $Date: 2006/09/14 09:19:39 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date:$
+  Version:   $Revision:$
 
-  Copyright (c) 2002 Insight Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+  Copyright (c) INRIA 2010. All rights reserved.
+  See LICENSE.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/

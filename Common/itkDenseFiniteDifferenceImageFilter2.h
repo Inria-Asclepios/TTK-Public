@@ -1,10 +1,26 @@
 /*=========================================================================
 
+  Program:   Tensor ToolKit - TTK
+  Module:    $URL:$
+  Language:  C++
+  Date:      $Date:$
+  Version:   $Revision:$
+
+  Copyright (c) INRIA 2010. All rights reserved.
+  See LICENSE.txt for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+/*=========================================================================
+
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDenseFiniteDifferenceImageFilter2.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/22 14:33:21 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

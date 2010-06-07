@@ -1,10 +1,11 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $RCSfile:$
+  Module:    $URL:$
+  Author:    $Author:$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.

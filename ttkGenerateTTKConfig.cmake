@@ -16,6 +16,9 @@ SET(TTK_LIBRARY_DIRS_CONFIG ${LIBRARY_OUTPUT_PATH})
 # Runtime library directory.
 SET(TTK_RUNTIME_LIBRARY_DIRS_CONFIG ${LIBRARY_OUTPUT_PATH})
 
+# Binary directory.
+SET(TTK_BINARY_DIR_CONFIG ${EXECUTABLE_OUTPUT_PATH})
+
 # Determine the include directories needed.
 SET(TTK_INCLUDE_DIRS_CONFIG
   ${TTK_INCLUDE_DIRS_BUILD_TREE}
@@ -59,6 +62,8 @@ ELSE(WIN32)
   SET(TTK_RUNTIME_LIBRARY_DIRS_CONFIG ${CMAKE_INSTALL_PREFIX}/lib/)
 ENDIF(WIN32)
 
+# Binary directory.
+SET(TTK_BINARY_DIR_CONFIG ${CMAKE_INSTALL_PREFIX}/bin/)
 
 #-----------------------------------------------------------------------------
 # Configure TTKConfig.cmake for the install tree.

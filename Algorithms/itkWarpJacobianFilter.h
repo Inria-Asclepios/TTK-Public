@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -115,6 +115,8 @@ public:
   typedef TOutputImage OutputImageType;
   typedef typename InputImageType::Pointer  InputImagePointer;
   typedef typename OutputImageType::Pointer OutputImagePointer;
+
+typedef Vector<double, InputImageType::ImageDimension> VectorType;
   
   /** The dimensionality of the input and output images. */
   itkStaticConstMacro(ImageDimension, unsigned int,
@@ -195,7 +197,7 @@ protected:
   itkSetMacro( NeighborhoodRadius, RadiusType );
   
   OutputPixelType EvaluateAtNeighborhood
-     (ConstNeighborhoodIteratorType &it) const;
+     (ConstNeighborhoodIteratorType &it);
 
   /** The weights used to scale partial derivatives during processing */
   double m_DerivativeWeights[itk::GetImageDimension<TInputImage>::ImageDimension];

@@ -96,7 +96,12 @@
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
   )
-
+  if (ITK_USE_REVIEW)
+    target_link_libraries(ttkConvertCommands
+      ITKIOReview
+      )
+  endif()
+  
   add_executable(ttk-convert
     ttk-convert.cxx
   )

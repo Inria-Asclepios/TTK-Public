@@ -291,3 +291,10 @@ else (WIN32 AND NOT UNIX)
 endif (WIN32 AND NOT UNIX)
 
 include(CPack)
+
+#### TESTING stuff ###
+enable_testing()
+include(CTest)
+if( BUILD_TESTING )
+  add_subdirectory(Testing)
+endif( BUILD_TESTING )

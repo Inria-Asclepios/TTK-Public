@@ -14,27 +14,31 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGradientFileReader_h
-#define __itkGradientFileReader_h
+#ifndef __itkGradientFileWriter_h
+#define __itkGradientFileWriter_h
 
 #include "itkLightProcessObject.h"
 #include "itkVector.h"
 #include <string>
 #include <vector>
+#include <itksys/SystemTools.hxx>
+#include <itksys/ios/sstream>
+#include <sstream>
+#include <fstream>
 
 namespace itk
 {
 
-/** \class GradientFileReader
+/** \class GradientFileWriter
  * 
  * \brief 
  */
-class GradientFileReader : public LightProcessObject
+class GradientFileWriter : public LightProcessObject
 {
 public:
 
   /** SmartPointer typedef support */
-  typedef GradientFileReader Self;
+  typedef GradientFileWriter Self;
   typedef SmartPointer<Self>  Pointer;
 
   typedef double ScalarType;
@@ -46,7 +50,7 @@ public:
 
   /** Run-time type information (and related methods). */
   typedef Object Superclass;
-  itkTypeMacro(GradientFileReader, LightProcessObject);
+  itkTypeMacro(GradientFileWriter, LightProcessObject);
 
   /** Set the filename  */
   itkSetStringMacro(FileName);
@@ -58,18 +62,19 @@ public:
   void Update();
 
   /** Get the gradient list */
-  VectorListType GetGradientList() {return m_GradientList;}
+  void SetGradientList(VectorListType list)
+  { m_GradientList = list; }
 
 protected:
-  GradientFileReader(const Self&); //purposely not implemented
+  GradientFileWriter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void ReadInsightStyleFile (std::string data);
-  void ReadBvecFile (std::string data);
-  void ReadSimpleTextFile (std::string data);
+  void WriteInsightStyleFile (std::ofstream& out);
+  void WriteBvecFile (std::ofstream& out);
+  void WriteSimpleTextFile (std::ofstream& out);
   
-  GradientFileReader();
-  virtual ~GradientFileReader();
+  GradientFileWriter();
+  virtual ~GradientFileWriter();
 
 private:
 
@@ -81,4 +86,4 @@ private:
 
 } // namespace itk
 
-#endif // __itkGradientFileReader_h
+#endif // __itkGradientFileWriter_h

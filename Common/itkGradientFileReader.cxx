@@ -118,19 +118,12 @@ void GradientFileReader
   std::string firstline = trim ( data.substr ( position, firstend - position ) );
   std::string fileextension = itksys::SystemTools::GetFilenameLastExtension(m_FileName);
   
-  if (firstline != "#Insight GradientList File V1.0")
-  {
-    if (fileextension == ".bvec")
-      this->ReadBvecFile (data);
-    else
-      this->ReadSimpleTextFile (data);
-    return;
-  }
-  else
-  {
+  if (firstline == "#Insight GradientList File V1.0")
     this->ReadInsightStyleFile (data);
-  }
-  
+  else if (fileextension == ".bvec")
+    this->ReadBvecFile (data);
+  else
+    this->ReadSimpleTextFile (data); 
 }
   
   

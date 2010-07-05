@@ -1,6 +1,7 @@
 add_library(ITKTensor ${TTK_BUILD_TYPE}
   itkNumericTraitsTensorPixel2.cxx
   itkGradientFileReader.cxx
+  itkGradientFileWriter.cxx
   )
 
 target_link_libraries(ITKTensor

@@ -67,7 +67,9 @@ GradientFileReader
 /** Update the Reader */
 void GradientFileReader
 ::Update()
-{  
+{
+  m_GradientList.clear();
+  
   std::ifstream in;
   in.open ( m_FileName.c_str(), std::ios::in | std::ios::binary );
   if( in.fail() )
@@ -93,7 +95,7 @@ void GradientFileReader
   // get file data  
   pbuf->sgetn (buffer,size); 
   buffer[size]='\0';
-  itkDebugMacro ( "Read file transform Data" );
+  itkDebugMacro ( "Read file gradient Data" );
   InData << buffer;
 
   delete[] buffer;
@@ -117,13 +119,22 @@ void GradientFileReader
   std::string::size_type firstend = data.find ( line_end, position );
   std::string firstline = trim ( data.substr ( position, firstend - position ) );
   std::string fileextension = itksys::SystemTools::GetFilenameLastExtension(m_FileName);
+
+  itkDebugMacro (<< "reading file: " << m_FileName <<"; extension found: "<< fileextension.c_str() << std::endl);
   
   if (firstline == "#Insight GradientList File V1.0")
     this->ReadInsightStyleFile (data);
   else if (fileextension == ".bvec")
     this->ReadBvecFile (data);
   else
-    this->ReadSimpleTextFile (data); 
+    this->ReadSimpleTextFile (data);
+
+  itkDebugMacro (<< "Number of gradients found: "<< m_GradientList.size() << std::endl);
+  
+  for (unsigned int i=0; i<m_GradientList.size(); i++)
+  {
+    itkDebugMacro (<< i << ": "<< m_GradientList[i] << std::endl);
+  }
 }
   
   
@@ -131,14 +142,14 @@ void GradientFileReader
 void GradientFileReader
 ::ReadBvecFile(std::string data)
 {
-
+  itkDebugMacro (<< "reading bvec format. " << std::endl);
+  
   // check for line end convention
   std::string line_end("\n");
   // Read line by line
   std::string::size_type position = 0;
 
   unsigned int line_id = -1;
-  
   
   while ( position < data.size() )
   {
@@ -165,20 +176,20 @@ void GradientFileReader
     }
     
     itksys_ios::istringstream parse ( line );
+    
     std::vector<ScalarType> values;
 
     // Read the line
-    std::string::size_type valueposition = position;
     unsigned int column_id = 0;
-    std::string RestOfLine = line;
+    bool line_finished = false;
     
-    while ( valueposition < end )
+    while ( !line_finished )
     {
-      std::string::size_type valueend = RestOfLine.find (" ");
-      std::string Value = trim ( line.substr ( valueposition, valueend) );
-      RestOfLine = trim ( line.substr ( valueend+1, end) );
       ScalarType value;
       parse >> value;
+      if (parse.eof())
+	line_finished = true;
+      
       if (m_GradientList.size() > column_id)
 	m_GradientList[column_id][line_id] = value;
       else
@@ -187,7 +198,7 @@ void GradientFileReader
 	gradient[line_id] = value;
 	m_GradientList.push_back (gradient);
       }
-      valueposition = valueend + 1;
+
       column_id++;
     }
     
@@ -200,6 +211,8 @@ void GradientFileReader
 void GradientFileReader
 ::ReadSimpleTextFile(std::string data)
 {
+
+  itkDebugMacro (<< "reading simple txt format. " << std::endl);
 
   // check for line end convention
   std::string line_end("\n");
@@ -248,6 +261,8 @@ void GradientFileReader
 void GradientFileReader
 ::ReadInsightStyleFile(std::string data)
 {
+
+  itkDebugMacro (<< "reading insight style format. " << std::endl);
 
   // check for line end convention
   std::string line_end("\n");

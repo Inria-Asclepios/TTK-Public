@@ -42,7 +42,7 @@ void GradientFileWriter
 {
   if ( !m_GradientList.size() )
   {
-    itkExceptionMacro ( "he input vector list is empty" << std::endl );
+    itkExceptionMacro ( "The input vector list is empty" << std::endl );
   }
   
   std::ofstream out( m_FileName.c_str(), std::ios::out);
@@ -100,7 +100,7 @@ void GradientFileWriter
   for (unsigned int i=0; i<m_GradientList.size(); i++)
   {
     VectorType g = m_GradientList[i];
-    out << i << ": " << g[0] << " " << g[1] << " " << g[2] << std::endl;
+    out << i << ": " << g[0] << "\t" << g[1] << "\t" << g[2] << std::endl;
   }
 }
 

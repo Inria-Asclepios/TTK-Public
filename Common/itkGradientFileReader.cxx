@@ -28,7 +28,7 @@ namespace itk
 {
 
 
-std::string trim(std::string const& source, char const* delims = " \t\r\n")
+std::string ttk_trim(std::string const& source, char const* delims = " \t\r\n")
 {
   std::string result(source);
   std::string::size_type index = result.find_last_not_of(delims);
@@ -117,7 +117,7 @@ void GradientFileReader
   }
 
   std::string::size_type firstend = data.find ( line_end, position );
-  std::string firstline = trim ( data.substr ( position, firstend - position ) );
+  std::string firstline = ttk_trim ( data.substr ( position, firstend - position ) );
   std::string fileextension = itksys::SystemTools::GetFilenameLastExtension(m_FileName);
 
   itkDebugMacro (<< "reading file: " << m_FileName <<"; extension found: "<< fileextension.c_str() << std::endl);
@@ -155,7 +155,7 @@ void GradientFileReader
   {
     // Find the next string
     std::string::size_type end = data.find ( line_end, position );
-    std::string line = trim ( data.substr ( position, end - position ) );
+    std::string line = ttk_trim ( data.substr ( position, end - position ) );
     itkDebugMacro ("Found line: \"" << line << "\"" );
     
     if ( line.length() == 0 )
@@ -222,7 +222,7 @@ void GradientFileReader
   {
     // Find the next string
     std::string::size_type end = data.find ( line_end, position );
-    std::string line = trim ( data.substr ( position, end - position ) );
+    std::string line = ttk_trim ( data.substr ( position, end - position ) );
     position = end+1;
     itkDebugMacro ("Found line: \"" << line << "\"" );
     
@@ -273,7 +273,7 @@ void GradientFileReader
   {
     // Find the next string
     std::string::size_type end = data.find ( line_end, position );
-    std::string line = trim ( data.substr ( position, end - position ) );
+    std::string line = ttk_trim ( data.substr ( position, end - position ) );
     position = end+1;
     itkDebugMacro ("Found line: \"" << line << "\"" );
     
@@ -294,8 +294,8 @@ void GradientFileReader
       // Throw an error
       itkExceptionMacro ( "Tags must be delimited by :" );
     }
-    std::string Name = trim ( line.substr ( 0, end ) );
-    std::string Value = trim ( line.substr ( end + 1, line.length() ) );
+    std::string Name = ttk_trim ( line.substr ( 0, end ) );
+    std::string Value = ttk_trim ( line.substr ( end + 1, line.length() ) );
     
     // Push back 
     itkDebugMacro ( "Name: \"" << Name << "\"" );

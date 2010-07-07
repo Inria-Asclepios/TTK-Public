@@ -165,6 +165,7 @@ void GradientFileReader
     if ( line[0] == '#' || std::string::npos == line.find_first_not_of ( " \t" ) )
     {
       // Skip lines beginning with #, or blank lines
+      position = end+1;
       continue;
     }
 
@@ -172,6 +173,8 @@ void GradientFileReader
     if (line_id > 2)
     {
       /// weird, we can't have that
+      position = end+1;
+      itkExceptionMacro(<<"Found more than 3 lines in bvec file "<<m_FileName<<"; File is of wrong type"<<std::endl)
       continue;
     }
     
@@ -181,7 +184,7 @@ void GradientFileReader
 
     // Read the line
     unsigned int column_id = 0;
-    bool line_finished = false;
+    bool line_finished = parse.eof();
     
     while ( !line_finished )
     {

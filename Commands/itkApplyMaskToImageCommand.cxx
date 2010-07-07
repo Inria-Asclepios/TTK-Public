@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -72,7 +72,6 @@ namespace itk
     typedef itk::ImageFileReader<ImageMaskType> ImageMaskReaderType;
     typedef itk::ImageFileWriter<ImageType> ImageWriterType;
     
-    
     ImageReaderType::Pointer reader = ImageReaderType::New();
     reader->SetFileName( input );
     
@@ -113,7 +112,8 @@ namespace itk
     std::cout << " Done." << std::endl;
     
     ImageType::Pointer maskImage = reader1->GetOutput();
-    
+    ImageMaskType::IndexType index;
+    ImageMaskType::PointType x;
     
     if (type)
     {
@@ -127,23 +127,26 @@ namespace itk
       finalImage->SetDirection( tensors->GetDirection() );
       finalImage->Allocate();
       TensorType zero = TensorType(static_cast<ScalarType>( 0.0 ));
-      
+	
       itk::ImageRegionIterator<TensorImageType> itOut (finalImage, finalImage->GetLargestPossibleRegion() );
       
       while( !itOut.IsAtEnd() )
       {
-	if( itMask.Value() )
-	{
-	  itOut.Set( itIn.Get() );
-	}
-	else
+	tensors->TransformIndexToPhysicalPoint (itOut.GetIndex(), x);
+	bool isinside = maskImage->TransformPhysicalPointToIndex (x, index);
+	if (!isinside)
 	{
 	  itOut.Set( zero );
+	  ++itOut;
+	  ++itIn;
+	  continue;
 	}
+	itMask.SetIndex (index);					
 	
+	if( itMask.Value() ) itOut.Set( itIn.Get() );
+	else                 itOut.Set( zero );
 	++itOut;
 	++itIn;
-	++itMask;
       }
       
       
@@ -176,25 +179,29 @@ namespace itk
       finalImage->SetRegions( image->GetLargestPossibleRegion() );
       finalImage->SetOrigin( image->GetOrigin() );
       finalImage->SetSpacing( image->GetSpacing() );
+      finalImage->SetDirection( image->GetDirection() );
+      
       finalImage->Allocate();
     
       itk::ImageRegionIterator<ImageType> itOut (finalImage, finalImage->GetLargestPossibleRegion() );
       while( !itOut.IsAtEnd() )
       {
-	if( itMask.Value() )
+	image->TransformIndexToPhysicalPoint (itOut.GetIndex(), x);
+	bool isinside = maskImage->TransformPhysicalPointToIndex (x, index);
+	if (!isinside)
 	{
-	  itOut.Set( itIn.Get() );
+	  itOut.Set( static_cast<ScalarType>(0.0) );
+	  ++itOut;
+	  ++itIn;
+	  continue;
 	}
-	else
-	{
-	  itOut.Set( static_cast<IntegerType>(0.0) );
-	}
+	itMask.SetIndex (index);				
 	
+	if( itMask.Value() ) itOut.Set( itIn.Get() );
+	else                 itOut.Set( static_cast<ScalarType>(0.0) );
 	++itOut;
 	++itIn;
-	++itMask;
       }
-      
   
       // write the image
       ImageWriterType::Pointer writer = ImageWriterType::New();

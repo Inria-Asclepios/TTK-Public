@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -96,7 +96,7 @@ namespace itk
       m_Sigma = 1.0;
       m_Gamma = 1.0;
       m_DoNotDiffuseTangent = false;
-      OutputPixelType m_Mean( static_cast<ScalarType>(0.0) ); // limit value == value at infinity
+      m_Mean = OutputPixelType ( static_cast<ScalarType>(0.0) ); // limit value == value at infinity
     }
     ~RBFInterpolationTensorImageFilter(){};
     

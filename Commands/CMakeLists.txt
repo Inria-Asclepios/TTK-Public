@@ -166,6 +166,49 @@
   ITKIO
   )
 
+  
+  # registration commands
+  if (TTK_USE_GMM)
+
+    add_executable(AssessRegistrationTensor
+      AssessRegistrationTensor.cxx
+      )
+
+    add_executable(DemonsRegistrationTensor
+      DemonsRegistrationTensor.cxx
+      )
+
+    add_executable(LogDomainDemonsRegistrationTensor
+      LogDomainDemonsRegistrationTensor.cxx
+      )
+
+    target_link_libraries(AssessRegistrationTensor
+      ITKCommon
+      ITKIO
+      ITKTensor
+      ITKBasicFilters
+      vtkCommon
+      vtkIO
+      )
+    target_link_libraries(DemonsRegistrationTensor
+      ITKCommon
+      ITKIO
+      ITKTensor
+      ITKBasicFilters
+      vtkCommon
+      vtkIO
+      )
+    target_link_libraries(LogDomainDemonsRegistrationTensor
+      ITKCommon
+      ITKIO
+      ITKTensor
+      ITKBasicFilters
+      vtkCommon
+      vtkIO
+      )
+
+  endif (TTK_USE_GMM)
+
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_LIBRARIES)
   install(TARGETS ttkCommands

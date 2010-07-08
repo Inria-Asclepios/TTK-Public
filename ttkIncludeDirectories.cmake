@@ -2,10 +2,17 @@
 # Include directories for other projects installed on the system.
 SET(TTK_INCLUDE_DIRS_SYSTEM "")
 
+IF (TTK_USE_GMM)  
+  set(TTK_INCLUDE_DIRS_SYSTEM
+    ${TTK_INCLUDE_DIRS_SYSTEM}
+    ${GMM_INCLUDE_DIR}
+  )
+ENDIF (TTK_USE_GMM)  
+
 IF (TTK_USE_MKL)  
   SET(TTK_INCLUDE_DIRS_SYSTEM
   ${TTK_INCLUDE_DIRS_SYSTEM}
-  ${MKL_INCLUDE_DIR}  
+  ${MKL_INCLUDE_DIR}
   )
 ENDIF(TTK_USE_MKL)
 
@@ -34,6 +41,7 @@ ${TTK_SOURCE_DIR}
 ${TTK_SOURCE_DIR}/Common
 ${TTK_SOURCE_DIR}/Algorithms
 ${TTK_SOURCE_DIR}/Algorithms/Hardi
+${TTK_SOURCE_DIR}/Registration
 ${TTK_SOURCE_DIR}/Commands
 )
 

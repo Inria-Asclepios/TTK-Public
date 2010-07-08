@@ -106,18 +106,37 @@ mark_as_advanced(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT
 ## Required dependencies
 ## #################################################################
 
-
 find_package(ITK REQUIRED)
 find_package(VTK REQUIRED)
+
+
+## ###################################################################
+## Some packages options are required for this project. Check them now
+## ###################################################################
+
+set(_ITKVersionString "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}" )
+math(EXPR _ITKVersionNum "${ITK_VERSION_MAJOR}*100*100 + ${ITK_VERSION_MINOR}*100 + ${ITK_VERSION_PATCH}")
+if( _ITKVersionNum LESS 30800 )
+  message(SEND_ERROR "The ITK version you want to use (${_ITKVersionString}) is not supported by this project. Please use a more recent version of ITK. The minimum required version is 3.8.0. The recommended version is 3.14.0.")
+endif( _ITKVersionNum LESS 30800 )
+if(NOT ITK_USE_REVIEW)
+  message(SEND_ERROR "ITK_USE_REVIEW has not been set to on when compiling ITK. This option is mandatory for this project to build. Please recompile your ITK installation.")
+endif(NOT ITK_USE_REVIEW)
 
 
 ## #################################################################
 ## Options
 ## #################################################################
 
+option(TTK_USE_GMM   OFF "Use GMM to build registration (tensor demons, log domain tensor demons) module")
 option(TTK_USE_MKL   OFF "Use MKL to solve eigensystems")
 option(TTK_USE_ACML  OFF "Use ACML to solve eigensystems")
 option(TTK_USE_MIPS  OFF "Use MIPS and make TTK compatible with inrimage file format (discouraged)")
+
+
+if (TTK_USE_GMM)
+  find_path(GMM_INCLUDE_DIR gmm/gmm.h)
+endif(TTK_USE_GMM)
 
 
 if  (TTK_USE_MKL 
@@ -225,6 +244,15 @@ if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 
 
+#-----------------------------------------------------------------------------
+# Set any extra compilation flags here
+if(CMAKE_COMPILER_IS_GNUCXX)
+  # Add some useful warning flags
+  # Note: -Wall and -Wno-deprecated are already pulled in by
+  # UseITK.cmake
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wshadow")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wshadow")
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 #-----------------------------------------------------------------------------
 # Add compiler flags TTK needs to work on this platform.  This must be
@@ -235,6 +263,9 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TTK_REQUIRED_CXX_FLAGS}")
 
 add_subdirectory(Common)
 add_subdirectory(Algorithms)
+if (TTK_USE_GMM)
+  add_subdirectory(Registration)
+endif (TTK_USE_GMM)
 add_subdirectory(Commands)
 
 

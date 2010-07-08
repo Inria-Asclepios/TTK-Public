@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -515,18 +515,18 @@ namespace itk
     // now interpolate
     for( unsigned int j=0; j<positions.size(); j++)
     {
-      GeneralMatrixType H(1,N);
-      H (0,0)=1.0;
+      GeneralMatrixType H2(1,N);
+      H2 (0,0)=1.0;
       PointType pt = positions[j];
       
       for(unsigned int i=1; i<N; i++)
       {
         PointType pti = points[i-1];
-        H(0,i) = Self::h(pti,pt,sigma,gamma);
+        H2(0,i) = Self::h(pti,pt,sigma,gamma);
       }
 
       // compute the interpolated value
-      GeneralMatrixType res = H*L;
+      GeneralMatrixType res = H2*L;
       OutputPixelType M;
       
       M = res.data_block();

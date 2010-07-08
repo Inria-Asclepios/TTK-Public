@@ -760,12 +760,12 @@ GetPot::__process_section_label(const std::string& Section,
 	}
 	section_stack.push_back(sname);
     }
-    std::string section = "";
+    std::string ssection = "";
     if( section_stack.size() != 0 ) {
 	victorate(std::string, section_stack, it)
-	    section += *it + "/";
+	    ssection += *it + "/";
     }
-    return section;
+    return ssection;
 }
 
 

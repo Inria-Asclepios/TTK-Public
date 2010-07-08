@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -161,18 +161,18 @@ namespace itk
       itk::TransformFactory< TransformType >::RegisterTransform ();
       
       typedef itk::TransformFileReader TransformReaderType;
-      TransformReaderType::Pointer reader = TransformReaderType::New();
-      reader->SetFileName ( mat );
+      TransformReaderType::Pointer reader_t = TransformReaderType::New();
+      reader_t->SetFileName ( mat );
       try
       {
-	reader->Update();
+	reader_t->Update();
       }
       catch (itk::ExceptionObject &e)
       {
 	std::cerr << e;
 	return -1;
       }
-      transform = dynamic_cast<TransformType*>( reader->GetTransformList()->front().GetPointer() );
+      transform = dynamic_cast<TransformType*>( reader_t->GetTransformList()->front().GetPointer() );
     }
     
     std::cout << " Done." << std::endl;

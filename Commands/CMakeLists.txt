@@ -40,8 +40,18 @@
     itkTensorGradientMagnitudeCalculatorCommand.cxx
     itkTensorGradientMagnitudeCalculatorCommandFactory.cxx
     itkNormalize2TensorsCommand.cxx
-    itkNormalize2TensorsCommandFactory.cxx
+    itkNormalize2TensorsCommandFactory.cxx    
   )
+
+  if (TTK_USE_GMM)
+    set(TTK_COMMAND_SRCS
+      ${TTK_COMMAND_SRCS}
+      itkDemonsTensorRegistrationCommand.cxx
+      itkDemonsTensorRegistrationCommandFactory.cxx
+      itkLogDomainDemonsTensorRegistrationCommand.cxx
+      itkLogDomainDemonsTensorRegistrationCommandFactory.cxx
+    )
+  endif (TTK_USE_GMM)
 
 
   add_library(ttkCommands ${TTK_BUILD_TYPE}

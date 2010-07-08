@@ -1,3 +1,20 @@
+/*=========================================================================
+
+  Program:   Tensor ToolKit - TTK
+  Module:    $URL:$
+  Language:  C++
+  Date:      $Date:$
+  Version:   $Revision:$
+
+  Copyright (c) INRIA 2010. All rights reserved.
+  See LICENSE.txt for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 /**
  * This is a small tool that assesses the results of a tensor image
  * registration. It computes the error between the images, characteristics of

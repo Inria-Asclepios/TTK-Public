@@ -1126,7 +1126,7 @@ TDeformationField, TSolverPrecision>::ElementWisePowerTensor(
 
   for (unsigned int i = 0; i < TensorType::NDegreesOfFreedom; i++)
     {
-      outTensor.SetNthComponent(i, pow(tensor.GetNthComponent(i), power));
+      outTensor.SetNthComponent(i, std::pow( (double)tensor.GetNthComponent(i), power));
     }
 
   return outTensor;

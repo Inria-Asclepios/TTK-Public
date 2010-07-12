@@ -14,6 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "ttkConfigure.h"
+
 #include "itkWarpTensorImageCommandFactory.h"
 #include "itkNPTRemoverCommandFactory.h"
 #include "itkTensorFlipCommandFactory.h"
@@ -35,12 +37,12 @@
 #include "itkBoostTensorAnisotropyCommandFactory.h"
 #include "itkAverageStdTensorCalculatorCommandFactory.h"
 #include "itkNormalize2TensorsCommandFactory.h"
+#ifdef TTK_USE_GMM
 #include "itkDemonsTensorRegistrationCommandFactory.h"
 #include "itkLogDomainDemonsTensorRegistrationCommandFactory.h"
+#endif
 
 #include "itkCommandObjectFactory.h"
-
-#include "ttkConfigure.h"
 
 #ifdef TTK_USE_MIPS
 #include "mipsInrimageImageIOFactory.h"

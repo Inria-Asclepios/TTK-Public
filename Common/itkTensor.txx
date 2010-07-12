@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -526,8 +526,8 @@ namespace itk
       for(unsigned int i=0;i<NDimension;i++)
       {
         double res = 0.0;
-        for(unsigned int n=0;n<NDimension;n++)
-          res += ev[n]*z[n*NDimension+i]*z[n*NDimension+j];
+        for(unsigned int k=0; k<NDimension; k++)
+          res += ev[k]*z[k*NDimension+i]*z[k*NDimension+j];
 
         result[j*(j+1)/2+i] = static_cast<T>(res);
 

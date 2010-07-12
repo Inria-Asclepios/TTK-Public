@@ -72,8 +72,10 @@ int main (int narg, char *args[])
   itk::SyntheticTensorFieldGeneratorCommandFactory::RegisterOneFactory();
   itk::BoostTensorAnisotropyCommandFactory::RegisterOneFactory();
   itk::AverageStdTensorCalculatorCommandFactory::RegisterOneFactory();
+#ifdef TTK_USE_GMM
   itk::DemonsTensorRegistrationCommandFactory::RegisterOneFactory();
   itk::LogDomainDemonsTensorRegistrationCommandFactory::RegisterOneFactory();
+#endif
   
   
   if (narg<2) {

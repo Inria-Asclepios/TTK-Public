@@ -1,6 +1,7 @@
 #ifndef _ttkConfigure_h_
 #define _ttkConfigure_h_
 
+#cmakedefine TTK_USE_VTKINRIA3D
 #cmakedefine TTK_USE_MIPS
 #cmakedefine TTK_USE_MKL
 #cmakedefine TTK_USE_ACML

@@ -132,6 +132,7 @@ option(TTK_USE_GMM   OFF "Use GMM to build registration (tensor demons, log doma
 option(TTK_USE_MKL   OFF "Use MKL to solve eigensystems")
 option(TTK_USE_ACML  OFF "Use ACML to solve eigensystems")
 option(TTK_USE_MIPS  OFF "Use MIPS and make TTK compatible with inrimage file format (discouraged)")
+option(TTK_USE_VTKINRIA3D  OFF "Use vtkINRIA3D and make TTK compatible with GIS file format")
 
 
 if (TTK_USE_GMM)
@@ -176,6 +177,18 @@ if(TTK_USE_MIPS)
   Basics 
   mipsZ)
 endif(TTK_USE_MIPS)
+
+
+set(TTK_VTKINRIA3D_LIBRARIES
+)
+if(TTK_USE_VTKINRIA3D)
+  find_package(vtkINRIA3D REQUIRED)
+  include(${vtkINRIA3D_USE_FILE})
+ 
+  set(TTK_VTKINRIA3D_LIBRARIES 
+  itkIOAddOn
+  )
+endif(TTK_USE_VTKINRIA3D)
 
 
 # -----------------------------------------------------------------------------

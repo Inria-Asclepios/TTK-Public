@@ -100,6 +100,7 @@
 
   target_link_libraries(ttkConvertCommands
     ${TTK_MIPS_LIBRARIES}
+    ${TTK_VTKINRIA3D_LIBRARIES}
     ITKProgramFactory
     ITKTensor
     ${ITK_LIBRARIES}

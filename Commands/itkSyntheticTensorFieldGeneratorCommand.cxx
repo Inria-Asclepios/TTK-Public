@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -60,7 +60,7 @@ namespace itk
       return -1;
     }
 
-    const char* output = cl.follow ("tensors.inr.gz", 2, "-o", "-O");
+    const char* output = cl.follow ("tensors.nii.gz", 2, "-o", "-O");
     const char* type = cl.follow ("crossing", 2, "-t", "-T");
     const int crossings = cl.follow (1, 2, "-c", "-C");
     const double r1 = cl.follow (1.0, 2, "-r1", "-R1");

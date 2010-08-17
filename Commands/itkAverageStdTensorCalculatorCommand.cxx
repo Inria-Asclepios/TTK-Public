@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -144,7 +144,7 @@ namespace itk
     {
       CovMatrixIOType::Pointer writer2 = CovMatrixIOType::New();
       writer2->SetInput( covMatrix );
-      std::string std_output = s_output + "_covariance_matrix.nii.gz";
+      std::string std_output = s_output + "_covariance_matrix.inr.gz";
       writer2->SetFileName( std_output.c_str() );
       try
       {

@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -54,7 +54,7 @@ namespace itk
     
     
     const char* input   = cl.follow ("NoFile", 2, "-i", "-I");
-    const char* output  = cl.follow ("output.inr.gz", 2, "-o", "-O");
+    const char* output  = cl.follow ("output.nii.gz", 2, "-o", "-O");
     
     
     typedef double                               ScalarType;  

@@ -42,7 +42,7 @@ int main (int narg, char *args[])
   itk::ConsolidateFiberBundleCommandFactory::RegisterOneFactory();
 
   if (narg<2) {
-    std::cout << "Software Tensor ToolKit (c)INRIA 2010, version 1.0.0\n";
+    std::cout << "Software Tensor ToolKit (c)INRIA 2010, version " << TTK_VERSION << "\n";
     std::cout << "\n";
     std::cout << "Author: Pierre Fillard (Pierre.Fillard@inria.fr)\n";
     std::cout << "\n";

@@ -142,6 +142,8 @@
     itkAverageStdCalculatorCommandFactory.cxx
     itkRBFRotationMatrixExtrapolationCommand.cxx
     itkRBFRotationMatrixExtrapolationCommandFactory.cxx
+    itkPermute23TensorCoefficientsCommand.cxx
+    itkPermute23TensorCoefficientsCommandFactory.cxx
   )
 
   add_library(ttkUtilCommands ${TTK_BUILD_TYPE}

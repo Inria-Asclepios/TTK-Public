@@ -20,6 +20,7 @@
 #include "itkWarpImageCommandFactory.h"
 #include "itkAverageStdCalculatorCommandFactory.h"
 #include "itkRBFRotationMatrixExtrapolationCommandFactory.h"
+#include "itkPermute23TensorCoefficientsCommandFactory.h"
 
 #include "itkCommandObjectFactory.h"
 
@@ -38,6 +39,7 @@ int main (int narg, char *args[])
   itk::WarpImageCommandFactory::RegisterOneFactory();
   itk::AverageStdCalculatorCommandFactory::RegisterOneFactory();
   itk::RBFRotationMatrixExtrapolationCommandFactory::RegisterOneFactory();
+  itk::Permute23TensorCoefficientsCommandFactory::RegisterOneFactory();
   
   if (narg<2) {
     std::cout << "Software Tensor ToolKit (c)INRIA 2010, version 1.0.0\n";

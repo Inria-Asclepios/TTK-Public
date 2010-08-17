@@ -60,6 +60,7 @@
 
   target_link_libraries(ttkCommands
     ${TTK_MIPS_LIBRARIES}
+    ${TTK_VTKINRIA3D_LIBRARIES}
     ITKProgramFactory
     ITKTensor
     ${ITK_LIBRARIES}
@@ -152,6 +153,7 @@
 
   target_link_libraries(ttkUtilCommands
     ${TTK_MIPS_LIBRARIES}
+    ${TTK_VTKINRIA3D_LIBRARIES}
     ITKProgramFactory
     ITKTensor
     ${ITK_LIBRARIES}

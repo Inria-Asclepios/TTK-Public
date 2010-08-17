@@ -28,6 +28,10 @@
 #include "mipsInrimageImageIOFactory.h"
 #endif
 
+#ifdef TTK_USE_VTKINRIA3D
+#include "itkGISImageIOFactory.h"
+#endif
+
 int main (int narg, char *args[])
 {
 
@@ -60,7 +64,11 @@ int main (int narg, char *args[])
 #ifdef TTK_USE_MIPS
     itk::InrimageImageIOFactory::RegisterOneFactory();
 #endif
-  
+
+#ifdef TTK_USE_VTKINRIA3D
+    itk::GISImageIOFactory::RegisterOneFactory();
+#endif
+
 	
   const char *programName = args[1];
   

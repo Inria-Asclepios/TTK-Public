@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -73,23 +73,23 @@ namespace itk
    
     try
     {
-      if( ext==".vtk" )
+      if ( ext.find(".vtk") == ext.length()-4 )
       {
         this->ReadVTK (m_FileName.c_str());
       }
-      else if ( ext==".nrrd" || ext==".nhdr" )
+      else if ( ext.find(".nrrd") == ext.length()-5 || ext.find(".nhdr") == ext.length()-5 )
       {
         this->ReadNrrd (m_FileName.c_str());
       }
-      else if ( ext==".inr.gz" )
+      else if ( ext.find(".inr.gz") == ext.length()-7 )
       {
         this->ReadInrimage (m_FileName.c_str());
       }
-      else if ( ext==".nii" || ext==".nii.gz" )
+      else if ( ext.find(".nii") == ext.length()-4 || ext.find(".nii.gz") == ext.length()-7 )
       {
         this->ReadNifti (m_FileName.c_str());
       }
-      else if ( ext==".mha" || ext==".mhd" )
+      else if ( ext.find(".mha") == ext.length()-4 || ext.find(".mhd") == ext.length()-4 )
       {
         this->ReadMha (m_FileName.c_str());
       }
@@ -861,23 +861,23 @@ namespace itk
     
     try
     {
-      if( ext==".vtk" )
+      if ( ext.find(".vtk") == ext.length()-4 )
       {
         this->WriteVTK (m_FileName.c_str());
       }
-      else if( ext==".nrrd" || ext==".nhdr" )
+      else if ( ext.find(".nrrd") == ext.length()-5 || ext.find(".nhdr") == ext.length()-5 )
       {
         this->WriteNrrd (m_FileName.c_str());
       }
-      else if( ext==".inr.gz" )
+      else if ( ext.find(".inr.gz") == ext.length()-7 )
       {
         this->WriteInrimage (m_FileName.c_str());
       }
-      else if( ext==".nii" || ext==".nii.gz")
+      else if ( ext.find(".nii") == ext.length()-4 || ext.find(".nii.gz") == ext.length()-7 )
       {
         this->WriteNifti (m_FileName.c_str());
       }
-      else if( ext==".mha" || ext==".mhd")
+      else if ( ext.find(".mha") == ext.length()-4 || ext.find(".mhd") == ext.length()-4 )
       {
         this->WriteMha (m_FileName.c_str());
       }

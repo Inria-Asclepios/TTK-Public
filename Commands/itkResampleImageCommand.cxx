@@ -42,7 +42,13 @@ namespace itk
   {
     m_ShortDescription = "Resample an image given a linear transform and a reference image";
     m_LongDescription = "Usage:\n";
-    m_LongDescription += "<-i input> <-m matrix> <-r reference> <-o output>\n\n";
+    m_LongDescription += "-i  [Image File]\n";
+    m_LongDescription += "-r  [Reference image file]\n";
+    m_LongDescription += "-m  [matrix file]\n";
+    m_LongDescription += "-sx [double]\n";
+    m_LongDescription += "-sy [double]\n";
+    m_LongDescription += "-sz [double]\n";
+    m_LongDescription += "-o  [Output File Name]\n\n";
     m_LongDescription += m_ShortDescription;
   }
   
@@ -53,6 +59,11 @@ namespace itk
   {
 
     itk::Object::GlobalWarningDisplayOff();
+
+#ifdef TTK_USE_MIPS	
+    itk::InrimageImageIOFactory::RegisterOneFactory();
+#endif
+    
     
     GetPot cl(narg, const_cast<char**>(arg)); // argument parser
     if( cl.size() == 1 || cl.search(2, "--help", "-h") )
@@ -65,16 +76,19 @@ namespace itk
     const char* output = cl.follow("NoFile",2,"-O","-o");
     const char* mat    = cl.follow( "NoFile", 2, "-m", "-M");
     const char* ref    = cl.follow( "NoFile", 2, "-r", "-R");
+    const unsigned int sx = cl.follow(-1,2,"-SX","-sx");
+    const unsigned int sy = cl.follow(-1,2,"-SY","-sy");
+    const unsigned int sz = cl.follow(-1,2,"-SZ","-sz");
     
     typedef double ScalarType;
-    typedef Image<ScalarType, 3>         ImageType;
-    
-#ifdef TTK_USE_MIPS	
-    itk::InrimageImageIOFactory::RegisterOneFactory();
-#endif
-    
+    typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;
+    typedef Image<ScalarType, 3>            ImageType;    
     typedef itk::ImageFileReader<ImageType> ImageReaderType;
     typedef itk::ImageFileWriter<ImageType> WriterType;
+    typedef ImageType::SizeType             SizeType;
+    typedef ImageType::SpacingType          SpacingType;
+    typedef ImageType::PointType            PointType;
+    typedef ImageType::DirectionType        DirectionType;
     
     ImageReaderType::Pointer reader = ImageReaderType::New();
     reader->SetFileName( input );
@@ -91,73 +105,33 @@ namespace itk
     }
     std::cout << " Done." << std::endl;
 
-
-    ImageReaderType::Pointer reader2 = ImageReaderType::New();
-    reader2->SetFileName( ref );
-    
-    std::cout << "Reading: " << ref << std::flush;
-    try
+    ImageType::Pointer inputimage = reader->GetOutput();
+    ImageType::Pointer reference = 0;
+    if (strcmp (ref, "NoFile"))
     {
-      reader2->Update();
+      
+      ImageReaderType::Pointer reader2 = ImageReaderType::New();
+      reader2->SetFileName( ref );
+      
+      std::cout << "Reading: " << ref << std::flush;
+      try
+      {
+	reader2->Update();
+      }
+      catch( itk::ExceptionObject &e)
+      {
+	std::cerr << e;
+	return -1;
+      }
+      std::cout << " Done." << std::endl;
+      reference = reader2->GetOutput();
     }
-    catch( itk::ExceptionObject &e)
-    {
-      std::cerr << e;
-      return -1;
-    }
-    std::cout << " Done." << std::endl;
-
     
     // read the affine matrix
-    std::cout << "Reading: " << mat;
-    typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;
-        
-    //TransformType::Pointer transform = TransformType::New();
-    
-    
-    /*
-      TransformType::MatrixType       matrix;
-      TransformType::OutputVectorType translation (0.0);
-      
-      std::ifstream buffer (mat);
-      if( buffer.fail() )
-      {
-      std::cerr << "Error: Cannot open file " << mat << std::endl;
-      matrix.SetIdentity();
-      }
-      else
-      {      
-      // skip the first 12 floats
-      char junk [512];
-      for( unsigned int i=0; i<12; i++)
-      {
-      buffer >> junk;
-      }
-      
-      for( unsigned int i=0 ;i<3; i++)
-      {
-      buffer >> matrix (i,0);
-      buffer >> matrix (i,1);
-      buffer >> matrix (i,2);
-      }
-      
-      for( unsigned int i=0; i<3; i++)
-      {
-      buffer >> translation[i];
-      }
-      }
-      
-      transform->SetMatrix (matrix);
-      transform->SetTranslation (translation);
-      
-      TransformType::Pointer inv_transform = TransformType::New();
-      transform->GetInverse(inv_transform);
-      
-      transform = inv_transform;
-    */
-    
     TransformType::Pointer transform = 0;
+    if (strcmp (mat, "NoFile"))
     {
+      std::cout << "Reading: " << mat;
       itk::TransformFactory< TransformType >::RegisterTransform ();
       
       typedef itk::TransformFileReader TransformReaderType;
@@ -173,12 +147,44 @@ namespace itk
 	return -1;
       }
       transform = dynamic_cast<TransformType*>( reader_t->GetTransformList()->front().GetPointer() );
+      std::cout << " Done." << std::endl;
     }
+
     
-    std::cout << " Done." << std::endl;
+    SpacingType spacing;
+    PointType origin;
+    SizeType size;
+    DirectionType direction;
     
-    std::cout << transform << std::endl;
-    
+    if (strcmp (ref, "NoFile"))
+    {
+      spacing   = reference->GetSpacing();
+      origin    = reference->GetOrigin();
+      size      = reference->GetLargestPossibleRegion().GetSize();
+      direction = reference->GetDirection();
+    }
+    else if ( (sx != -1) && (sy != -1) && (sz != -1) )
+    {
+      spacing   = inputimage->GetSpacing();
+      origin    = inputimage->GetOrigin();
+      size      = inputimage->GetLargestPossibleRegion().GetSize();
+      direction = inputimage->GetDirection();
+      
+      spacing[0] /= (double)(sx) / (double)(size[0]);
+      spacing[1] /= (double)(sy) / (double)(size[1]);
+      spacing[2] /= (double)(sz) / (double)(size[2]);
+      
+      size[0] = sx;
+      size[1] = sy;
+      size[2] = sz;    
+    }
+    else
+    {
+      spacing   = inputimage->GetSpacing();
+      origin    = inputimage->GetOrigin();
+      size      = inputimage->GetLargestPossibleRegion().GetSize();
+      direction = inputimage->GetDirection();
+    }
     
     typedef itk::ResampleImageFilter<ImageType, ImageType> FilterType;
     FilterType::Pointer filter = FilterType::New();
@@ -187,13 +193,14 @@ namespace itk
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     
     filter->SetInterpolator( interpolator );
-    filter->SetInput ( reader->GetOutput() );
-    filter->SetOutputOrigin( reader2->GetOutput()->GetOrigin() );
-    filter->SetOutputSpacing( reader2->GetOutput()->GetSpacing() );
-    filter->SetOutputDirection (reader2->GetOutput()->GetDirection());
-    filter->SetSize( reader2->GetOutput()->GetLargestPossibleRegion().GetSize() );
+    filter->SetInput ( inputimage );
+    filter->SetOutputOrigin( origin );
+    filter->SetOutputSpacing( spacing );
+    filter->SetOutputDirection (direction);
+    filter->SetSize( size );
     
-    filter->SetTransform( transform );
+    if(transform)
+      filter->SetTransform( transform );
     
     std::cout << "Resampling...";
     try

@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -40,6 +40,7 @@ namespace itk
 	 m_VarianceImage->SetRegions( this->GetInput(0)->GetLargestPossibleRegion() );
 	 m_VarianceImage->SetOrigin( this->GetInput(0)->GetOrigin() );
 	 m_VarianceImage->SetSpacing( this->GetInput(0)->GetSpacing() );
+	 m_VarianceImage->SetDirection( this->GetInput(0)->GetDirection() );	 
 	 
 	 m_VarianceImage->Allocate();
 	 

@@ -40,7 +40,9 @@
     itkTensorGradientMagnitudeCalculatorCommand.cxx
     itkTensorGradientMagnitudeCalculatorCommandFactory.cxx
     itkNormalize2TensorsCommand.cxx
-    itkNormalize2TensorsCommandFactory.cxx    
+    itkNormalize2TensorsCommandFactory.cxx
+    itkScaleTensorCommand.cxx
+    itkScaleTensorCommandFactory.cxx
   )
 
   if (TTK_USE_GMM)

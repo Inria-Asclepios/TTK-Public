@@ -37,6 +37,7 @@
 #include "itkBoostTensorAnisotropyCommandFactory.h"
 #include "itkAverageStdTensorCalculatorCommandFactory.h"
 #include "itkNormalize2TensorsCommandFactory.h"
+#include "itkScaleTensorCommandFactory.h"
 #ifdef TTK_USE_GMM
 #include "itkDemonsTensorRegistrationCommandFactory.h"
 #include "itkLogDomainDemonsTensorRegistrationCommandFactory.h"
@@ -76,6 +77,7 @@ int main (int narg, char *args[])
   itk::SyntheticTensorFieldGeneratorCommandFactory::RegisterOneFactory();
   itk::BoostTensorAnisotropyCommandFactory::RegisterOneFactory();
   itk::AverageStdTensorCalculatorCommandFactory::RegisterOneFactory();
+  itk::ScaleTensorCommandFactory::RegisterOneFactory();
 #ifdef TTK_USE_GMM
   itk::DemonsTensorRegistrationCommandFactory::RegisterOneFactory();
   itk::LogDomainDemonsTensorRegistrationCommandFactory::RegisterOneFactory();

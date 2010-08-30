@@ -1222,7 +1222,8 @@ TDeformationField, TSolverPrecision>::ReorientateMovingGradient(
         }
 
       // then rotate with RTranspose because ApplyMatrix does R*T*R'
-      T.SetVnlMatrix(T.ApplyMatrix(R.GetTranspose()));
+      T = T.ApplyMatrix( CastMatrix<DeformationFieldMatrixType, TensorMatrixType>(
+        DeformationFieldMatrixType(R.GetTranspose()) ));
 
       // then copy to output
       for (unsigned int row = 0; row < TensorGradientType::RowDimensions; row++)

@@ -198,6 +198,9 @@
       )
 
     target_link_libraries(AssessRegistrationTensor
+      ${TTK_MIPS_LIBRARIES}
+      ${TTK_VTKINRIA3D_LIBRARIES}
+      ${TTK_LAPACK_LIBRARIES}
       ITKCommon
       ITKIO
       ITKTensor
@@ -206,6 +209,9 @@
       vtkIO
       )
     target_link_libraries(DemonsRegistrationTensor
+      ${TTK_MIPS_LIBRARIES}
+      ${TTK_VTKINRIA3D_LIBRARIES}
+      ${TTK_LAPACK_LIBRARIES}
       ITKCommon
       ITKIO
       ITKTensor
@@ -214,6 +220,9 @@
       vtkIO
       )
     target_link_libraries(LogDomainDemonsRegistrationTensor
+      ${TTK_MIPS_LIBRARIES}
+      ${TTK_VTKINRIA3D_LIBRARIES}
+      ${TTK_LAPACK_LIBRARIES}
       ITKCommon
       ITKIO
       ITKTensor

@@ -73,23 +73,23 @@ namespace itk
    
     try
     {
-      if ( ext.find(".vtk") == ext.length()-4 )
+      if( ext==".vtk" )
       {
         this->ReadVTK (m_FileName.c_str());
       }
-      else if ( ext.find(".nrrd") == ext.length()-5 || ext.find(".nhdr") == ext.length()-5 )
+      else if ( ext==".nrrd" || ext==".nhdr" )
       {
         this->ReadNrrd (m_FileName.c_str());
       }
-      else if ( ext.find(".inr.gz") == ext.length()-7 )
+      else if ( ext==".inr.gz" )
       {
         this->ReadInrimage (m_FileName.c_str());
       }
-      else if ( ext.find(".nii") == ext.length()-4 || ext.find(".nii.gz") == ext.length()-7 )
+      else if ( ext==".nii" || ext==".nii.gz" )
       {
         this->ReadNifti (m_FileName.c_str());
       }
-      else if ( ext.find(".mha") == ext.length()-4 || ext.find(".mhd") == ext.length()-4 )
+      else if ( ext==".mha" || ext==".mhd" )
       {
         this->ReadMha (m_FileName.c_str());
       }
@@ -861,23 +861,23 @@ namespace itk
     
     try
     {
-      if ( ext.find(".vtk") == ext.length()-4 )
+      if( ext==".vtk" )
       {
         this->WriteVTK (m_FileName.c_str());
       }
-      else if ( ext.find(".nrrd") == ext.length()-5 || ext.find(".nhdr") == ext.length()-5 )
+      else if( ext==".nrrd" || ext==".nhdr" )
       {
         this->WriteNrrd (m_FileName.c_str());
       }
-      else if ( ext.find(".inr.gz") == ext.length()-7 )
+      else if( ext==".inr.gz" )
       {
         this->WriteInrimage (m_FileName.c_str());
       }
-      else if ( ext.find(".nii") == ext.length()-4 || ext.find(".nii.gz") == ext.length()-7 )
+      else if( ext==".nii" || ext==".nii.gz")
       {
         this->WriteNifti (m_FileName.c_str());
       }
-      else if ( ext.find(".mha") == ext.length()-4 || ext.find(".mhd") == ext.length()-4 )
+      else if( ext==".mha" || ext==".mhd")
       {
         this->WriteMha (m_FileName.c_str());
       }

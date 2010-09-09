@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -30,8 +30,9 @@ namespace itk
   template <class TInputImage, class TOutputImage>
   void
   AddGaussianNoiseImageFilter<TInputImage, TOutputImage>
-  ::BeforeThreadedGenerateData()
+  ::BeforeGenerateData()
   {
+    std::cout<<"initialize generator"<<std::endl;    
     m_NormalGenerator->Initialize( (int) clock() );
   }
   
@@ -39,24 +40,21 @@ namespace itk
   template <class TInputImage, class TOutputImage>
   void
   AddGaussianNoiseImageFilter<TInputImage, TOutputImage>
-  ::ThreadedGenerateData(const OutputRegionType &outputRegion, int threadId)
+  ::GenerateData(void)
   {
-
     typedef ImageRegionIterator<OutputImageType>      OutputIteratorType;
     typedef ImageRegionConstIterator<InputImageType>  InputIteratorType;
-                                      
-    InputIteratorType itIn(this->GetInput(), outputRegion);
-    OutputIteratorType itOut(this->GetOutput(), outputRegion);
 
+    InputIteratorType itIn  (this->GetInput(), this->GetInput()->GetLargestPossibleRegion());
+    OutputIteratorType itOut(this->GetOutput(), this->GetOutput()->GetLargestPossibleRegion());
+    
     while( !itOut.IsAtEnd() )
     {
 
       InputPixelType T = itIn.Get();
       if (T != 0)
       {
-	
-	double random_number = m_NormalGenerator->GetVariate() * sqrt ( m_Variance );
-	
+	double random_number = m_NormalGenerator->GetVariate() * std::sqrt ( m_Variance );
 	T+=random_number;
       }
       
@@ -64,6 +62,49 @@ namespace itk
       
       ++itOut;
       ++itIn;
+    }
+
+    
+  }
+
+
+  
+
+  template <class TInputImage, class TOutputImage>
+  void
+  AddGaussianNoiseImageFilter<TInputImage, TOutputImage>
+  ::GenerateInputRequestedRegion() throw (InvalidRequestedRegionError)
+  {
+    Superclass::GenerateInputRequestedRegion();
+    if ( this->GetInput() )
+    {
+      InputImagePointer image = const_cast< InputImageType * >( this->GetInput() );
+      image->SetRequestedRegionToLargestPossibleRegion();
+    }
+  }
+
+  
+
+  template <class TInputImage, class TOutputImage>
+  void
+  AddGaussianNoiseImageFilter<TInputImage, TOutputImage>
+  ::GenerateOutputInformation(void)
+  {
+
+    // call the superclass' implementation of this method
+    Superclass::GenerateOutputInformation();
+    
+    if (this->GetInput())
+    {
+      std::cout<<"initialize generator"<<std::endl;    
+      m_NormalGenerator->Initialize( (int) clock() );
+      // we need to compute the output spacing, the output origin, the
+      // output image size, and the output image start index
+      this->GetOutput()->SetRegions( this->GetInput()->GetLargestPossibleRegion() );
+      this->GetOutput()->SetDirection (this->GetInput()->GetDirection());
+      this->GetOutput()->SetOrigin(this->GetInput()->GetOrigin());
+      this->GetOutput()->SetSpacing(this->GetInput()->GetSpacing());    
+      this->GetOutput()->Allocate();
     }
     
   }

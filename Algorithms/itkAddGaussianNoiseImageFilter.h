@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -44,6 +44,7 @@ namespace itk
     typedef TOutputImage                          OutputImageType;
     typedef typename OutputImageType::PixelType   OutputPixelType;
     typedef typename OutputImageType::RegionType  OutputRegionType;
+    typedef typename InputImageType::Pointer      InputImagePointer;
 
     itkSetMacro (Variance, double);
     itkGetMacro (Variance, double);
@@ -56,9 +57,12 @@ namespace itk
     }
     ~AddGaussianNoiseImageFilter(){};
 
-    void BeforeThreadedGenerateData(void);
-    void ThreadedGenerateData(const OutputRegionType &, int);
-
+    /* void BeforeThreadedGenerateData(void); */
+    /* void ThreadedGenerateData(const OutputRegionType &, int); */
+    void BeforeGenerateData(void);
+    void GenerateData(void);
+    void GenerateOutputInformation();
+    void GenerateInputRequestedRegion() throw (InvalidRequestedRegionError);
     
   private:
     AddGaussianNoiseImageFilter (const Self&);

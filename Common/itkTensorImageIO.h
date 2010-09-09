@@ -96,6 +96,9 @@ namespace itk
       Superclass::PrintSelf (os,indent);      
     }
   
+    /** @return True if \c filename has extension \c ext */
+    bool CheckExtension(const char* filename, const char* ext) const;
+
     void ReadVTK (const char* filename);
     void ReadNrrd (const char* filename);
     void ReadInrimage (const char* filename);

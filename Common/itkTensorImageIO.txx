@@ -55,6 +55,17 @@ namespace itk
 
 
   template<class T, unsigned int TensorDimension, unsigned int ImageDimension>
+  bool
+  TensorImageIO<T,TensorDimension,ImageDimension>
+  ::CheckExtension (const char* filename, const char* ext) const
+  {
+    const char* found = strstr(filename, ext);
+
+    // return true if extension is found and is at the end of the filename
+    return ( found && found == ( filename+strlen(filename)-strlen(ext) ) );
+  }
+
+  template<class T, unsigned int TensorDimension, unsigned int ImageDimension>
   void
   TensorImageIO<T,TensorDimension,ImageDimension>
   ::Read (void)
@@ -73,30 +84,30 @@ namespace itk
    
     try
     {
-      if( ext==".vtk" )
+      if ( CheckExtension(m_FileName.c_str(), ".vtk") )
       {
         this->ReadVTK (m_FileName.c_str());
       }
-      else if ( ext==".nrrd" || ext==".nhdr" )
+      else if ( CheckExtension(m_FileName.c_str(), ".nrrd") || CheckExtension(m_FileName.c_str(), ".nhdr") )
       {
         this->ReadNrrd (m_FileName.c_str());
       }
-      else if ( ext==".inr.gz" )
+      else if ( CheckExtension(m_FileName.c_str(), ".inr.gz") )
       {
         this->ReadInrimage (m_FileName.c_str());
       }
-      else if ( ext==".nii" || ext==".nii.gz" )
+      else if ( CheckExtension(m_FileName.c_str(), ".nii") || CheckExtension(m_FileName.c_str(), ".nii.gz") )
       {
         this->ReadNifti (m_FileName.c_str());
       }
-      else if ( ext==".mha" || ext==".mhd" )
+      else if ( CheckExtension(m_FileName.c_str(), ".mha") || CheckExtension(m_FileName.c_str(), ".mhd") )
       {
         this->ReadMha (m_FileName.c_str());
       }
       else
       {
         throw itk::ExceptionObject (__FILE__,__LINE__,"Error: extension not recognized."
-                                    " Supported extenstions are:\n-vtk\n-inr.gz\n-nrrd.");
+                                    " Supported extenstions are:\n-vtk\n-nrrd\n-nhdr\n-inr.gz\n-nii\n-nii.gz\n-mha\n-mhd.");
       }
     }
     catch (itk::ExceptionObject &e)

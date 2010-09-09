@@ -23,6 +23,8 @@
 #include <itkImage.h>
 #include <itkTensorImageIO.h>
 
+#include "itkLinearInterpolateImageFunction.h"
+
 #include <iostream>
 #include "GetPot.h"
 
@@ -61,8 +63,8 @@ namespace itk
     typedef double                        ScalarType;
     
     typedef unsigned short                IntegerType;
-    typedef Image<IntegerType, 3>         ImageType;
-    typedef Image<IntegerType, 3>         ImageMaskType;
+    typedef Image<ScalarType, 3>         ImageType;
+    typedef Image<ScalarType, 3>         ImageMaskType;
     
     typedef TensorImageIO<ScalarType,3,3> TensorIOType;
     typedef TensorIOType::TensorImageType TensorImageType;
@@ -143,8 +145,10 @@ namespace itk
 	}
 	itMask.SetIndex (index);					
 	
-	if( itMask.Value() ) itOut.Set( itIn.Get() );
-	else                 itOut.Set( zero );
+	if( itMask.Value() > 0.0)
+	  itOut.Set( itIn.Get() );
+	else
+	  itOut.Set( zero );
 	++itOut;
 	++itIn;
       }

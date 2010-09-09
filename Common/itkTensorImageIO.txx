@@ -872,30 +872,30 @@ namespace itk
     
     try
     {
-      if( ext==".vtk" )
+      if ( CheckExtension(m_FileName.c_str(), ".vtk") )
       {
         this->WriteVTK (m_FileName.c_str());
       }
-      else if( ext==".nrrd" || ext==".nhdr" )
+      else if ( CheckExtension(m_FileName.c_str(), ".nrrd") || CheckExtension(m_FileName.c_str(), ".nhdr") )
       {
         this->WriteNrrd (m_FileName.c_str());
       }
-      else if( ext==".inr.gz" )
+      else if ( CheckExtension(m_FileName.c_str(), ".inr.gz") )
       {
         this->WriteInrimage (m_FileName.c_str());
       }
-      else if( ext==".nii" || ext==".nii.gz")
+      else if ( CheckExtension(m_FileName.c_str(), ".nii") || CheckExtension(m_FileName.c_str(), ".nii.gz") )
       {
         this->WriteNifti (m_FileName.c_str());
       }
-      else if( ext==".mha" || ext==".mhd")
+      else if ( CheckExtension(m_FileName.c_str(), ".mha") || CheckExtension(m_FileName.c_str(), ".mhd") )
       {
         this->WriteMha (m_FileName.c_str());
       }
       else
       {
         throw itk::ExceptionObject (__FILE__,__LINE__,"Error: extension not recognized."
-                                    " Supported extenstions are:\n-vtk\n-inr.gz\n-nrrd.");
+                                    " Supported extenstions are:\n-vtk\n-nrrd\n-nhdr\n-inr.gz\n-nii\n-nii.gz\n-mha\n-mhd.");
       }
     }
     catch (itk::ExceptionObject &e)

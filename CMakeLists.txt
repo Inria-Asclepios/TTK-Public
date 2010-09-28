@@ -198,8 +198,8 @@ configure_file(${PROJECT_SOURCE_DIR}/ttkConfigure.h.in
                ${PROJECT_BINARY_DIR}/ttkConfigure.h CONFIGURE IMMEDIATE)
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
-  install_files(/include FILES 
-    ${TTK_BINARY_DIR}/ttkConfigure.h)
+  install(FILES ${TTK_BINARY_DIR}/ttkConfigure.h
+      DESTINATION include)
 endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 
 set(TTK_REQUIRED_C_FLAGS)
@@ -249,10 +249,10 @@ CMAKE_EXPORT_BUILD_SETTINGS(${TTK_BUILD_SETTINGS_FILE})
 INCLUDE (${TTK_SOURCE_DIR}/ttkGenerateTTKConfig.cmake)
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
-  INSTALL_FILES(/lib FILES
-   ${TTK_BINARY_DIR}/TTKBuildSettings.cmake
-   ${TTK_BINARY_DIR}/UseTTK.cmake
-   ${TTK_BINARY_DIR}/Utilities/TTKConfig.cmake
+  INSTALL(FILES ${TTK_BINARY_DIR}/TTKBuildSettings.cmake 
+      ${TTK_BINARY_DIR}/UseTTK.cmake 
+      ${TTK_BINARY_DIR}/Utilities/TTKConfig.cmake
+   DESTINATION lib
   )
 endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 
@@ -320,6 +320,8 @@ endif (${CMAKE_SYSTEM_NAME} MATCHES Windows)
 
 set (CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${CPACK_SYSTEM_NAME}")
 
+set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+
 if (WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly.
   # Make sure there is at least one set of four (4) backslashes.
@@ -333,6 +335,8 @@ else (WIN32 AND NOT UNIX)
   #set (CPACK_STRIP_FILES "bin/ccmake;bin/cmake;bin/cpack;bin/ctest")
   #set (CPACK_PACKAGE_EXECUTABLES "")
 endif (WIN32 AND NOT UNIX)
+
+
 
 include(CPack)
 

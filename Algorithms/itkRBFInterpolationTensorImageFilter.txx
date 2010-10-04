@@ -22,9 +22,13 @@
 #include <itkImageRegionConstIteratorWithIndex.h>
 
 #ifdef TTK_USE_MKL
-#include <mkl_lapack.h>
+  #include <mkl_lapack.h>
 #else
-#include <vnl/algo/vnl_matrix_inverse.h>
+#ifdef TTK_USE_ACML
+  #include <acml.h>
+#else
+  #include <vnl/algo/vnl_matrix_inverse.h>
+#endif
 #endif
 
 namespace itk
@@ -46,9 +50,9 @@ namespace itk
     // Solve the system
     unsigned int numTensors = m_Tensors.size();
 
-	unsigned int N = numTensors+1;
+    unsigned int N = numTensors+1;
 	
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
     ScalarType *H;
     ScalarType *T;    
         
@@ -62,14 +66,14 @@ namespace itk
 
     for( unsigned int j=0;j<numTensors;j++)
     {
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
       H[j] = 1.0;
 #else
       H(j,0) = 1.0;
 #endif
     }
 
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
     H[numTensors]=0.0;
 #else
     H(numTensors,0) = 0.0;
@@ -83,25 +87,25 @@ namespace itk
       for(unsigned int i=0; i<numTensors; i++)
       {
         PointType xi = m_Points[i];
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
         H[ j*N + i ] = this->h(xi,xj, m_Sigma, m_Gamma);
 #else
-        H(j,i) = this->h(xj,xi, m_Sigma, m_Gamma);
+        H(i,j) = this->h(xj,xi, m_Sigma, m_Gamma);
 #endif
       }
 
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
       H[ j*N + numTensors ] = 1.0;
 #else
-      H(j,numTensors) = 0.0;
+      H(numTensors, j) = 0.0;
 #endif
       
     }
 
-#ifdef TTK_USE_MKL
-
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
     
     // display H:
+    /*
     std::cout << "H=[" << std::endl;
     for( unsigned int i=0;i<N;i++)
     {
@@ -110,7 +114,7 @@ namespace itk
       std::cout << std::endl;
     }
     std::cout << "];" << std::endl;
-    
+    */
     
 #endif 
 
@@ -121,14 +125,14 @@ namespace itk
       {
         //OutputPixelType W = m_Tensors[j] - m_Mean;
         OutputPixelType W = m_Tensors[j];
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
         T[ i*(N) + j ] = W.GetNthComponent(i);
 #else
         T(i,j) = W.GetNthComponent(i);
 #endif
       }
       
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
       T[ i*N + numTensors ] = 0.0;
 #else
       T(i,numTensors) = 0.0;
@@ -138,15 +142,19 @@ namespace itk
     
     m_L = GeneralMatrixType ( N, OutputPixelType::NDegreesOfFreedom, 0.0 );
     
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
     // 1. LU factorization of H :
     int m = N;
     int n = N;
     int *ipiv = new int[N];
     int info = -1;
     int ldh = N;
-    
+
+#ifdef TTK_USE_MKL
     dgetrf(&m, &n, H, &m, ipiv, &info);
+#else
+    dgetrf(m, n, H, m, ipiv, &info);
+#endif
     if( info != 0)
     {
       std::cerr << info << std::endl;
@@ -160,8 +168,11 @@ namespace itk
     info = -1;
     int ldt = N;
         
-
+#ifdef TTK_USE_MKL
     dgetrs(&trans, &n, &nrhs, H, &ldh, ipiv, T, &ldt, &info);
+#else // ACML
+    dgetrs(trans, n, nrhs, H, ldh, ipiv, T, ldt, &info);
+#endif
     if( info != 0)
       throw itk::ExceptionObject(__FILE__,__LINE__,"Error: Bad system solution.");
 
@@ -173,14 +184,15 @@ namespace itk
     }
 
     // check the m_L
+    /*
     for( unsigned int i=0; i<OutputPixelType::NDegreesOfFreedom; i++ )
     {
       double sum=0.0;
       for( unsigned int j=1; j<(N); j++)
         sum += m_L (j,i);
       std::cout << "Lambda sum is: " << sum << std::endl;
-    }
-           
+      }*/
+
     
     // delete the shit
     delete [] H;
@@ -358,13 +370,13 @@ namespace itk
    
     // compute the tensors mean:
     OutputPixelType mean = Self::ComputeMeanOfTensors( tensors );
-
+    
     // Solve the system
     unsigned int numTensors = tensors.size();
 
-	unsigned int N = numTensors+1;
+    unsigned int N = numTensors+1;
 	
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
     ScalarType *H;
     ScalarType *T;    
         
@@ -378,14 +390,14 @@ namespace itk
 
     for( unsigned int j=0;j<numTensors;j++)
     {
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
       H[j] = 1.0;
 #else
       H(j,0) = 1.0;
 #endif
     }
 
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
     H[numTensors]=0.0;
 #else
     H(numTensors,0) = 0.0;
@@ -399,22 +411,22 @@ namespace itk
       for(unsigned int i=0; i<numTensors; i++)
       {
         PointType xi = points[i];
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
         H[ j*N + i ] = Self::h(xi,xj, sigma, gamma);
 #else
-        H(j,i) = Self::h(xj,xi, sigma, gamma);
+        H(i,j) = Self::h(xj,xi, sigma, gamma);
 #endif
       }
 
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
       H[ j*N + numTensors ] = 1.0;
 #else
-      H(j,numTensors) = 0.0;
+      H(numTensors, j) = 1.0;
 #endif
       
     }
 
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
 
     // display H:
     /*    std::cout << "H=[" << std::endl;
@@ -436,14 +448,14 @@ namespace itk
       {
         //OutputPixelType W = tensors[j] - mean;
         OutputPixelType W = tensors[j];
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
         T[ i*(N) + j ] = W.GetNthComponent(i);
 #else
         T(i,j) = W.GetNthComponent(i);
 #endif
       }
       
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
       T[ i*N + numTensors ] = 0.0;
 #else
       T(i,numTensors) = 0.0;
@@ -453,15 +465,19 @@ namespace itk
     
     GeneralMatrixType L = GeneralMatrixType ( N, OutputPixelType::NDegreesOfFreedom, 0.0 );
     
-#ifdef TTK_USE_MKL
+#if defined (TTK_USE_MKL) || defined(TTK_USE_ACML)
     // 1. LU factorization of H :
     int m = N;
     int n = N;
     int *ipiv = new int[N];
     int info = -1;
     int ldh = N;
-    
+
+#ifdef TTK_USE_MKL
     dgetrf(&m, &n, H, &m, ipiv, &info);
+#else
+    dgetrf(m, n, H, m, ipiv, &info);
+#endif
     if( info != 0)
     {
       std::cerr << info << std::endl;
@@ -475,8 +491,11 @@ namespace itk
     info = -1;
     int ldt = N;
         
-
+#ifdef TTK_USE_MKL
     dgetrs(&trans, &n, &nrhs, H, &ldh, ipiv, T, &ldt, &info);
+#else
+    dgetrs(trans, n, nrhs, H, ldh, ipiv, T, ldt, &info);
+#endif
     if( info != 0)
       throw itk::ExceptionObject(__FILE__,__LINE__,"Error: Bad system solution.");
 
@@ -488,6 +507,7 @@ namespace itk
     }
 
     // check the L
+    /*
     for( unsigned int i=0; i<OutputPixelType::NDegreesOfFreedom; i++ )
     {
       double sum=0.0;
@@ -495,6 +515,7 @@ namespace itk
         sum += L (j,i);
       std::cout << "Lambda sum is: " << sum << std::endl;
     }
+    */
            
     
     // delete the shit
@@ -509,6 +530,52 @@ namespace itk
     
 #endif
 
+    /*
+    // check that result is correct
+    GeneralMatrixType T2(N, OutputPixelType::NDegreesOfFreedom, 0.0);
+    for( unsigned int j=0; j<OutputPixelType::NDegreesOfFreedom; j++)
+    {
+      for( unsigned int i=0; i<numTensors; i++)
+      {
+        //OutputPixelType W = m_Tensors[j] - m_Mean;
+        OutputPixelType W = tensors[i];
+        T2(i,j) = W.GetNthComponent(j);
+      }
+      
+      T2(numTensors, j) = 0.0;
+    }
+
+    GeneralMatrixType H3(N, N, 0.0);
+    for( unsigned int i=0;i<numTensors;i++)
+    {
+      H3(i,0) = 1.0;
+    }
+
+    H3(numTensors,0) = 0.0;
+
+    
+    for(unsigned int j=1; j<N; j++)
+    {
+      PointType xj = points[j-1];
+      
+      for(unsigned int i=0; i<numTensors; i++)
+      {
+        PointType xi = points[i];
+        H3(i,j) = Self::h(xi, xj, sigma, gamma);
+      }
+
+      H3(numTensors, j) = 1.0;
+    }
+
+    GeneralMatrixType res = H3*L;
+    for (unsigned int i=0; i<N; i++)
+    {
+      for (unsigned int j=0; j<OutputPixelType::NDegreesOfFreedom; j++)
+      {
+	std::cout << res (i,j) << " " << T2 (i,j) << std::endl;
+      }
+    }
+    */
 
     VectorOfPixelType output;
 

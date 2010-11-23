@@ -286,6 +286,8 @@ add_subdirectory(Commands)
 #-----------------------------------------------------------------------------
 # Packing stuff
 #-----------------------------------------------------------------------------
+if (NOT CPACK_PACKAGE_NAME)
+
 if(NOT ${PROJECT_NAME}_INSTALL_NO_RUNTIME)
   if (EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
     set (CMAKE_INSTALL_MFC_LIBRARIES 1)
@@ -339,6 +341,8 @@ endif (WIN32 AND NOT UNIX)
 
 
 include(CPack)
+
+ENDIF(NOT CPACK_PACKAGE_NAME)
 
 #### TESTING stuff ###
 enable_testing()

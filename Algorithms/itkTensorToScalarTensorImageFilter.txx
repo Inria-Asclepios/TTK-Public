@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -25,6 +25,25 @@
 namespace itk
 {
 
+  template <class TInputImage, class TOutputImage>
+  TensorToScalarTensorImageFilter<TInputImage, TOutputImage>
+  ::TensorToScalarTensorImageFilter()
+  {
+    m_TensorToScalarFunction = 0;
+  }
+
+
+  template <class TInputImage, class TOutputImage>
+  void
+  TensorToScalarTensorImageFilter<TInputImage, TOutputImage>
+  ::BeforeThreadedGenerateData()
+  {
+    if (m_TensorToScalarFunction.IsNull())
+    {
+      itkExceptionMacro ( << "Tensor to scalar function is not set");
+    }
+  }
+  
   template <class TInputImage, class TOutputImage>
   void
   TensorToScalarTensorImageFilter<TInputImage, TOutputImage>
@@ -50,13 +69,12 @@ namespace itk
       
       
       OutputPixelType out = static_cast<OutputPixelType>( 0.0 ); // be careful, overload in MedINRIA
-      
+
       InputPixelType T = itIn.Get();
 
       if ( !T.IsZero() )
         out = m_TensorToScalarFunction->ComputeScalar( T );
 
-      
       if( threadId==0 && step>0)
       {        
         if( (progress%step)==0 )

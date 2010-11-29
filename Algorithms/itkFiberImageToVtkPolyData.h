@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -23,10 +23,6 @@
 #include <itkImage.h>
 #include <itkAffineTransform.h>
 
-#include "itkTensorLinearInterpolateImageFunction.h"
-#include "itkInterpolateImageFunction.h"
-#include "itkLogTensorImageFilter.h"
-
 namespace itk
 {
   /*! \class FiberImageToVtkPolyData
@@ -34,7 +30,7 @@ namespace itk
     Transforms a fiber image into a vtkPolyData.
    */
 
-  template <class TInputImage, class TensorImageType>
+  template <class TInputImage>
     class ITK_EXPORT FiberImageToVtkPolyData: public ProcessObject
   {
 
@@ -51,15 +47,12 @@ namespace itk
     typedef TInputImage                        InputImageType;
     typedef typename InputImageType::PixelType FiberType;
     typedef typename FiberType::PointType      PointType;
-    typedef typename FiberType::VectorType     VectorType;
-    typedef typename FiberType::PointListType  PointListType;
+    typedef typename FiberType::TensorType     TensorType;
+    typedef typename PointType::VectorType     VectorType;
+    typedef typename FiberType::FiberPoint     FiberPointType;
+    typedef typename FiberType::FiberPointListType  FiberPointListType;
     typedef typename FiberType::ScalarType     ScalarType;
     typedef vtkPolyData                        OutputType;
-
-
-    typedef TensorLinearInterpolateImageFunction<TensorImageType, ScalarType>  InterpolatorType;
-    typedef LogTensorImageFilter<TensorImageType, TensorImageType> LogFilterType;
-    typedef AffineTransform<ScalarType, InputImageType::ImageDimension>   AffineTransformType;
 
     void SetInput (typename InputImageType::Pointer input)
     { m_Input = input; }    
@@ -68,17 +61,7 @@ namespace itk
     OutputType* GetOutput (void) const
     { return m_Output; }
     
-    itkSetConstObjectMacro(TensorImage, TensorImageType);
-    itkGetConstObjectMacro(TensorImage, TensorImageType);
-
-    itkSetConstObjectMacro(LogTensorImage, TensorImageType);
-    itkGetConstObjectMacro(LogTensorImage, TensorImageType);
-
-    itkSetObjectMacro (AffineTransform, AffineTransformType);
-    itkGetObjectMacro (AffineTransform, AffineTransformType);
-	
     void Update (void);
-        
 
   protected:
     FiberImageToVtkPolyData()
@@ -86,9 +69,6 @@ namespace itk
       m_Input = 0;
       m_Output = OutputType::New();
       m_Output->Allocate();
-      m_TensorImage = 0;
-	  m_LogTensorImage = 0;
-      m_AffineTransform = 0;
     };
     ~FiberImageToVtkPolyData()
     {
@@ -96,19 +76,12 @@ namespace itk
     };
         
     
-
   private:
     FiberImageToVtkPolyData (const Self&);
     void operator=(const Self&);
 
     typename InputImageType::Pointer m_Input;
     OutputType*                      m_Output;
-	
-    typename TensorImageType::ConstPointer m_TensorImage;
-    typename TensorImageType::ConstPointer m_LogTensorImage;
-    typename AffineTransformType::Pointer  m_AffineTransform;
-    
-
   };
     
 

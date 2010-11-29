@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -32,47 +32,22 @@ namespace itk
 {
 
 
-  template<class TInputImage, class TensorImageType>
+  template<class TInputImage>
   void
-  FiberImageToVtkPolyData<TInputImage,TensorImageType>::
+  FiberImageToVtkPolyData<TInputImage>::
   Update()
   {
-
-    if( this->GetInput().IsNull() || !this->GetTensorImage() || !this->GetLogTensorImage() )
+    if( this->GetInput().IsNull() )
     {
-      throw itk::ExceptionObject (__FILE__,__LINE__,"Error: Input or Tensors are not set.");
+      throw itk::ExceptionObject (__FILE__,__LINE__,"Error: Input is not set.");
     }
-
-    typedef typename TensorImageType::PixelType TensorType;
-    
-    typename InterpolatorType::Pointer interpolator = InterpolatorType::New();
-    /*
-    typename LogFilterType::Pointer loger = LogFilterType::New();
-    loger->SetInput( m_TensorImage );
-    try
-    {
-      loger->Update();
-    }
-    catch(itk::ExceptionObject &e)
-    {
-      std::cerr << e;
-      throw itk::ExceptionObject(__FILE__,__LINE__,"Error in FiberImageToVtkPolyData::Update()");
-    }
-    interpolator->SetInputImage( loger->GetOutput() );
-    */
-    
-    interpolator->SetInputImage( this->GetLogTensorImage() );
-    
     
     //m_Output->Reset();
     m_Output->Initialize();
     m_Output->Allocate();
 
-    typedef itk::ContinuousIndex<ScalarType, TensorImageType::ImageDimension> ContinuousIndexType;
-    
     typedef ImageRegionConstIterator<InputImageType> InputIteratorType;
     InputIteratorType itIn (this->GetInput(), this->GetInput()->GetLargestPossibleRegion());
-
     
     vtkPoints*            myPoints = vtkPoints::New();
     vtkUnsignedCharArray* myColors = vtkUnsignedCharArray::New();
@@ -83,70 +58,34 @@ namespace itk
     myFAArray->SetName ("FA");
     myFAArray->SetNumberOfComponents (1);
 
-
     unsigned long numPixels = this->GetInput()->GetLargestPossibleRegion().GetNumberOfPixels();
     unsigned long step      = numPixels/10;
     unsigned long progress  = 0;
 
-    
     this->UpdateProgress (0.0);
 
-    
     while( !itIn.IsAtEnd() )
     {
-
-      FiberType     Fiber      = itIn.Get();
-      PointListType listPoints = Fiber.GetPointList();
+      FiberType Fiber               = itIn.Get();
+      FiberPointListType listPoints = Fiber.GetPointList();
       int npts = (int)(listPoints.size());
-
-      
       
       if(npts>1)
       {
         vtkIdType* ids = new vtkIdType[npts];
 
         // special case of the first point:
-        VectorType diff = listPoints[1]-listPoints[0];
+        VectorType diff = listPoints[1].Point-listPoints[0].Point;
         diff /= diff.GetNorm();
 	
-        //double alpha = 1.0;
         double fa = 0.0;
-
-        if( !m_TensorImage.IsNull() )
+        TensorType t = listPoints[0].Tensor;
+        if (!t.IsZero())
         {
-          ContinuousIndexType index;
-          PointType           itkPoint;
-          
-          for( unsigned int j=0; j<TensorImageType::ImageDimension; j++)
-          {
-            itkPoint[j] = listPoints[0][j];
-          }
-
-          if( this->GetAffineTransform() )
-          {
-            m_TensorImage->TransformPhysicalPointToContinuousIndex( this->GetAffineTransform()->TransformPoint (itkPoint), index );
-          }
-          else
-          {
-            m_TensorImage->TransformPhysicalPointToContinuousIndex( itkPoint, index );
-          }
-          
-          
-          if( interpolator->IsInsideBuffer( index ) )
-          {
-            //TensorType t = interpolator->EvaluateAtContinuousIndex( index ).Exp();
-            TensorType t = interpolator->EvaluateAtContinuousIndex( index );
-	    if( !t.IsZero() )
-	    {
-	      t  = t.Exp();
-	      fa = t.GetFA();
-	    }
-            //alpha = t.GetFA();
-          }
-        }
+          fa = t.GetFA();
+        }        
         
-        
-	
+        //double alpha = 1.0;
         for( unsigned int i=0; i<3; i++)
         {
           //double c = 2.0*fabs (diff[i]*alpha)*255.0;
@@ -157,52 +96,24 @@ namespace itk
         //myColors->InsertNextValue( (unsigned char)(alpha*255.0) );
         //myColors->InsertNextValue( (unsigned char)(255.0) );
         
-        PointType pt = listPoints[0];
+        PointType pt = listPoints[0].Point;
         ids[0] = myPoints->InsertNextPoint (pt[0],pt[1],pt[2]);
         
         if( npts>1)
         {
           for( int i=1; i<npts-1; i++)
           {
-            
-            PointType point = listPoints[i];
+            PointType point = listPoints[i].Point;
             
             //alpha = 1.0;
             fa = 0.0;
-
-            if( !m_TensorImage.IsNull() )
+            TensorType t = listPoints[i].Tensor;
+            if (!t.IsZero())
             {
-              ContinuousIndexType index;
-              PointType           itkPoint;
-              
-              for( unsigned int j=0; j<3; j++)
-              {
-                itkPoint[j] = point[j];
-              }
-
-              if( this->GetAffineTransform() )
-              {
-                m_TensorImage->TransformPhysicalPointToContinuousIndex( this->GetAffineTransform()->TransformPoint (itkPoint), index );
-              }
-              else
-              {
-                m_TensorImage->TransformPhysicalPointToContinuousIndex( itkPoint, index );
-              }
-                            
-              if( interpolator->IsInsideBuffer( index ) )
-              {
-                //TensorType t = interpolator->EvaluateAtContinuousIndex( index ).Exp();
-                TensorType t = interpolator->EvaluateAtContinuousIndex( index );
-		if( !t.IsZero() )
-		{
-		  t  = t.Exp();
-		  fa = t.GetFA();
-		}
-                //alpha = t.GetFA();
-              }
+              fa = t.GetFA();
             }
             
-            diff = listPoints[i+1]-listPoints[i-1];
+            diff = listPoints[i+1].Point-listPoints[i-1].Point;
             diff /= diff.GetNorm();
             for( unsigned int j=0; j<3; j++)
             {
@@ -214,7 +125,7 @@ namespace itk
             //myColors->InsertNextValue( (unsigned char)(alpha*255.0) );
             //myColors->InsertNextValue( (unsigned char)(255.0) );
             
-            pt = listPoints[i];
+            pt = listPoints[i].Point;
             ids[i] = myPoints->InsertNextPoint (pt[0],pt[1],pt[2]);
           }
           
@@ -222,41 +133,13 @@ namespace itk
           
           fa = 0.0;
           //double alpha = 1.0;
-
-          if( !m_TensorImage.IsNull() )
+          TensorType t = listPoints[npts-1].Tensor;
+          if (!t.IsZero())
           {
-            
-            ContinuousIndexType index;
-            PointType           itkPoint;
-            
-            for( unsigned int j=0; j<3; j++)
-            {
-              itkPoint[j] = listPoints[npts-1][j];
-            }
-
-            if( this->GetAffineTransform() )
-            {
-              m_TensorImage->TransformPhysicalPointToContinuousIndex( this->GetAffineTransform()->TransformPoint (itkPoint), index );
-            }
-            else
-            {
-              m_TensorImage->TransformPhysicalPointToContinuousIndex( itkPoint, index );
-            }
-            
-            if( interpolator->IsInsideBuffer( index ) )
-            {
-              //TensorType t = interpolator->EvaluateAtContinuousIndex( index ).Exp();
-              TensorType t = interpolator->EvaluateAtContinuousIndex( index );
-	      if( !t.IsZero() )
-	      {
-		t  = t.Exp();
-		fa = t.GetFA();
-	      }
-              //alpha = t.GetFA();
-            }
+            fa = t.GetFA();
           }
           
-          diff = listPoints[npts-2]-listPoints[npts-1];
+          diff = listPoints[npts-2].Point-listPoints[npts-1].Point;
           diff /= diff.GetNorm();
           for( unsigned int i=0; i<3; i++)
           {
@@ -268,7 +151,7 @@ namespace itk
           //myColors->InsertNextValue( (unsigned char)(255.0*alpha) );
           //myColors->InsertNextValue( (unsigned char)(255.0) );
           
-          pt = listPoints[npts-1];
+          pt = listPoints[npts-1].Point;
           ids[npts-1] = myPoints->InsertNextPoint (pt[0],pt[1],pt[2]);
 
         }
@@ -276,8 +159,8 @@ namespace itk
         m_Output->InsertNextCell (VTK_POLY_LINE, npts, ids);
 
         // cell color
-        PointType first = listPoints[0];
-        PointType last  = listPoints[npts-1];
+        PointType first = listPoints[0].Point;
+        PointType last  = listPoints[npts-1].Point;
         diff = last-first;
         diff.Normalize();
         for( unsigned int i=0; i<3; i++)
@@ -286,7 +169,6 @@ namespace itk
           unsigned char color = (unsigned char)(c>255.0?255.0:c);
           myCellColors->InsertNextValue ( color );
         }
-        
         
         delete [] ids;
       }

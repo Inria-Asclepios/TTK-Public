@@ -30,14 +30,40 @@
 
 namespace itk
 {
+  
+  template<class TInputImage>
+  FiberImageToVtkPolyData<TInputImage>::
+  FiberImageToVtkPolyData()
+  {
+    m_Input = 0;
+    m_Output = OutputType::New();
+    m_Output->Allocate();
+  }
 
 
+  template<class TInputImage>
+  FiberImageToVtkPolyData<TInputImage>::
+  ~FiberImageToVtkPolyData()
+  {
+    m_Output->Delete();
+  }
+
+
+  template<class TInputImage>
+  typename FiberImageToVtkPolyData<TInputImage>::OutputType*
+  FiberImageToVtkPolyData<TInputImage>::
+  GetOutput() const
+  {
+    return m_Output;
+  }
+  
+  
   template<class TInputImage>
   void
   FiberImageToVtkPolyData<TInputImage>::
   Update()
   {
-    if( this->GetInput().IsNull() )
+    if( !this->GetInput() )
     {
       throw itk::ExceptionObject (__FILE__,__LINE__,"Error: Input is not set.");
     }
@@ -49,14 +75,16 @@ namespace itk
     typedef ImageRegionConstIterator<InputImageType> InputIteratorType;
     InputIteratorType itIn (this->GetInput(), this->GetInput()->GetLargestPossibleRegion());
     
-    vtkPoints*            myPoints = vtkPoints::New();
-    vtkUnsignedCharArray* myColors = vtkUnsignedCharArray::New();
+    vtkPoints*            myPoints     = vtkPoints::New();
+    vtkUnsignedCharArray* myColors     = vtkUnsignedCharArray::New();
     vtkUnsignedCharArray* myCellColors = vtkUnsignedCharArray::New();
-    vtkFloatArray*        myFAArray = vtkFloatArray::New();
+    vtkFloatArray*        myFAArray    = vtkFloatArray::New();
+    vtkFloatArray*        tensorArray  = vtkFloatArray::New();
     myColors->SetNumberOfComponents (3);
     myCellColors->SetNumberOfComponents (3);
     myFAArray->SetName ("FA");
     myFAArray->SetNumberOfComponents (1);
+    tensorArray->SetNumberOfComponents (9);
 
     unsigned long numPixels = this->GetInput()->GetLargestPossibleRegion().GetNumberOfPixels();
     unsigned long step      = numPixels/10;
@@ -93,6 +121,11 @@ namespace itk
           myColors->InsertNextValue( (unsigned char)( c>255.0?255.0:c ) );
         }
         myFAArray->InsertNextValue (fa);
+
+	for (unsigned int i=0; i<3; i++)
+	  for (unsigned int j=0; j<3; j++)
+	    tensorArray->InsertNextValue ( t.GetComponent (i,j) );
+	
         //myColors->InsertNextValue( (unsigned char)(alpha*255.0) );
         //myColors->InsertNextValue( (unsigned char)(255.0) );
         
@@ -122,6 +155,11 @@ namespace itk
               myColors->InsertNextValue( (unsigned char)( c>255.0?255.0:c ) );
             }
             myFAArray->InsertNextValue (fa);
+	    
+	    for (unsigned int j=0; j<3; j++)
+	      for (unsigned int k=0; k<3; k++)
+		tensorArray->InsertNextValue ( t.GetComponent (j,k) );
+	    
             //myColors->InsertNextValue( (unsigned char)(alpha*255.0) );
             //myColors->InsertNextValue( (unsigned char)(255.0) );
             
@@ -148,6 +186,11 @@ namespace itk
             myColors->InsertNextValue( (unsigned char)(c>255.0?255.0:c) );
           }
           myFAArray->InsertNextValue (fa);
+
+	  for (unsigned int i=0; i<3; i++)
+	    for (unsigned int j=0; j<3; j++)
+	      tensorArray->InsertNextValue ( t.GetComponent (i,j) );
+	  
           //myColors->InsertNextValue( (unsigned char)(255.0*alpha) );
           //myColors->InsertNextValue( (unsigned char)(255.0) );
           
@@ -188,12 +231,15 @@ namespace itk
 
     m_Output->SetPoints (myPoints);
     m_Output->GetPointData()->SetScalars (myColors);
-    m_Output->GetPointData()->AddArray (myFAArray);
-    m_Output->GetCellData()->SetScalars (myCellColors);
+    m_Output->GetPointData()->SetTensors (tensorArray);
+    m_Output->GetPointData()->AddArray   (myFAArray);
+    m_Output->GetCellData()->SetScalars  (myCellColors);
+    
     myPoints->Delete();
     myColors->Delete();
     myCellColors->Delete();
     myFAArray->Delete();
+    tensorArray->Delete();
 
     this->UpdateProgress (1.0);
     

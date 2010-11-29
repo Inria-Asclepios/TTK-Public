@@ -41,7 +41,7 @@ namespace itk
     typedef SmartPointer<Self>       Pointer;
     typedef SmartPointer<const Self> ConstPointer;
 
-    itkNewMacro (Self);
+    itkNewMacro  (Self);
     itkTypeMacro (FiberImageToVtkPolyData, Object);
 
     typedef TInputImage                        InputImageType;
@@ -54,27 +54,18 @@ namespace itk
     typedef typename FiberType::ScalarType     ScalarType;
     typedef vtkPolyData                        OutputType;
 
-    void SetInput (typename InputImageType::Pointer input)
-    { m_Input = input; }    
-    typename InputImageType::Pointer GetInput (void) const
-    { return m_Input; }
-    OutputType* GetOutput (void) const
-    { return m_Output; }
+
+    itkSetObjectMacro (Input, InputImageType);
+    itkGetObjectMacro (Input, InputImageType);
+
+    OutputType *GetOutput (void) const;
     
     void Update (void);
 
   protected:
-    FiberImageToVtkPolyData()
-    {
-      m_Input = 0;
-      m_Output = OutputType::New();
-      m_Output->Allocate();
-    };
-    ~FiberImageToVtkPolyData()
-    {
-      m_Output->Delete();
-    };
-        
+    FiberImageToVtkPolyData();
+    ~FiberImageToVtkPolyData();
+
     
   private:
     FiberImageToVtkPolyData (const Self&);

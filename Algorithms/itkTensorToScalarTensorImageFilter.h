@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -60,7 +60,7 @@ namespace itk
                         TensorToScalarFunctionType );
     
   protected:
-    TensorToScalarTensorImageFilter(){};
+    TensorToScalarTensorImageFilter();
     ~TensorToScalarTensorImageFilter(){};
 
     void PrintSelf (std::ostream& os, Indent indent) const
@@ -68,7 +68,8 @@ namespace itk
       Superclass::PrintSelf (os, indent);      
     }
     
-    
+
+    void BeforeThreadedGenerateData (void);
     void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId);
 
     

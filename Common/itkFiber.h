@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -18,7 +18,7 @@
 #define _itk_Fibers_h_
 
 #include <itkPoint.h>
-#include <itkVector.h>
+#include <itkTensor.h>
 #include <ostream>
 
 namespace itk
@@ -28,36 +28,45 @@ namespace itk
     Convenient way to handle dti fiber data.
    */
 
-  template <  class T , unsigned int NDimension >
+  template <  class T , unsigned int NDimension, class TTensorCoord = float >
     class Fiber
   {
-
   public:
-
-    typedef T                              ScalarType;
-    typedef Fiber                          Self;
-    typedef Point<ScalarType, NDimension>  PointType;
-    typedef Vector<ScalarType, NDimension> VectorType;    
-    typedef std::vector<PointType>         PointListType;
-    typedef std::vector<VectorType>        VectorListType;
-
+    typedef T                                ScalarType;
+    typedef Fiber                            Self;
+    typedef Point<ScalarType, NDimension>    PointType;
+    typedef Tensor<TTensorCoord, NDimension> TensorType;
+     
+    struct FiberPoint
+    {
+       PointType  Point;
+       TensorType Tensor;
+       FiberPoint(): Tensor(0.0) 
+       {
+         for(unsigned int i=0; i<NDimension; i++)
+           Point[i] = 0.0;
+       };
+    };
+     
+    typedef std::vector<FiberPoint> FiberPointListType;
+     
 
     itkStaticConstMacro (Dimension, unsigned int, NDimension);
     
     
     /** add a point to the tail of the fiber. */
-    void AddPoint ( const PointType & );
+    void AddPoint ( const FiberPoint & );
 
     /** set the list of points */
-    void SetPointList ( const PointListType l)
-    { m_PointList = l; }
+    void SetPointList ( const FiberPointListType &l)
+    { m_FiberPointList = l; }
     
     /** get the list of points */
-    PointListType GetPointList (void) const
-    { return m_PointList; }
+    FiberPointListType GetPointList (void) const
+    { return m_FiberPointList; }
     
     /** return the ith point (if it exists)*/
-    PointType GetPoint (const int) const;
+    FiberPoint GetPoint (const int) const;
 
     /** merge two fibers */
     void MergeWith (const Self& );
@@ -70,11 +79,11 @@ namespace itk
 
     /** return the number of points */
     unsigned int GetNumberOfPoints (void) const
-    { return m_PointList.size(); }
+    { return m_FiberPointList.size(); }
 
     /** Empties the point list */
     void Clear (void)
-    { m_PointList.clear(); }
+    { m_FiberPointList.clear(); }
     
     
 
@@ -82,18 +91,14 @@ namespace itk
     ~Fiber(){};
     Fiber (const Self& f)
     {
-      m_PointList  = f.GetPointList();
+      m_FiberPointList  = f.GetPointList();
     }
     Self& operator=(const Self& f);
 
     
     
   private:
-
-    PointListType  m_PointList;
-    VectorListType m_VectorList;
-    
-    
+    FiberPointListType  m_FiberPointList;
 
   };
 
@@ -102,7 +107,7 @@ namespace itk
     std::ostream & operator<<(std::ostream &os, const Fiber<T,NDimension> &f)
   {
     for( unsigned int i=0; i<f.GetNumberOfPoints(); i++)
-      os << f.GetPointList()[i] << " " << std::endl;
+      os << f.GetPointList()[i].Point << " " << f.GetPointList()[i].Tensor << std::endl;
 
     return os;
   }

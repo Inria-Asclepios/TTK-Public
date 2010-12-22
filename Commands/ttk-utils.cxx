@@ -21,6 +21,7 @@
 #include "itkAverageStdCalculatorCommandFactory.h"
 #include "itkRBFRotationMatrixExtrapolationCommandFactory.h"
 #include "itkPermute23TensorCoefficientsCommandFactory.h"
+#include "itkSubtractImageCommandFactory.h"
 
 #include "itkCommandObjectFactory.h"
 
@@ -44,6 +45,7 @@ int main (int narg, char *args[])
   itk::AverageStdCalculatorCommandFactory::RegisterOneFactory();
   itk::RBFRotationMatrixExtrapolationCommandFactory::RegisterOneFactory();
   itk::Permute23TensorCoefficientsCommandFactory::RegisterOneFactory();
+  itk::SubtractImageCommandFactory::RegisterOneFactory();
   
   if (narg<2) {
     std::cout << "Software Tensor ToolKit (c)INRIA 2010, version " << TTK_VERSION << "\n";

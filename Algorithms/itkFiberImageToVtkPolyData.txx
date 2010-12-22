@@ -84,8 +84,9 @@ namespace itk
     myCellColors->SetNumberOfComponents (3);
     myFAArray->SetName ("FA");
     myFAArray->SetNumberOfComponents (1);
-    tensorArray->SetNumberOfComponents (9);
-
+    tensorArray->SetName ("Tensors");
+    tensorArray->SetNumberOfComponents (6);
+    
     unsigned long numPixels = this->GetInput()->GetLargestPossibleRegion().GetNumberOfPixels();
     unsigned long step      = numPixels/10;
     unsigned long progress  = 0;
@@ -122,9 +123,8 @@ namespace itk
         }
         myFAArray->InsertNextValue (fa);
 
-	for (unsigned int i=0; i<3; i++)
-	  for (unsigned int j=0; j<3; j++)
-	    tensorArray->InsertNextValue ( t.GetComponent (i,j) );
+	for (unsigned int i=0; i<6; i++)
+	  tensorArray->InsertNextValue ( t[i] );
 	
         //myColors->InsertNextValue( (unsigned char)(alpha*255.0) );
         //myColors->InsertNextValue( (unsigned char)(255.0) );
@@ -155,10 +155,9 @@ namespace itk
               myColors->InsertNextValue( (unsigned char)( c>255.0?255.0:c ) );
             }
             myFAArray->InsertNextValue (fa);
-	    
-	    for (unsigned int j=0; j<3; j++)
-	      for (unsigned int k=0; k<3; k++)
-		tensorArray->InsertNextValue ( t.GetComponent (j,k) );
+
+	    for (unsigned int j=0; j<6; j++)
+	      tensorArray->InsertNextValue ( t[j] );
 	    
             //myColors->InsertNextValue( (unsigned char)(alpha*255.0) );
             //myColors->InsertNextValue( (unsigned char)(255.0) );
@@ -187,9 +186,8 @@ namespace itk
           }
           myFAArray->InsertNextValue (fa);
 
-	  for (unsigned int i=0; i<3; i++)
-	    for (unsigned int j=0; j<3; j++)
-	      tensorArray->InsertNextValue ( t.GetComponent (i,j) );
+	  for (unsigned int i=0; i<6; i++)
+	    tensorArray->InsertNextValue ( t[i] );
 	  
           //myColors->InsertNextValue( (unsigned char)(255.0*alpha) );
           //myColors->InsertNextValue( (unsigned char)(255.0) );
@@ -231,7 +229,7 @@ namespace itk
 
     m_Output->SetPoints (myPoints);
     m_Output->GetPointData()->SetScalars (myColors);
-    m_Output->GetPointData()->SetTensors (tensorArray);
+    m_Output->GetPointData()->AddArray   (tensorArray);
     m_Output->GetPointData()->AddArray   (myFAArray);
     m_Output->GetCellData()->SetScalars  (myCellColors);
     

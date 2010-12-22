@@ -147,6 +147,8 @@
     itkRBFRotationMatrixExtrapolationCommandFactory.cxx
     itkPermute23TensorCoefficientsCommand.cxx
     itkPermute23TensorCoefficientsCommandFactory.cxx
+    itkSubtractImageCommand.cxx
+    itkSubtractImageCommandFactory.cxx
   )
 
   add_library(ttkUtilCommands ${TTK_BUILD_TYPE}

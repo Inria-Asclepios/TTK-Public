@@ -32,6 +32,12 @@
 #include "itkGISImageIOFactory.h"
 #endif
 
+#ifdef ITK_USE_REVIEW
+#include <itkPhilipsRECImageIOFactory.h>
+#endif
+
+
+
 int main (int narg, char *args[])
 {
 
@@ -69,6 +75,9 @@ int main (int narg, char *args[])
     itk::GISImageIOFactory::RegisterOneFactory();
 #endif
 
+#ifdef ITK_USE_REVIEW
+  itk::PhilipsRECImageIOFactory::RegisterOneFactory();
+#endif
 	
   const char *programName = args[1];
   

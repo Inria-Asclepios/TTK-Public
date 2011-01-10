@@ -111,7 +111,7 @@ void GradientFileReader
   {
     if(data.find('\r') == std::string::npos)
     {
-      itkExceptionMacro ( "No line ending character found, not a valid ITK Transform TXT file" );
+      itkExceptionMacro ( "No line ending character found, not a valid Gradient file" );
     }
     line_end = "\r";
   }

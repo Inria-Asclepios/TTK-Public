@@ -137,6 +137,8 @@
     itkDWIBrainMaskExtractorCommandFactory.cxx
     itkApplyMaskToImageCommand.cxx
     itkApplyMaskToImageCommandFactory.cxx
+    itkAddGaussianNoiseToImageCommand.cxx
+    itkAddGaussianNoiseToImageCommandFactory.cxx
     itkResampleImageCommand.cxx
     itkResampleImageCommandFactory.cxx
     itkWarpImageCommand.cxx

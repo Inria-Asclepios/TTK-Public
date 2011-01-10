@@ -30,16 +30,6 @@ namespace itk
   template <class TInputImage, class TOutputImage>
   void
   AddGaussianNoiseImageFilter<TInputImage, TOutputImage>
-  ::BeforeGenerateData()
-  {
-    std::cout<<"initialize generator"<<std::endl;    
-    m_NormalGenerator->Initialize( (int) clock() );
-  }
-  
-
-  template <class TInputImage, class TOutputImage>
-  void
-  AddGaussianNoiseImageFilter<TInputImage, TOutputImage>
   ::GenerateData(void)
   {
     typedef ImageRegionIterator<OutputImageType>      OutputIteratorType;
@@ -50,7 +40,6 @@ namespace itk
     
     while( !itOut.IsAtEnd() )
     {
-
       InputPixelType T = itIn.Get();
       if (T != 0)
       {
@@ -93,20 +82,18 @@ namespace itk
 
     // call the superclass' implementation of this method
     Superclass::GenerateOutputInformation();
+    if (!this->GetInput())
+      return;
+
+    std::cout<<"generating output information"<<std::endl;
     
-    if (this->GetInput())
-    {
-      std::cout<<"initialize generator"<<std::endl;    
-      m_NormalGenerator->Initialize( (int) clock() );
-      // we need to compute the output spacing, the output origin, the
-      // output image size, and the output image start index
-      this->GetOutput()->SetRegions( this->GetInput()->GetLargestPossibleRegion() );
-      this->GetOutput()->SetDirection (this->GetInput()->GetDirection());
-      this->GetOutput()->SetOrigin(this->GetInput()->GetOrigin());
-      this->GetOutput()->SetSpacing(this->GetInput()->GetSpacing());    
-      this->GetOutput()->Allocate();
-    }
-    
+    // we need to compute the output spacing, the output origin, the
+    // output image size, and the output image start index
+    this->GetOutput()->SetRegions( this->GetInput()->GetLargestPossibleRegion() );
+    this->GetOutput()->SetDirection (this->GetInput()->GetDirection());
+    this->GetOutput()->SetOrigin(this->GetInput()->GetOrigin());
+    this->GetOutput()->SetSpacing(this->GetInput()->GetSpacing());    
+    this->GetOutput()->Allocate();
   }
   
 

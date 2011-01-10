@@ -48,18 +48,19 @@ namespace itk
 
     itkSetMacro (Variance, double);
     itkGetMacro (Variance, double);
+
+    itkGetObjectMacro (NormalGenerator, Statistics::NormalVariateGenerator);
+    itkSetObjectMacro (NormalGenerator, Statistics::NormalVariateGenerator);
+    
     
   protected:
     AddGaussianNoiseImageFilter()
     {
-      m_Variance = 1.0;
       m_NormalGenerator = Statistics::NormalVariateGenerator::New();      
+      m_Variance = 1.0;
     }
     ~AddGaussianNoiseImageFilter(){};
 
-    /* void BeforeThreadedGenerateData(void); */
-    /* void ThreadedGenerateData(const OutputRegionType &, int); */
-    void BeforeGenerateData(void);
     void GenerateData(void);
     void GenerateOutputInformation();
     void GenerateInputRequestedRegion() throw (InvalidRequestedRegionError);
@@ -69,7 +70,9 @@ namespace itk
     void operator=(const Self&);
 
     double m_Variance;
-
+    unsigned int m_UseSeed;
+    unsigned long m_Seed;
+    
     typename Statistics::NormalVariateGenerator::Pointer m_NormalGenerator;
     
   };

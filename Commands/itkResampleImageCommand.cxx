@@ -76,9 +76,9 @@ namespace itk
     const char* output = cl.follow("NoFile",2,"-O","-o");
     const char* mat    = cl.follow( "NoFile", 2, "-m", "-M");
     const char* ref    = cl.follow( "NoFile", 2, "-r", "-R");
-    const unsigned int sx = cl.follow(-1,2,"-SX","-sx");
-    const unsigned int sy = cl.follow(-1,2,"-SY","-sy");
-    const unsigned int sz = cl.follow(-1,2,"-SZ","-sz");
+    const int sx = cl.follow(-1,2,"-SX","-sx");
+    const int sy = cl.follow(-1,2,"-SY","-sy");
+    const int sz = cl.follow(-1,2,"-SZ","-sz");
     
     typedef double ScalarType;
     typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;

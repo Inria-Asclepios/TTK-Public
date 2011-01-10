@@ -88,7 +88,7 @@ namespace itk
     if (IsReproducible)
       seed = 5323;
     else
-      seed = (int) clock();
+      seed = (int) time(NULL);
 
     filter->GetNormalGenerator()->Initialize (seed);
     

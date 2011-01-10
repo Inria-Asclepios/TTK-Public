@@ -22,10 +22,3 @@ FOREACH (test ${TTKTests})
   ADD_TEST(${TName} ${CXX_TEST_PATH}/${KIT}Tests ${TName}) 
 ENDFOREACH (test) 
 
-
-# A gaussian addition to image
-add_executable(itkAddGaussianNoiseToImage itkAddGaussianNoiseToImage.cxx)
-
-TARGET_LINK_LIBRARIES(itkAddGaussianNoiseToImage
-  ${ITK_LIBRARIES}
-  )

@@ -151,6 +151,8 @@
     itkPermute23TensorCoefficientsCommandFactory.cxx
     itkSubtractImageCommand.cxx
     itkSubtractImageCommandFactory.cxx
+    itkAverage4DImageCommand.cxx
+    itkAverage4DImageCommandFactory.cxx
   )
 
   add_library(ttkUtilCommands ${TTK_BUILD_TYPE}

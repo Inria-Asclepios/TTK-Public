@@ -112,12 +112,12 @@ namespace itk
 
       if (voxelCount0)
       {
-	mean0 /= voxelCount0;
+	mean0 /= static_cast<double>(voxelCount0);
       }
 
       if (voxelCount1)
       {
-	mean1 /= voxelCount1;
+	mean1 /= static_cast<double>(voxelCount1);
       }
 
       double diff0 = mean0 - mean;

@@ -101,6 +101,20 @@
     ${TTK-CONVERT_COMMAND_SRCS}
   )
 
+
+  if(WIN32)
+     # The file itkImageConverterCommand.cxx causes the following compile-time error using visual studio 2010:
+     #     ...\itk\code\common\itkdefaultpixelaccessorfunctor.h(66): 
+     #     fatal error C1128: number of sections exceeded object file format limit : compile with /bigobj
+     # The additional flag /bigobj is added to this one file here. 
+     get_source_file_property(itkImageConverterCommand_COMPILE_FLAGS itkImageConverterCommand.cxx COMPILE_FLAGS)
+     if (itkImageConverterCommand_COMPILE_FLAGS STREQUAL NOTFOUND)
+       set_source_files_properties(itkImageConverterCommand.cxx PROPERTIES COMPILE_FLAGS "/bigobj")
+     else (itkImageConverterCommand_COMPILE_FLAGS STREQUAL NOTFOUND)
+       set_source_files_properties(itkImageConverterCommand.cxx PROPERTIES COMPILE_FLAGS "${itkImageConverterCommand_COMPILE_FLAGS} /bigobj")
+     endif (itkImageConverterCommand_COMPILE_FLAGS STREQUAL NOTFOUND)
+  endif(WIN32)
+  
   target_link_libraries(ttkConvertCommands
     ${TTK_MIPS_LIBRARIES}
     ${TTK_VTKINRIA3D_LIBRARIES}

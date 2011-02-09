@@ -70,8 +70,6 @@ namespace itk
     void operator=(const Self&);
 
     double m_Variance;
-    unsigned int m_UseSeed;
-    unsigned long m_Seed;
     
     typename Statistics::NormalVariateGenerator::Pointer m_NormalGenerator;
     

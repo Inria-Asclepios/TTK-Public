@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL: https://scm.gforge.inria.fr/svn/ttk/trunk/Commands/itkAddGaussianNoiseToImageCommand.h $
+  Module:    $URL: https://scm.gforge.inria.fr/svn/ttk/trunk/Commands/itkAddRicianNoiseToImageCommand.h $
   Language:  C++
   Date:      $Date: 2010-06-07 12:39:13 +0100 (Mon, 07 Jun 2010) $
   Version:   $Revision: 68 $
@@ -14,37 +14,37 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itk_AddGaussianNoiseToImageCommand_h_
-#define _itk_AddGaussianNoiseToImageCommand_h_
+#ifndef _itk_AddRicianNoiseToImageCommand_h_
+#define _itk_AddRicianNoiseToImageCommand_h_
 
 #include "itkCommandObjectBase.h"
 
 namespace itk {
 
-  class AddGaussianNoiseToImageCommand : public CommandObjectBase
+  class AddRicianNoiseToImageCommand : public CommandObjectBase
   {
     
   public:
 		
-    typedef AddGaussianNoiseToImageCommand Self;
+    typedef AddRicianNoiseToImageCommand Self;
     typedef CommandObjectBase Superclass;
     typedef SmartPointer <Self> Pointer;
     typedef SmartPointer <const Self> ConstPointer;
     
-    itkTypeMacro(AddGaussianNoiseToImageCommand, CommandObjectBase);
+    itkTypeMacro(AddRicianNoiseToImageCommand, CommandObjectBase);
     itkNewMacro(Self);
     
     const char *GetCommandName(void)
-    { return "add_gaussian_noise"; }
+    { return "add_rician_noise"; }
     
     int Execute(int nargs, const char *args[]);
     
   protected:
-    AddGaussianNoiseToImageCommand();
-    ~AddGaussianNoiseToImageCommand();
+    AddRicianNoiseToImageCommand();
+    ~AddRicianNoiseToImageCommand();
     
   private:
-    AddGaussianNoiseToImageCommand(const Self&);
+    AddRicianNoiseToImageCommand(const Self&);
     void operator=(const Self&);
     
   };

@@ -17,6 +17,7 @@
 #include "itkDWIBrainMaskExtractorCommandFactory.h"
 #include "itkApplyMaskToImageCommandFactory.h"
 #include "itkAddGaussianNoiseToImageCommandFactory.h"
+#include "itkAddRicianNoiseToImageCommandFactory.h"
 #include "itkResampleImageCommandFactory.h"
 #include "itkWarpImageCommandFactory.h"
 #include "itkAverageStdCalculatorCommandFactory.h"
@@ -43,6 +44,7 @@ int main (int narg, char *args[])
   itk::DWIBrainMaskExtractorCommandFactory::RegisterOneFactory();
   itk::ApplyMaskToImageCommandFactory::RegisterOneFactory();
   itk::AddGaussianNoiseToImageCommandFactory::RegisterOneFactory();
+  itk::AddRicianNoiseToImageCommandFactory::RegisterOneFactory();
   itk::ResampleImageCommandFactory::RegisterOneFactory();
   itk::WarpImageCommandFactory::RegisterOneFactory();
   itk::AverageStdCalculatorCommandFactory::RegisterOneFactory();

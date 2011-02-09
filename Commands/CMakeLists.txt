@@ -153,6 +153,8 @@
     itkApplyMaskToImageCommandFactory.cxx
     itkAddGaussianNoiseToImageCommand.cxx
     itkAddGaussianNoiseToImageCommandFactory.cxx
+    itkAddRicianNoiseToImageCommand.cxx
+    itkAddRicianNoiseToImageCommandFactory.cxx
     itkResampleImageCommand.cxx
     itkResampleImageCommandFactory.cxx
     itkWarpImageCommand.cxx

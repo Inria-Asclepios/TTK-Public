@@ -45,8 +45,8 @@ namespace itk
       {
 	double real = this->GetNormalGenerator()->GetVariate() * std::sqrt ( this->GetVariance() );
 	double imag = this->GetNormalGenerator()->GetVariate() * std::sqrt ( this->GetVariance() );
-	double random_number  = std::sqrt (real*real + imag*imag);
-	T+=random_number;
+	double realplusT = static_cast<double>(T) + real;
+	T = static_cast<InputPixelType>( std::sqrt (realplusT*realplusT + imag*imag) );
       }
       
       itOut.Set (T);

@@ -18,12 +18,11 @@
 
 #include <itkImageFileReader.h>
 #include <itkImageFileWriter.h>
-#include <itkImageRegionConstIterator.h>
-#include <itkImageRegionIterator.h>
 #include <itkImage.h>
 #include <itkTensorImageIO.h>
-
-#include "itkLinearInterpolateImageFunction.h"
+#include <itkMaskImageFilter.h>
+#include <itkExtractImageFilter.h>
+#include <itkJoinSeriesImageFilter.h>
 
 #include <iostream>
 #include "GetPot.h"
@@ -31,6 +30,147 @@
 
 namespace itk
 {
+    struct argument
+    {
+        const char *input;
+        const char *output;
+        const char *mask;
+    };
+
+    template <class TInputImage>
+    int ApplyMaskToImageCommandImplementation(const argument &arg)
+    {
+        typedef TInputImage ImageType;
+
+        typedef itk::Image<unsigned char, ImageType::ImageDimension > MaskType;
+
+        typedef itk::ImageFileReader<ImageType> ImageReaderType;
+        typedef itk::ImageFileReader<MaskType>  MaskReaderType;
+
+        typedef itk::ImageFileWriter<ImageType> ImageWriterType;
+    
+        try
+        {
+            ImageReaderType::Pointer reader = ImageReaderType::New();
+            reader->SetFileName( arg.input );
+
+            MaskReaderType::Pointer maskReader = MaskReaderType::New();
+            maskReader->SetFileName(arg.mask);
+
+            typedef itk::MaskImageFilter<ImageType, MaskType, ImageType>
+                MaskFilterType;
+
+            MaskFilterType::Pointer masker = MaskFilterType::New();
+            masker->SetInput1 (reader->GetOutput());
+            masker->SetInput2 (maskReader->GetOutput());
+
+            masker->Update();
+
+            ImageWriterType::Pointer writer = ImageWriterType::New();
+            writer->SetInput (masker->GetOutput());
+            writer->SetFileName (arg.output);
+
+            writer->Update();
+        }
+        catch(itk::ExceptionObject &e)
+        {
+            std::cerr << e;
+            return EXIT_FAILURE;
+        }
+   
+        return EXIT_SUCCESS;
+    }
+
+
+     template <class TInputImage>
+    int ApplyMaskTo4DImageCommandImplementation(const argument &arg)
+    {
+        typedef TInputImage ImageType;
+
+        typedef itk::Image<unsigned char, 3 > MaskType;
+        typedef itk::Image<typename ImageType::PixelType, 3> InternalImageType;
+
+        typedef itk::ImageFileReader<ImageType> ImageReaderType;
+        typedef itk::ImageFileReader<MaskType>  MaskReaderType;
+
+        typedef itk::ImageFileWriter<ImageType> ImageWriterType;
+    
+        try
+        {
+            typename ImageType::Pointer image = 0;
+
+            {
+                ImageReaderType::Pointer reader = ImageReaderType::New();
+                reader->SetFileName( arg.input );
+                reader->Update();
+
+                image = reader->GetOutput();
+                image->DisconnectPipeline();
+            }
+
+            MaskType::Pointer mask = 0;
+            {
+                MaskReaderType::Pointer maskReader = MaskReaderType::New();
+                maskReader->SetFileName(arg.mask);
+                maskReader->Update();
+
+                mask = maskReader->GetOutput();
+                mask->DisconnectPipeline();
+            }
+
+            typedef itk::MaskImageFilter<InternalImageType, MaskType, InternalImageType>
+                MaskFilterType;
+
+            typedef itk::ExtractImageFilter<ImageType, InternalImageType> ExtractFilterType;
+
+            typedef itk::JoinSeriesImageFilter<InternalImageType, ImageType> JoinFilterType;
+            typename JoinFilterType::Pointer joiner = JoinFilterType::New();
+
+            unsigned int volumeCount = image->GetLargestPossibleRegion().GetSize()[3];
+            for (unsigned int i=0; i<volumeCount; i++)
+            {
+                typename ImageType::SizeType size = image->GetLargestPossibleRegion().GetSize();
+                size[3] = 0;
+                typename ImageType::IndexType index = {{0,0,0,i}};
+
+                typename ImageType::RegionType region;
+                region.SetSize(size);
+                region.SetIndex(index);
+
+                typename ExtractFilterType::Pointer extractor = ExtractFilterType::New();
+                extractor->SetExtractionRegion(region);
+                extractor->SetInput(image);
+
+                MaskFilterType::Pointer masker = MaskFilterType::New();
+                masker->SetInput1 (extractor->GetOutput());
+                masker->SetInput2 (mask);
+
+                masker->Update();
+
+                joiner->PushBackInput (masker->GetOutput());
+                masker->GetOutput()->DisconnectPipeline();
+            }
+
+            joiner->Update();
+
+            ImageWriterType::Pointer writer = ImageWriterType::New();
+            writer->SetInput (joiner->GetOutput());
+            writer->SetFileName (arg.output);
+
+            writer->Update();
+        }
+        catch(itk::ExceptionObject &e)
+        {
+            std::cerr << e;
+            return EXIT_FAILURE;
+        }
+   
+        return EXIT_SUCCESS;
+    }
+
+    template <class TInputTensorImage, class TMaskImage>
+    int ApplyMaskToTensorImageCommandImplementation(const argument &arg)
+    {}
 
   ApplyMaskToImageCommand::ApplyMaskToImageCommand()
   {
@@ -43,191 +183,166 @@ namespace itk
   ApplyMaskToImageCommand::~ApplyMaskToImageCommand()
   {}
 
-  int ApplyMaskToImageCommand::Execute (int narg, const char* arg[])
+  int ApplyMaskToImageCommand::Execute (int argc, const char* argv[])
   {
 
     itk::Object::GlobalWarningDisplayOff();
     
-    GetPot cl(narg, const_cast<char**>(arg)); // argument parser
+    GetPot cl(argc, const_cast<char**>(argv)); // argument parser
     if( cl.size() == 1 || cl.search(2, "--help", "-h") )
     {
       std::cout << this->GetLongDescription() << std::endl;
-      return -1;
+      return EXIT_FAILURE;
     }
 
-    const char* input = cl.follow("NoFile",2,"-I","-i");
-    const char* output = cl.follow("NoFile",2,"-O","-o");
-    const char* mask = cl.follow( "NoFile", 2, "-m", "-M");
-    const int type = cl.follow(0, 2, "-t", "-T");
+    argument arg;
+
+    arg.input = cl.follow("",2,"-I","-i");
+    arg.output = cl.follow("",2,"-O","-o");
+    arg.mask = cl.follow( "", 2, "-m", "-M");
     
-    typedef double                        ScalarType;
+    int type = cl.follow(0, 2, "-t", "-T");
+
+    if (type==0)
+    {
     
-    typedef unsigned short                IntegerType;
-    typedef Image<ScalarType, 3>         ImageType;
-    typedef Image<ScalarType, 3>         ImageMaskType;
+        itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(arg.input, itk::ImageIOFactory::ReadMode);
+        if (io.IsNull())
+        {
+            return EXIT_FAILURE;
+        }
+        io->SetFileName(arg.input);
+        try
+        {
+            io->ReadImageInformation();
+        }
+        catch(itk::ExceptionObject &e)
+        {
+            std::cerr << e;
+            return EXIT_FAILURE;
+        }
+
+        if (io->GetNumberOfDimensions()==3) 
+        {
+        switch( io->GetComponentType())
+        {
+            case itk::ImageIOBase::UCHAR:
+            return ApplyMaskToImageCommandImplementation< itk::Image<unsigned char, 3> >(arg);
+            break;
+
+            case itk::ImageIOBase::CHAR:
+            return ApplyMaskToImageCommandImplementation< itk::Image<char, 3> >(arg);
+            break;
+
+            case itk::ImageIOBase::USHORT:
+            return ApplyMaskToImageCommandImplementation< itk::Image<unsigned short, 3> >(arg);
+            break;
+
+            case itk::ImageIOBase::SHORT:
+            return ApplyMaskToImageCommandImplementation< itk::Image<short, 3> >(arg);
+            break;
+
+            case itk::ImageIOBase::UINT:
+            return ApplyMaskToImageCommandImplementation< itk::Image<unsigned int, 3> >(arg);
+            break;
+
+            case itk::ImageIOBase::INT:
+            return ApplyMaskToImageCommandImplementation< itk::Image<int, 3> >(arg);
+            break;
+
+            case itk::ImageIOBase::ULONG:
+            return ApplyMaskToImageCommandImplementation< itk::Image<unsigned long, 3> >(arg);
+            break;
+
+            case itk::ImageIOBase::LONG:
+            return ApplyMaskToImageCommandImplementation< itk::Image<long, 3> >(arg);
+            break;
+
+            case itk::ImageIOBase::FLOAT:
+            return ApplyMaskToImageCommandImplementation< itk::Image<float, 3> >(arg);
+            break;
+
+            case itk::ImageIOBase::DOUBLE:
+            return ApplyMaskToImageCommandImplementation< itk::Image<double, 3> >(arg);
+            break;
+
+            default:
+            std::cerr << "unsupported component type: " << io->GetComponentTypeAsString( io->GetComponentType() );
+            return EXIT_FAILURE;
+            break;
+        }
+        }
+        else if (io->GetNumberOfDimensions()==4)
+        {
+            switch( io->GetComponentType())
+            {
+            case itk::ImageIOBase::UCHAR:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<unsigned char, 4> >(arg);
+            break;
+
+            case itk::ImageIOBase::CHAR:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<char, 4> >(arg);
+            break;
+
+            case itk::ImageIOBase::USHORT:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<unsigned short, 4> >(arg);
+            break;
+
+            case itk::ImageIOBase::SHORT:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<short, 4> >(arg);
+            break;
+
+            case itk::ImageIOBase::UINT:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<unsigned int, 4> >(arg);
+            break;
+
+            case itk::ImageIOBase::INT:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<int, 4> >(arg);
+            break;
+
+            case itk::ImageIOBase::ULONG:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<unsigned long, 4> >(arg);
+            break;
+
+            case itk::ImageIOBase::LONG:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<long, 4> >(arg);
+            break;
+
+            case itk::ImageIOBase::FLOAT:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<float, 4> >(arg);
+            break;
+
+            case itk::ImageIOBase::DOUBLE:
+            return ApplyMaskTo4DImageCommandImplementation< itk::Image<double, 4> >(arg);
+            break;
+
+            default:
+            std::cerr << "unsupported component type: " << io->GetComponentTypeAsString( io->GetComponentType() );
+            return EXIT_FAILURE;
+            break;
+            }
+        }
+        else
+            std::cerr << "images of dimension " << io->GetNumberOfDimensions() << " not supported";
+    }
+    else
+    {
+        std::cerr << "Tensors are not supported yet";
+        return EXIT_FAILURE;
+    }
     
+    /*
     typedef TensorImageIO<ScalarType,3,3> TensorIOType;
     typedef TensorIOType::TensorImageType TensorImageType;
     typedef TensorIOType::TensorType      TensorType;
     
-    typedef itk::ImageFileReader<ImageType> ImageReaderType;
-    typedef itk::ImageFileReader<ImageMaskType> ImageMaskReaderType;
-    typedef itk::ImageFileWriter<ImageType> ImageWriterType;
-    
-    ImageReaderType::Pointer reader = ImageReaderType::New();
-    reader->SetFileName( input );
-    
     TensorIOType::Pointer tensorreader = TensorIOType::New();
     tensorreader->SetFileName( input );
     
-    std::cout << "Reading: " << input << std::flush;
-    try
-    {
-      if (type)
-	tensorreader->Read();
-      else
-	reader->Update();
+    return EXIT_FAILURE;
+  */
+
+    return EXIT_FAILURE;
+
     }
-    catch( itk::ExceptionObject &e)
-    {
-      std::cerr << e;
-      return -1;
-    }
-    std::cout << " Done." << std::endl;
-    
-    ImageType::Pointer image = reader->GetOutput();
-    TensorImageType::Pointer tensors = tensorreader->GetOutput();
-    
-    ImageMaskReaderType::Pointer reader1 = ImageMaskReaderType::New();
-    reader1->SetFileName( mask );
-  
-    std::cout << "Reading: " << mask << std::flush;
-    try
-    {
-      reader1->Update();
-    }
-    catch( itk::ExceptionObject &e)
-    {
-      std::cerr << e;
-      return -1;
-    }
-    std::cout << " Done." << std::endl;
-    
-    ImageType::Pointer maskImage = reader1->GetOutput();
-    ImageMaskType::IndexType index;
-    ImageMaskType::PointType x;
-    
-    if (type)
-    {
-      itk::ImageRegionConstIterator<TensorImageType> itIn (tensors, tensors->GetLargestPossibleRegion() );
-      itk::ImageRegionConstIterator<ImageMaskType> itMask (maskImage, maskImage->GetLargestPossibleRegion() );
-      
-      TensorImageType::Pointer finalImage = TensorImageType::New();
-      finalImage->SetRegions( tensors->GetLargestPossibleRegion() );
-      finalImage->SetOrigin( tensors->GetOrigin() );
-      finalImage->SetSpacing( tensors->GetSpacing() );
-      finalImage->SetDirection( tensors->GetDirection() );
-      finalImage->Allocate();
-      TensorType zero = TensorType(static_cast<ScalarType>( 0.0 ));
-	
-      itk::ImageRegionIterator<TensorImageType> itOut (finalImage, finalImage->GetLargestPossibleRegion() );
-      
-      while( !itOut.IsAtEnd() )
-      {
-	tensors->TransformIndexToPhysicalPoint (itOut.GetIndex(), x);
-	bool isinside = maskImage->TransformPhysicalPointToIndex (x, index);
-	if (!isinside)
-	{
-	  itOut.Set( zero );
-	  ++itOut;
-	  ++itIn;
-	  continue;
-	}
-	itMask.SetIndex (index);					
-	
-	if( itMask.Value() > 0.0)
-	  itOut.Set( itIn.Get() );
-	else
-	  itOut.Set( zero );
-	++itOut;
-	++itIn;
-      }
-      
-      
-      // write the image
-      TensorIOType::Pointer writer = TensorIOType::New();
-      writer->SetFileName( output );
-      writer->SetInput( finalImage );
-      
-      std::cout << "Writing: " << output << std::flush;
-      try
-      {
-	writer->Write();
-      }
-      catch( itk::ExceptionObject &e)
-      {
-	std::cerr << e;
-	return -1;
-      }
-      
-      std::cout << " Done." << std::endl;
-      
-    }
-    else
-    {
-      
-      itk::ImageRegionConstIterator<ImageType> itIn (image, image->GetLargestPossibleRegion() );
-      itk::ImageRegionConstIterator<ImageMaskType> itMask (maskImage, maskImage->GetLargestPossibleRegion() );
-      
-      ImageType::Pointer finalImage = ImageType::New();
-      finalImage->SetRegions( image->GetLargestPossibleRegion() );
-      finalImage->SetOrigin( image->GetOrigin() );
-      finalImage->SetSpacing( image->GetSpacing() );
-      finalImage->SetDirection( image->GetDirection() );
-      
-      finalImage->Allocate();
-    
-      itk::ImageRegionIterator<ImageType> itOut (finalImage, finalImage->GetLargestPossibleRegion() );
-      while( !itOut.IsAtEnd() )
-      {
-	image->TransformIndexToPhysicalPoint (itOut.GetIndex(), x);
-	bool isinside = maskImage->TransformPhysicalPointToIndex (x, index);
-	if (!isinside)
-	{
-	  itOut.Set( static_cast<ScalarType>(0.0) );
-	  ++itOut;
-	  ++itIn;
-	  continue;
-	}
-	itMask.SetIndex (index);				
-	
-	if( itMask.Value() ) itOut.Set( itIn.Get() );
-	else                 itOut.Set( static_cast<ScalarType>(0.0) );
-	++itOut;
-	++itIn;
-      }
-  
-      // write the image
-      ImageWriterType::Pointer writer = ImageWriterType::New();
-      writer->SetFileName( output );
-      writer->SetInput( finalImage );
-      
-      std::cout << "Writing: " << output << std::flush;
-      try
-      {
-	writer->Update();
-      }
-      catch( itk::ExceptionObject &e)
-      {
-	std::cerr << e;
-	return -1;
-      }
-      
-      std::cout << " Done." << std::endl;
-    }
-    
-    
-    return 0;
-  }
-  
 }

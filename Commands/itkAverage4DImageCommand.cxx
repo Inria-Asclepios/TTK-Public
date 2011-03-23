@@ -29,36 +29,12 @@
 namespace itk
 {
 
-  Average4DImageCommand::Average4DImageCommand()
-  {
-    m_ShortDescription = "Average a 4D image";
-    m_LongDescription = "Usage:\n";
-    m_LongDescription += "<-i input> <-n offset> <-o output>\n\n";
-    m_LongDescription += m_ShortDescription;
-  }
-
-  Average4DImageCommand::~Average4DImageCommand()
-  {}
-
-  int Average4DImageCommand::Execute (int narg, const char* arg[])
-  {
-    itk::Object::GlobalWarningDisplayOff();
-    
-    GetPot cl(narg, const_cast<char**>(arg)); // argument parser
-    if( cl.size() == 1 || cl.search(2, "--help", "-h") )
+    template<class TImage>
+    int Average4DCommandImplementation(const char *input, const char *output, const int &offset)
     {
-      std::cout << this->GetLongDescription() << std::endl;
-      return -1;
-    }
-
-    const char* input = cl.follow("","-i");
-    const char* output = cl.follow("output.nii.gz","-o");
-    int offset = cl.follow (0, "-n");
-    
-
-    typedef unsigned short                ScalarType;
-    typedef Image<ScalarType, 4>          InputImageType;
-    typedef Image<ScalarType, 3>          OutputImageType;
+        typedef TImage InputImageType;
+        typedef typename InputImageType::PixelType ScalarType;
+      typedef Image<ScalarType, 3>          OutputImageType;
     
     typedef itk::ImageFileReader<InputImageType>     ImageReaderType;
     typedef itk::ImageFileWriter<OutputImageType>    ImageWriterType;
@@ -74,7 +50,7 @@ namespace itk
       catch (itk::ExceptionObject &e)
       {
 	std::cerr << e;
-	return EXIT_FAILURE;
+	return -1;
       }
 
       image = reader->GetOutput();
@@ -102,7 +78,7 @@ namespace itk
       catch (itk::ExceptionObject &e)
       {
 	std::cerr << e;
-	return EXIT_FAILURE;
+	return -1;
       }
 
       image = extractor->GetOutput();
@@ -123,7 +99,7 @@ namespace itk
       catch (itk::ExceptionObject &e)
       {
 	std::cerr << e;
-	return EXIT_FAILURE;
+	return -1;
       }
 
       image = filter->GetOutput();
@@ -151,7 +127,7 @@ namespace itk
       catch (itk::ExceptionObject &e)
       {
 	std::cerr << e;
-	return EXIT_FAILURE;
+	return -1;
       }
 
       outImage = extractor->GetOutput();
@@ -176,8 +152,89 @@ namespace itk
     
     std::cout << " Done." << std::endl;
     
-    
     return 0;
+    }
+
+  Average4DImageCommand::Average4DImageCommand()
+  {
+    m_ShortDescription = "Average a 4D image";
+    m_LongDescription = "Usage:\n";
+    m_LongDescription += "<-i input> <-n offset> <-o output>\n\n";
+    m_LongDescription += m_ShortDescription;
+  }
+
+  Average4DImageCommand::~Average4DImageCommand()
+  {}
+
+  int Average4DImageCommand::Execute (int narg, const char* arg[])
+  {
+    itk::Object::GlobalWarningDisplayOff();
+    
+    GetPot cl(narg, const_cast<char**>(arg)); // argument parser
+    if( cl.size() == 1 || cl.search(2, "--help", "-h") )
+    {
+      std::cout << this->GetLongDescription() << std::endl;
+      return -1;
+    }
+
+    const char* input = cl.follow("","-i");
+    const char* output = cl.follow("output.nii.gz","-o");
+    int offset = cl.follow (0, "-n");
+    
+    itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(input, itk::ImageIOFactory::ReadMode);
+    if (io.IsNull())
+    {
+        return EXIT_FAILURE;
+    }
+    io->SetFileName(input);
+    try
+    {
+    io->ReadImageInformation();
+    }
+    catch(itk::ExceptionObject &e)
+    {
+        std::cerr << e;
+        return EXIT_FAILURE;
+    }
+
+    switch( io->GetComponentType())
+    {
+    case itk::ImageIOBase::UCHAR:
+        return Average4DCommandImplementation< itk::Image<unsigned char, 4> >(input, output, offset);
+
+    case itk::ImageIOBase::CHAR:
+        return Average4DCommandImplementation< itk::Image<char, 4> >(input, output, offset);
+
+        case itk::ImageIOBase::USHORT:
+        return Average4DCommandImplementation< itk::Image<unsigned short, 4> >(input, output, offset);
+
+        case itk::ImageIOBase::SHORT:
+        return Average4DCommandImplementation< itk::Image<short, 4> >(input, output, offset);
+
+        case itk::ImageIOBase::UINT:
+        return Average4DCommandImplementation< itk::Image<unsigned int, 4> >(input, output, offset);
+
+        case itk::ImageIOBase::INT:
+        return Average4DCommandImplementation< itk::Image<int, 4> >(input, output, offset);
+
+        case itk::ImageIOBase::ULONG:
+        return Average4DCommandImplementation< itk::Image<unsigned long, 4> >(input, output, offset);
+
+        case itk::ImageIOBase::LONG:
+        return Average4DCommandImplementation< itk::Image<long, 4> >(input, output, offset);
+
+        case itk::ImageIOBase::FLOAT:
+        return Average4DCommandImplementation< itk::Image<float, 4> >(input, output, offset);
+
+        case itk::ImageIOBase::DOUBLE:
+        return Average4DCommandImplementation< itk::Image<double, 4> >(input, output, offset);
+
+    default:
+        std::cerr << "unsupported component type: " << io->GetComponentTypeAsString( io->GetComponentType() );
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
   }
   
 }

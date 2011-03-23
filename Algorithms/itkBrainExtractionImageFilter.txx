@@ -144,6 +144,19 @@ namespace itk
       outputImage = filler->GetOutput();
       outputImage->DisconnectPipeline();
     }
+
+	{
+	  cross.SetRadius( 2 );
+
+	  typename DilateFilterType::Pointer dilater = DilateFilterType::New();
+	  dilater->SetInput ( outputImage );
+	  dilater->SetKernel( cross );
+      
+      dilater->Update();
+
+	  outputImage = dilater->GetOutput();
+      outputImage->DisconnectPipeline();
+	}
     
     
     this->GraftOutput ( outputImage );

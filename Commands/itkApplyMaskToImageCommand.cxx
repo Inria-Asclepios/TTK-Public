@@ -170,7 +170,9 @@ namespace itk
 
     template <class TInputTensorImage, class TMaskImage>
     int ApplyMaskToTensorImageCommandImplementation(const argument &arg)
-    {}
+    {
+        return EXIT_FAILURE;
+    }
 
   ApplyMaskToImageCommand::ApplyMaskToImageCommand()
   {

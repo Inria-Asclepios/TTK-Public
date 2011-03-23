@@ -39,9 +39,9 @@ namespace itk
     typedef itk::ImageFileReader<InputImageType>     ImageReaderType;
     typedef itk::ImageFileWriter<OutputImageType>    ImageWriterType;
     
-    InputImageType::Pointer image = 0;
+    typename InputImageType::Pointer image = 0;
     {
-      ImageReaderType::Pointer reader = ImageReaderType::New();
+      typename ImageReaderType::Pointer reader = ImageReaderType::New();
       reader->SetFileName( input );
       try
       {
@@ -61,14 +61,14 @@ namespace itk
     if (offset>0)
     {
       typedef ExtractImageFilter<InputImageType, InputImageType> Extract4DFilterType;
-      InputImageType::RegionType region = image->GetLargestPossibleRegion();
-      InputImageType::SizeType size = region.GetSize();
+      typename InputImageType::RegionType region = image->GetLargestPossibleRegion();
+      typename InputImageType::SizeType size = region.GetSize();
       size[3] -= offset;
-      InputImageType::IndexType index = region.GetIndex();
+      typename InputImageType::IndexType index = region.GetIndex();
       index[3] = offset;
       region.SetSize  (size);
       region.SetIndex (index);
-      Extract4DFilterType::Pointer extractor = Extract4DFilterType::New();
+      typename Extract4DFilterType::Pointer extractor = Extract4DFilterType::New();
       extractor->SetInput (image);
       extractor->SetExtractionRegion (region);
       try
@@ -89,7 +89,7 @@ namespace itk
     
     typedef GetAverageSliceImageFilter<InputImageType, InputImageType> FilterType;
     {
-      FilterType::Pointer filter = FilterType::New();
+      typename FilterType::Pointer filter = FilterType::New();
       filter->SetInput (image);
       filter->SetAveragedOutDimension (3);
       try
@@ -107,17 +107,17 @@ namespace itk
     }
 
 
-    OutputImageType::Pointer outImage = 0;
+    typename OutputImageType::Pointer outImage = 0;
     typedef ExtractImageFilter<InputImageType, OutputImageType> ExtractFilterType;
     {
-      InputImageType::RegionType region = image->GetLargestPossibleRegion();
-      InputImageType::SizeType size = region.GetSize();
+      typename InputImageType::RegionType region = image->GetLargestPossibleRegion();
+      typename InputImageType::SizeType size = region.GetSize();
       size[3] = 0;
-      InputImageType::IndexType index = region.GetIndex();
+      typename InputImageType::IndexType index = region.GetIndex();
       index[3] = 0;
       region.SetSize  (size);
       region.SetIndex (index);
-      ExtractFilterType::Pointer extractor = ExtractFilterType::New();
+      typename ExtractFilterType::Pointer extractor = ExtractFilterType::New();
       extractor->SetInput (image);
       extractor->SetExtractionRegion (region);
       try
@@ -135,7 +135,7 @@ namespace itk
     }
     
     // write the image
-    ImageWriterType::Pointer writer = ImageWriterType::New();
+    typename ImageWriterType::Pointer writer = ImageWriterType::New();
     writer->SetFileName( output );
     writer->SetInput( outImage );
     

@@ -48,7 +48,7 @@ namespace itk
         typedef itk::ImageFileWriter<MaskImageType> MaskImageWriterType;
 
 
-        ImageType::Pointer image = 0;
+        typename ImageType::Pointer image = 0;
         {
             typename ImageReaderType::Pointer reader = ImageReaderType::New();
             reader->SetFileName( arg.input );

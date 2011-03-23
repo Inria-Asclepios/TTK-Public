@@ -50,7 +50,7 @@ namespace itk
 
         ImageType::Pointer image = 0;
         {
-            ImageReaderType::Pointer reader = ImageReaderType::New();
+            typename ImageReaderType::Pointer reader = ImageReaderType::New();
             reader->SetFileName( arg.input );
     
       std::cout << "Reading: " << arg.input << std::flush;
@@ -71,9 +71,9 @@ namespace itk
     
 
     typedef itk::BrainExtractionImageFilter<ImageType, MaskImageType> BrainExtractionFilterType;
-    MaskImageType::Pointer maskImage = 0;
+    typename MaskImageType::Pointer maskImage = 0;
     {
-      BrainExtractionFilterType::Pointer extractor = BrainExtractionFilterType::New();
+      typename BrainExtractionFilterType::Pointer extractor = BrainExtractionFilterType::New();
       extractor->SetInput ( image );
       try
       {
@@ -92,7 +92,7 @@ namespace itk
     
     typedef itk::MaskImageFilter<ImageType, MaskImageType, ImageType> MaskFilterType;
     {
-      MaskFilterType::Pointer masker = MaskFilterType::New();
+      typename MaskFilterType::Pointer masker = MaskFilterType::New();
       masker->SetInput1 ( image );
       masker->SetInput2 ( maskImage );
       masker->SetOutsideValue ( 0.0 );
@@ -114,7 +114,7 @@ namespace itk
     
     // write the mask
     std::cout << "Writing: " << arg.mask << std::flush;
-     MaskImageWriterType::Pointer maskWriter = MaskImageWriterType::New();
+     typename MaskImageWriterType::Pointer maskWriter = MaskImageWriterType::New();
       maskWriter->SetInput ( maskImage );
       maskWriter->SetFileName (arg.mask);
       try
@@ -132,7 +132,7 @@ namespace itk
     if (strcmp(arg.output, "")!=0)
     {
      // write the image
-    ImageWriterType::Pointer writer = ImageWriterType::New();
+    typename ImageWriterType::Pointer writer = ImageWriterType::New();
     writer->SetFileName( arg.output );
     writer->SetInput   ( image );
     

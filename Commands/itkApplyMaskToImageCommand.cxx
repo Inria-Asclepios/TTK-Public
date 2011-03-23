@@ -51,22 +51,22 @@ namespace itk
     
         try
         {
-            ImageReaderType::Pointer reader = ImageReaderType::New();
+            typename ImageReaderType::Pointer reader = ImageReaderType::New();
             reader->SetFileName( arg.input );
 
-            MaskReaderType::Pointer maskReader = MaskReaderType::New();
+            typename MaskReaderType::Pointer maskReader = MaskReaderType::New();
             maskReader->SetFileName(arg.mask);
 
             typedef itk::MaskImageFilter<ImageType, MaskType, ImageType>
                 MaskFilterType;
 
-            MaskFilterType::Pointer masker = MaskFilterType::New();
+            typename MaskFilterType::Pointer masker = MaskFilterType::New();
             masker->SetInput1 (reader->GetOutput());
             masker->SetInput2 (maskReader->GetOutput());
 
             masker->Update();
 
-            ImageWriterType::Pointer writer = ImageWriterType::New();
+            typename ImageWriterType::Pointer writer = ImageWriterType::New();
             writer->SetInput (masker->GetOutput());
             writer->SetFileName (arg.output);
 
@@ -100,7 +100,7 @@ namespace itk
             typename ImageType::Pointer image = 0;
 
             {
-                ImageReaderType::Pointer reader = ImageReaderType::New();
+                typename ImageReaderType::Pointer reader = ImageReaderType::New();
                 reader->SetFileName( arg.input );
                 reader->Update();
 
@@ -110,7 +110,7 @@ namespace itk
 
             MaskType::Pointer mask = 0;
             {
-                MaskReaderType::Pointer maskReader = MaskReaderType::New();
+                typename MaskReaderType::Pointer maskReader = MaskReaderType::New();
                 maskReader->SetFileName(arg.mask);
                 maskReader->Update();
 
@@ -141,7 +141,7 @@ namespace itk
                 extractor->SetExtractionRegion(region);
                 extractor->SetInput(image);
 
-                MaskFilterType::Pointer masker = MaskFilterType::New();
+                typename MaskFilterType::Pointer masker = MaskFilterType::New();
                 masker->SetInput1 (extractor->GetOutput());
                 masker->SetInput2 (mask);
 
@@ -153,7 +153,7 @@ namespace itk
 
             joiner->Update();
 
-            ImageWriterType::Pointer writer = ImageWriterType::New();
+            typename ImageWriterType::Pointer writer = ImageWriterType::New();
             writer->SetInput (joiner->GetOutput());
             writer->SetFileName (arg.output);
 

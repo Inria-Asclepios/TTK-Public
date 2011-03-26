@@ -145,6 +145,7 @@ namespace itk
       outputImage->DisconnectPipeline();
     }
 
+/*
 	{
 	  cross.SetRadius( 2 );
 
@@ -157,7 +158,7 @@ namespace itk
 	  outputImage = dilater->GetOutput();
       outputImage->DisconnectPipeline();
 	}
-    
+  */  
     
     this->GraftOutput ( outputImage );
   }

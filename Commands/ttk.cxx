@@ -38,6 +38,7 @@
 #include "itkAverageStdTensorCalculatorCommandFactory.h"
 #include "itkNormalize2TensorsCommandFactory.h"
 #include "itkScaleTensorCommandFactory.h"
+#include "itkComputeBundleStatisticsCommandFactory.h"
 #ifdef TTK_USE_GMM
 #include "itkDemonsTensorRegistrationCommandFactory.h"
 #include "itkLogDomainDemonsTensorRegistrationCommandFactory.h"
@@ -51,6 +52,7 @@
 
 #ifdef TTK_USE_VTKINRIA3D
 #include "itkGISImageIOFactory.h"
+#include "itkExtractBundleWithROICommandFactory.h"
 #endif
 
 int main (int narg, char *args[])
@@ -78,10 +80,14 @@ int main (int narg, char *args[])
   itk::BoostTensorAnisotropyCommandFactory::RegisterOneFactory();
   itk::AverageStdTensorCalculatorCommandFactory::RegisterOneFactory();
   itk::ScaleTensorCommandFactory::RegisterOneFactory();
+  itk::ComputeBundleStatisticsCommandFactory::RegisterOneFactory();
 #ifdef TTK_USE_GMM
   itk::DemonsTensorRegistrationCommandFactory::RegisterOneFactory();
   itk::LogDomainDemonsTensorRegistrationCommandFactory::RegisterOneFactory();
 #endif
+#ifdef TTK_USE_VTKINRIA3D
+  itk::ExtractBundleWithROICommandFactory::RegisterOneFactory();
+#endif TTK_USE_VTKINRIA3D
   
   
   if (narg<2) {

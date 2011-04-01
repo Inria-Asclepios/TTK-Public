@@ -85,7 +85,11 @@ namespace itk
     void Clear (void)
     { m_FiberPointList.clear(); }
     
-    
+    /** Integrates the FA along the fiber */
+    double GetMeanFA (void) const;
+
+    /** Integrates the ADC along the fiber */
+    double GetMeanADC (void) const;
 
     Fiber(){};
     ~Fiber(){};

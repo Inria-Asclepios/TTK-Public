@@ -187,6 +187,9 @@ if(TTK_USE_VTKINRIA3D)
  
   set(TTK_VTKINRIA3D_LIBRARIES 
   itkIOAddOn
+  vtkImaging
+  vtkVisuManagement
+  vtkGraphics
   )
 endif(TTK_USE_VTKINRIA3D)
 

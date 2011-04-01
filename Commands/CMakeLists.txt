@@ -43,6 +43,8 @@
     itkNormalize2TensorsCommandFactory.cxx
     itkScaleTensorCommand.cxx
     itkScaleTensorCommandFactory.cxx
+    itkComputeBundleStatisticsCommand.cxx
+    itkComputeBundleStatisticsCommandFactory.cxx
   )
 
   if (TTK_USE_GMM)
@@ -55,6 +57,13 @@
     )
   endif (TTK_USE_GMM)
 
+  if (TTK_USE_VTKINRIA3D)
+    set(TTK_COMMAND_SRCS
+      ${TTK_COMMAND_SRCS}
+      itkExtractBundleWithROICommand.cxx
+      itkExtractBundleWithROICommandFactory.cxx
+    )
+  endif (TTK_USE_VTKINRIA3D)
 
   add_library(ttkCommands ${TTK_BUILD_TYPE}
     ${TTK_COMMAND_SRCS}
@@ -65,6 +74,7 @@
     ${TTK_VTKINRIA3D_LIBRARIES}
     ITKProgramFactory
     ITKTensor
+    ttkAlgorithms
     ${ITK_LIBRARIES}
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
@@ -75,11 +85,10 @@
   )
 
   target_link_libraries(ttk
-    ttkCommands
+    ttkCommands	
     ITKProgramFactory
     ${ITK_LIBRARIES}
   )
-
 
 
   # ttk convert

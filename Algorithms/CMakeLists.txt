@@ -7,3 +7,11 @@ if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
     COMPONENT   Development
   )
 endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+
+add_library(ttkAlgorithms
+itkFiberBundleToScalarFunction.cxx
+)
+
+target_link_libraries(ttkAlgorithms
+${ITK_LIBRARIES}
+)

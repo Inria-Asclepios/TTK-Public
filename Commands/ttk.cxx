@@ -87,7 +87,7 @@ int main (int narg, char *args[])
 #endif
 #ifdef TTK_USE_VTKINRIA3D
   itk::ExtractBundleWithROICommandFactory::RegisterOneFactory();
-#endif TTK_USE_VTKINRIA3D
+#endif
   
   
   if (narg<2) {

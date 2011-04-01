@@ -12,6 +12,7 @@
 
 #include <vtkLimitFibersToROI.h>
 
+#include <errno.h>
 #include <iostream>
 #include "GetPot.h"
 

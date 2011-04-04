@@ -16,7 +16,7 @@
 =========================================================================*/
 #include "itkComputeBundleStatisticsCommand.h"
 
-#include <itkFiberBundleToScalarFunction.h>
+#include <itkFiberBundleStatisticsCalculator.h>
 
 #include <vtkPolyData.h>
 #include <vtkPolyDataReader.h>
@@ -61,7 +61,7 @@ namespace itk
 
     vtkPolyData *bundle = reader->GetOutput();
     
-    itk::FiberBundleToScalarFunction::Pointer calculator = itk::FiberBundleToScalarFunction::New();
+    itk::FiberBundleStatisticsCalculator::Pointer calculator = itk::FiberBundleStatisticsCalculator::New();
     calculator->SetInput (bundle);
     try
     {
@@ -73,9 +73,17 @@ namespace itk
         return EXIT_FAILURE;
     }
 
-    std::cout << "Mean FA: " << calculator->GetMeanFA() << std::endl;
-    std::cout << "Mean ADC: " << calculator->GetMeanADC() << std::endl;
-    std::cout << "Mean Length: " << calculator->GetMeanFiberLength() << std::endl;
+    double meanFA, minFA, maxFA, varFA;
+    double meanADC, minADC, maxADC, varADC;
+    double meanLength, minLength, maxLength, varLength;
+
+    calculator->GetFAStatistics(meanFA, minFA, maxFA, varFA);
+    calculator->GetADCStatistics(meanADC, minADC, maxADC, varADC);
+    calculator->GetLengthStatistics(meanLength, minLength, maxLength, varLength);
+
+    std::cout << "FA (mean, min, max, var): " <<  meanFA << " " << minFA << " " << maxFA << " " << varFA << std::endl;
+    std::cout << "ADC (mean, min, max, var): " << meanADC << " " << minADC << " " << maxADC << " " << varADC << std::endl;
+    std::cout << "Length (mean, min, max, var): " << meanLength << " " << minLength << " " << maxLength << " " << varLength << std::endl;
 
     reader->Delete();
 

@@ -1,5 +1,5 @@
-#ifndef _itk_FiberBundleToScalarFunction_h_
-#define _itk_FiberBundleToScalarFunction_h_
+#ifndef _itk_FiberBundleStatisticsCalculator_h_
+#define _itk_FiberBundleStatisticsCalculator_h_
 
 #include <itkObject.h>
 #include <itkObjectFactory.h>
@@ -13,24 +13,23 @@ class vtkPolyData;
 
 namespace itk
 {
-    class FiberBundleToScalarFunction : public Object
+    class FiberBundleStatisticsCalculator : public Object
     {
     public:
-        typedef FiberBundleToScalarFunction Self;
+        typedef FiberBundleStatisticsCalculator Self;
         typedef Object Superclass;
 
         typedef SmartPointer<Self>       Pointer;
         typedef SmartPointer<const Self> ConstPointer;
 
         itkNewMacro (Self);
-        itkTypeMacro(FiberBundleToScalarFunction, Object);
+        itkTypeMacro(FiberBundleStatisticsCalculator, Object);
 
         // specific typedef
-        typedef std::vector<double> ScalarArrayType;
-        typedef double              MeanType;
-        typedef double              VarianceType;
-        typedef Tensor<double, 3>   TensorType;
-        typedef Fiber<double, 3, double> FiberType;
+        typedef double                           ScalarType;
+        typedef std::vector<ScalarType>          ScalarArrayType;
+        typedef Tensor<ScalarType, 3>            TensorType;
+        typedef Fiber<ScalarType, 3, ScalarType> FiberType;
 
         typedef vtkPolyData FiberBundleType;
 
@@ -43,17 +42,13 @@ namespace itk
         ScalarArrayType GetADCValues (void) const;
         ScalarArrayType GetFiberLengthValues (void) const;
 
-        MeanType GetMeanFA (void) const;
-        MeanType GetMeanADC (void) const;
-        MeanType GetMeanFiberLength (void) const;
-
-        VarianceType GetVarianceFA (void) const;
-        VarianceType GetVarianceADC (void) const;
-        VarianceType GetVarianceFiberLength (void) const;
+        void GetFAStatistics     (ScalarType &mean, ScalarType &min, ScalarType &max, ScalarType &var);
+        void GetADCStatistics    (ScalarType &mean, ScalarType &min, ScalarType &max, ScalarType &var);
+        void GetLengthStatistics (ScalarType &mean, ScalarType &min, ScalarType &max, ScalarType &var);
 
     protected:
-        FiberBundleToScalarFunction();
-        ~FiberBundleToScalarFunction();
+        FiberBundleStatisticsCalculator();
+        ~FiberBundleStatisticsCalculator();
 
         virtual void PrintSelf(std::ostream &os, Indent indent) const
         {
@@ -61,7 +56,7 @@ namespace itk
         }
 
     private:
-        FiberBundleToScalarFunction (const Self&);
+        FiberBundleStatisticsCalculator (const Self&);
         void operator=(const Self&);
 
         vtkSmartPointer<vtkPolyData> m_Input;

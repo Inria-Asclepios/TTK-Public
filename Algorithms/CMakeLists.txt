@@ -9,7 +9,7 @@ if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 
 add_library(ttkAlgorithms
-itkFiberBundleToScalarFunction.cxx
+itkFiberBundleStatisticsCalculator.cxx
 )
 
 target_link_libraries(ttkAlgorithms

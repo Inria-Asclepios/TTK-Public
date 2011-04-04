@@ -86,10 +86,19 @@ namespace itk
     { m_FiberPointList.clear(); }
     
     /** Integrates the FA along the fiber */
-    double GetMeanFA (void) const;
+    void GetFAStatistics (double &mean, double &min, double &max, double &var) const;
 
     /** Integrates the ADC along the fiber */
-    double GetMeanADC (void) const;
+    void GetADCStatistics (double &mean, double &min, double &max, double &var) const;
+
+    enum StatisticsType
+    {
+        FA,
+        ADC
+    };
+
+    void GetStatistics (StatisticsType type, double &mean, double &min, double &max, double &var) const;
+
 
     Fiber(){};
     ~Fiber(){};
@@ -99,9 +108,11 @@ namespace itk
     }
     Self& operator=(const Self& f);
 
+protected:
+    inline double GetTensorScalarValue (const TensorType &tensor, const StatisticsType &type) const;
     
     
-  private:
+private:
     FiberPointListType  m_FiberPointList;
 
   };

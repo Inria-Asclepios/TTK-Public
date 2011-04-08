@@ -21,6 +21,7 @@
 #include "itkImageToImageFilter.h"
 
 class vtkStructuredPoints;
+class vtkMatrix4x4;
 
 namespace itk
 {
@@ -37,8 +38,9 @@ public:
 	/** Some typedefs. */
 	typedef TTensorImage                             TensorImageType;
 	typedef typename  TensorImageType::PixelType     TensorType;
+        typedef typename  TensorType::ValueType          ScalarType;
  	typedef typename  TensorImageType::Pointer       TensorImagePointer;
-	typedef typename  TensorImageType::ConstPointer  TensorImageConstPointer;
+	typedef typename  TensorImageType::ConstPointer  TensorImageConstPointer;                
 
 	/** Standard class typedefs. */
 	typedef ITKTensorsToVTKTensorsFilter                         Self;
@@ -54,7 +56,7 @@ public:
 
 	/** Return the input (no ITK filtering is performed on the input
 	 * image) */
-	TensorImagePointer GetOutput();
+        TensorImageType *GetOutput();
 
 	/** Get the VTK tensor image to obtained from the input ITK tensor
 	 * image */
@@ -62,6 +64,8 @@ public:
 
 	vtkStructuredPoints* GetVTKTensors(void) const
 	{ return m_VTKTensors; }
+
+        vtkMatrix4x4* GetDirectionMatrix(void) const;
 
 protected:
 	ITKTensorsToVTKTensorsFilter(); 
@@ -77,6 +81,8 @@ private:
 
 	/** VTK output */
 	vtkStructuredPoints* m_VTKTensors;
+
+        vtkMatrix4x4 *m_DirectionMatrix;
 
 };
 

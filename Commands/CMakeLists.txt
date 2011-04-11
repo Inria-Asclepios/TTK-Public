@@ -112,16 +112,18 @@
 
 
   if(WIN32)
-     # The file itkImageConverterCommand.cxx causes the following compile-time error using visual studio 2010:
-     #     ...\itk\code\common\itkdefaultpixelaccessorfunctor.h(66): 
+     # The files itkImageConverterCommand.cxx and itkDWIBrainMaskExtractorCommand.cxx
+     # cause the following compile-time error using visual studio 2010:
      #     fatal error C1128: number of sections exceeded object file format limit : compile with /bigobj
-     # The additional flag /bigobj is added to this one file here. 
-     get_source_file_property(itkImageConverterCommand_COMPILE_FLAGS itkImageConverterCommand.cxx COMPILE_FLAGS)
-     if (itkImageConverterCommand_COMPILE_FLAGS STREQUAL NOTFOUND)
-       set_source_files_properties(itkImageConverterCommand.cxx PROPERTIES COMPILE_FLAGS "/bigobj")
-     else (itkImageConverterCommand_COMPILE_FLAGS STREQUAL NOTFOUND)
-       set_source_files_properties(itkImageConverterCommand.cxx PROPERTIES COMPILE_FLAGS "${itkImageConverterCommand_COMPILE_FLAGS} /bigobj")
-     endif (itkImageConverterCommand_COMPILE_FLAGS STREQUAL NOTFOUND)
+     # The additional flag /bigobj is added to this one file here.
+     foreach(bigobjFile itkImageConverterCommand.cxx and itkDWIBrainMaskExtractorCommand.cxx)
+         get_source_file_property(bigobjFile_COMPILE_FLAGS ${bigobjFile} COMPILE_FLAGS)
+         if (${bigobjFile_COMPILE_FLAGS} STREQUAL NOTFOUND)
+           set_source_files_properties(${bigobjFile} PROPERTIES COMPILE_FLAGS "/bigobj")
+         else (${bigobjFile_COMPILE_FLAGS} STREQUAL NOTFOUND)
+           set_source_files_properties(${bigobjFile} PROPERTIES COMPILE_FLAGS "${bigobjFile_COMPILE_FLAGS} /bigobj")
+         endif (${bigobjFile_COMPILE_FLAGS} STREQUAL NOTFOUND)
+     endforeach(bigobjFile)
   endif(WIN32)
   
   target_link_libraries(ttkConvertCommands

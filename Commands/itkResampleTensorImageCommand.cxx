@@ -130,6 +130,7 @@ namespace itk
     std::cout << "Reading: " << mat;
     typedef itk::AffineTensorTransform< ScalarType, 3 >         TensorTransformType;
     typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;
+    typedef itk::AffineTransform< ScalarType, 3>                AffineTransformType;
     
     /*
     // read the affine matrix
@@ -210,6 +211,7 @@ namespace itk
     TransformType::Pointer transform = 0;
     {
       itk::TransformFactory< TransformType >::RegisterTransform ();
+      itk::TransformFactory< AffineTransformType >::RegisterTransform ();
       
       typedef itk::TransformFileReader TransformReaderType;
       TransformReaderType::Pointer reader = TransformReaderType::New();

@@ -23,6 +23,7 @@
 #include <itkVectorLinearInterpolateImageFunction.h>
 #include <itkTransformFileReader.h>
 #include <itkMatrixOffsetTransformBase.h>
+#include <itkAffineTransform.h>
 #include <itkTransformFactory.h>
 
 #include <vtkPolyData.h>
@@ -119,11 +120,13 @@ namespace itk
     
     
     typedef itk::MatrixOffsetTransformBase<double, 3, 3> LinearTransformType;
+    typedef itk::AffineTransform<double, 3>              AffineTransformType;
     
     LinearTransformType::Pointer transform = 0;
     if( strcmp (file_matrix, "")!=0 )
     {
       itk::TransformFactory< LinearTransformType >::RegisterTransform ();
+      itk::TransformFactory< AffineTransformType >::RegisterTransform ();
       
       typedef itk::TransformFileReader TransformReaderType;
       TransformReaderType::Pointer reader_t = TransformReaderType::New();

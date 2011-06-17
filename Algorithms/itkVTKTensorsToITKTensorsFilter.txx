@@ -72,19 +72,19 @@ VTKTensorsToITKTensorsFilter< TTensor, TDimension >
   this->Modified();
 }
 
-
+  
 
 /**
  * Get an itk::Image as output
  */
 template < class TTensor, int TDimension >
 typename itk::Image< TTensor, TDimension >::Pointer
-VTKTensorsToITKTensorsFilter< TTensor, TDimension >
-::GetOutput() const
+VTKTensorsToITKTensorsFilter< TTensor, TDimension >::GetOutput() const
 {
   return m_Output;
 }
-
+  
+  
 
 
 

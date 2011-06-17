@@ -54,7 +54,7 @@ public:
 	itkTypeMacro(VTKTensorsToITKTensorsFilter, ImageSource);
 
 	/** Return the ITK tensor image */
-	OutputImagePointer GetOutput() const;
+	typename OutputImageType::Pointer GetOutput() const;
 
 	/** Set the input VTK tensor image to convert */
 	void SetVTKTensors( vtkStructuredPoints* );

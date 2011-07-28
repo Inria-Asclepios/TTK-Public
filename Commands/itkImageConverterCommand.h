@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Tensor ToolKit - TTK
-  Module:    $URL:$
+  Module:    $URL$
   Language:  C++
-  Date:      $Date:$
-  Version:   $Revision:$
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) INRIA 2010. All rights reserved.
   See LICENSE.txt for details.
@@ -18,6 +18,7 @@
 #define _itk_ImageConverterCommand_h_
 
 #include "itkCommandObjectBase.h"
+#include "itkImage.h"
 
 namespace itk {
 
@@ -38,10 +39,15 @@ namespace itk {
     { return "image"; }
     
     int Execute(int nargs, const char *args[]);
+
+    typedef Image<float,3> FloatImageType;
     
   protected:
     ImageConverterCommand();
     ~ImageConverterCommand();
+
+    FloatImageType::DirectionType ExtractPARRECImageOrientation (const char* filename);
+    FloatImageType::PointType ExtractPARRECImageOrigin (const char* filename, FloatImageType::DirectionType direction);
     
   private:
     ImageConverterCommand(const Self&);

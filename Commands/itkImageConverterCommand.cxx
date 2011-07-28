@@ -22,6 +22,8 @@
 
 #include <itkImageIOBase.h>
 #include <itkAnalyzeImageIOFactory.h>
+#include <itkMetaDataDictionary.h>
+#include <itkMetaDataObject.h>
 
 #include "ttkConfigure.h"
 
@@ -36,11 +38,14 @@
 
 #ifdef ITK_USE_REVIEW
 #include <itkPhilipsRECImageIOFactory.h>
+#include <itkPhilipsRECImageIO.h>
+#include <itkPhilipsPAR.h>
 #endif
 
 // macro for templated ITK read and write
 #define ReadWriteImageMacro(dimension, type)				\
-  itk::ImageFileReader< itk::Image<type, dimension> >::Pointer Reader = itk::ImageFileReader< itk::Image<type, dimension> >::New(); \
+  typedef itk::Image<type, dimension> CorrectImageType;			\
+  itk::ImageFileReader< CorrectImageType >::Pointer Reader = itk::ImageFileReader< itk::Image<type, dimension> >::New(); \
   Reader->SetFileName ( filename1 );					\
   try									\
   {									\
@@ -49,6 +54,22 @@
   catch (itk::ExceptionObject &e) {					\
     std::cerr << e;							\
     return -1;								\
+  }									\
+  if (isparrec)								\
+  {									\
+    typedef CorrectImageType::DirectionType CorrectDirectionType;	\
+    typedef CorrectImageType::PointType CorrectPointType;		\
+    CorrectDirectionType direction;					\
+    direction.SetIdentity();						\
+    for (unsigned int i=0; i<3; i++)					\
+      for (unsigned int j=0; j<3; j++)					\
+	direction[i][j] = correctdirection[i][j];			\
+    CorrectPointType origin;						\
+    origin.Fill(0.0);							\
+    for (unsigned int i=0; i<3; i++)					\
+      origin[i] = correctorigin[i];					\
+    Reader->GetOutput()->SetDirection (direction);			\
+    Reader->GetOutput()->SetOrigin (origin);				\
   }									\
   itk::ImageFileWriter< itk::Image<type, dimension> >::Pointer Writer = itk::ImageFileWriter< itk::Image<type, dimension> >::New(); \
   Writer->SetFileName ( filename2 );					\
@@ -100,7 +121,7 @@ namespace itk
 #endif
   
     // dummy reading information to get type and dimension
-    typedef itk::Image<float,3> ImageType;
+    typedef FloatImageType ImageType;
     typedef itk::ImageFileReader<ImageType> ReaderType;
     ReaderType::Pointer informationreader = ReaderType::New();
     informationreader->SetFileName(filename1);
@@ -128,6 +149,16 @@ namespace itk
     unsigned int dim = informationreader->GetImageIO()->GetNumberOfDimensions();
     itk::ImageIOBase::IOComponentType componenttype = informationreader->GetImageIO()->GetComponentType();
 
+    bool isparrec = !strcmp (informationreader->GetImageIO()->GetNameOfClass(), "PhilipsRECImageIO");
+    FloatImageType::DirectionType correctdirection;
+    FloatImageType::PointType correctorigin;
+    if (isparrec)
+    {
+      isparrec = 1;
+      correctdirection = this->ExtractPARRECImageOrientation(filename1);
+      correctorigin = this->ExtractPARRECImageOrigin (filename1, correctdirection);
+    }
+    
     if (dim > 6)
     { std::cerr << "Dimension Too High." << dim<< std::endl; return -1; }
 
@@ -212,5 +243,219 @@ namespace itk
     return 0;
     
   }
+  
+  ImageConverterCommand::FloatImageType::PointType ImageConverterCommand::ExtractPARRECImageOrigin (const char* filename, FloatImageType::DirectionType direction)
+  {
+    
+    typedef FloatImageType::PointType PointType;
+    PointType nullorigin;
+    nullorigin[0] = nullorigin[1] = nullorigin[2] = 0.0;
+    
+#ifndef ITK_USE_REVIEW
+    std::cerr<<"cannot correct for PAR-REC angulation without ITK_USE_REVIEW to ON"<<std::endl;
+    return nullorigin;
+#else
+    
+    
+    itk::PhilipsRECImageIO::Pointer philipsIO = itk::PhilipsRECImageIO::New();
+    
+    philipsIO->SetFileName(filename);
+    try
+    {
+      philipsIO->ReadImageInformation();
+    }
+    catch(itk::ExceptionObject &e)
+    {
+      std::cerr << e;
+    }
+    
+    itk::MetaDataDictionary PARheader = philipsIO->GetMetaDataDictionary();
+    
+    typedef itk::PhilipsRECImageIO::OffCentreMidSliceType OffCentreType;
+    
+    OffCentreType offcenter;
+    
+    bool valid = itk::ExposeMetaData<OffCentreType>(PARheader, "PAR_OffCentreMidSlice", offcenter);
+    if (!valid)
+    {
+      std::cerr<<"cannot find off-center information in PAR header, no correction"<<std::endl;
+      return nullorigin;
+    }
+    
+    double dimensions[3];
+    dimensions[0] = philipsIO->GetDimensions (0);
+    dimensions[1] = philipsIO->GetDimensions (1);
+    dimensions[2] = philipsIO->GetDimensions (2);
+    
+    FloatImageType::SpacingType midoffset;
+    midoffset[0] = philipsIO->GetSpacing (0) * (dimensions[0] - 1) / 2.0;
+    midoffset[1] = philipsIO->GetSpacing (1) * (dimensions[1] - 1) / 2.0;
+    midoffset[2] = philipsIO->GetSpacing (2) * (dimensions[2] - 1) / 2.0;
+    midoffset = direction * midoffset;
+    
+    PointType offcenterpoint;
+    offcenterpoint[0] = offcenter[0];
+    offcenterpoint[1] = offcenter[1];
+    offcenterpoint[2] = offcenter[2];
+    
+    FloatImageType::DirectionType AFRtoLPS;
+    AFRtoLPS.Fill (0);
+    AFRtoLPS[0][2] = 1;
+    AFRtoLPS[1][0] = 1;
+    AFRtoLPS[2][1] = 1;
+    
+    offcenterpoint = AFRtoLPS * offcenterpoint;
+    offcenterpoint -= midoffset;
+    
+    return offcenterpoint;
+  
+#endif
+  }
+
+  
+  ImageConverterCommand::FloatImageType::DirectionType ImageConverterCommand::ExtractPARRECImageOrientation (const char* filename)
+  {
+    
+    typedef FloatImageType::DirectionType DirectionType;
+    
+    DirectionType eyedir;
+    eyedir.SetIdentity();
+    
+#ifndef ITK_USE_REVIEW
+    std::cerr<<"cannot correct for PAR-REC angulation without ITK_USE_REVIEW to ON"<<std::endl;
+    return eyedir;
+#else
+    
+    itk::PhilipsRECImageIO::Pointer philipsIO = itk::PhilipsRECImageIO::New();
+    
+    philipsIO->SetFileName(filename);
+    try
+    {
+      philipsIO->ReadImageInformation();
+    }
+    catch(itk::ExceptionObject &e)
+    {
+      std::cerr << e;
+    }
+    
+    itk::MetaDataDictionary PARheader = philipsIO->GetMetaDataDictionary();
+    
+    typedef itk::PhilipsRECImageIO::AngulationMidSliceType AngulationType;
+    
+    AngulationType angulation;
+    int sliceorientation = 0;
+    
+    bool valid = itk::ExposeMetaData<AngulationType>(PARheader, "PAR_AngulationMidSlice", angulation);
+    if (!valid)
+    {
+      std::cerr<<"cannot find angulation in PAR header, no correction"<<std::endl;
+      return eyedir;
+    }
+    
+    valid = itk::ExposeMetaData<int>(PARheader, "PAR_SliceOrientation", sliceorientation);
+    if (!valid)
+    {
+      std::cerr<<"cannot find slice orientation in PAR header, no correction"<<std::endl;
+      return eyedir;
+    }
+    
+    DirectionType AFRtoLPS;
+    AFRtoLPS.Fill (0);
+    AFRtoLPS[0][2] = 1;
+    AFRtoLPS[1][0] = 1;
+    AFRtoLPS[2][1] = 1;
+    
+    DirectionType magicmatrix;
+    magicmatrix.Fill (0);
+    magicmatrix [0][0] = -1;
+    magicmatrix [1][2] = 1;
+    magicmatrix [2][1] = -1;
+    
+    DirectionType TRA;
+    TRA.Fill (0);
+    TRA [0][1] = 1;
+    TRA [1][0] = -1;
+    TRA [2][2] = -1;
+    DirectionType SAG;
+    SAG.Fill (0);
+    SAG [0][0] = -1;
+    SAG [1][2] = 1;
+    SAG [2][1] = -1;
+    DirectionType COR;
+    COR.Fill (0);
+    COR [0][1] = 1;
+    COR [1][2] = 1;
+    COR [2][0] = -1;
+    
+    
+    DirectionType Torientation;
+    
+    switch(sliceorientation)
+    {
+      
+	case PAR_SLICE_ORIENTATION_TRANSVERSAL: 
+	  // Transverse - the REC data appears to be stored as right-left, 
+	  // anterior-posterior, and inferior-superior.
+	  // Verified using a marker on right side of brain.
+	  Torientation = TRA;      
+	  break;
+	case PAR_SLICE_ORIENTATION_SAGITTAL: 
+	  // Sagittal - the REC data appears to be stored as anterior-posterior, 
+	  // superior-inferior, and right-left.
+	  // Verified using marker on right side of brain.
+	  Torientation = SAG;
+	  break;
+	case PAR_SLICE_ORIENTATION_CORONAL: 
+	  // Coronal - the REC data appears to be stored as right-left, 
+	  // superior-inferior, and anterior-posterior.
+	  // Verified using marker on right side of brain.
+	  // fall thru
+	default:
+	  Torientation = COR;
+	  
+    }
+    
+    
+    double ap = angulation[0] * vnl_math::pi / 180.0;
+    double fh = angulation[1] * vnl_math::pi / 180.0;
+    double rl = angulation[2] * vnl_math::pi / 180.0;
+    
+    DirectionType Tap;
+    Tap.Fill (0);
+    Tap[0][0] = 1;
+    Tap[1][1] = std::cos (ap);
+    Tap[1][2] = - std::sin (ap);
+    Tap[2][1] = std::sin (ap);
+    Tap[2][2] = std::cos (ap);
+    
+    DirectionType Tfh;
+    Tfh.Fill (0);
+    Tfh[1][1] = 1;
+    Tfh[0][0] = std::cos (fh);
+    Tfh[0][2] = std::sin (fh);
+    Tfh[2][0] = - std::sin (fh);
+    Tfh[2][2] = std::cos (fh);
+    
+    DirectionType Trl;
+    Trl.Fill (0);
+    Trl[2][2] = 1;
+    Trl[0][0] = std::cos (rl);
+    Trl[0][1] = - std::sin (rl);
+    Trl[1][0] = std::sin (rl);
+    Trl[1][1] = std::cos (rl);
+    
+    DirectionType TR = AFRtoLPS * Trl * Tap * Tfh * magicmatrix.GetTranspose() * Torientation.GetTranspose();
+    DirectionType retval;
+    retval.SetIdentity();
+    
+    for (unsigned int i=0; i<3; i++)
+      for (unsigned int j=0; j<3; j++)
+	retval[i][j] = TR[i][j];
+    
+    return retval;
+    
+#endif
+  }
+
   
 }

@@ -37,6 +37,16 @@ namespace itk
     {
       throw itk::ExceptionObject (__FILE__,__LINE__,"Error: Tensor and vector dimensions do not match.");
     }    
+
+    // Images
+    const TInputImage * input  = this->GetInput();
+    TOutputImage      * output = this->GetOutput();
+
+    // Copy image geometry
+    output->SetRegions(   input->GetLargestPossibleRegion() );
+    output->SetOrigin(    input->GetOrigin() );
+    output->SetSpacing(   input->GetSpacing() );
+    output->SetDirection( input->GetDirection() );
   }
 
 

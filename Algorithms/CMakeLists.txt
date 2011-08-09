@@ -14,4 +14,5 @@ itkFiberBundleStatisticsCalculator.cxx
 
 target_link_libraries(ttkAlgorithms
 ${ITK_LIBRARIES}
+${VTK_LIBRARIES}
 )

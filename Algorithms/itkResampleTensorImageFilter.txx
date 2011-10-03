@@ -285,8 +285,12 @@ namespace itk
         PixelType pixval;
         OutputType value = m_TensorInterpolator->EvaluateAtContinuousIndex(inputIndex);
 
+	value = value.ApplyMatrix(this->GetInput()->GetDirection());
+	
         value = m_TensorTransform->TransformTensorReverse (value);
-        
+
+	value.SetVnlMatrix(value.ApplyMatrix (this->GetOutput()->GetDirection().GetTranspose()));
+	
         pixval = static_cast<PixelType>( value );
     
         outIt.Set( pixval );      
@@ -465,8 +469,13 @@ namespace itk
         {
           PixelType pixval;
           OutputType value = m_TensorInterpolator->EvaluateAtContinuousIndex(inputIndex);
-          value = m_TensorTransform->TransformTensor (value);
-          
+
+	  value = value.ApplyMatrix(this->GetInput()->GetDirection());
+	  
+	  value = m_TensorTransform->TransformTensor (value);
+	  
+	  value.SetVnlMatrix(value.ApplyMatrix (this->GetOutput()->GetDirection().GetTranspose()));
+	  
           pixval = static_cast<PixelType>( value );
           outIt.Set( pixval );      
         }

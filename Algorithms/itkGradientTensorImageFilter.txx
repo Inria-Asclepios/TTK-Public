@@ -23,21 +23,9 @@
 namespace itk
 {
 
-
-  template< class TInputImage, class TOutputImage >
+  template< class TInputImage, class TOutputValue >
   void
-  GradientTensorImageFilter< TInputImage, TOutputImage >
-  ::PrintSelf (const ostream& os, Indent indent) const
-  {
-    Superclass::PrintSelf();
-    os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
-    
-  }
-
-
-  template< class TInputImage, class TOutputImage >
-  void
-  GradientTensorImageFilter< TInputImage, TOutputImage >
+  GradientTensorImageFilter< TInputImage, TOutputValue >
   ::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
   {
     
@@ -47,7 +35,11 @@ namespace itk
     // get pointers to the input and output
     typename InputImageType::Pointer  inputPtr = const_cast<InputImageType*>(this->GetInput());
     typename OutputImageType::Pointer outputPtr = this->GetOutput();
+
+    typename InputImageType::SpacingType spacing = this->GetInput()->GetSpacing();
+    std::cout<<"gradient computation with sp : "<<spacing<<std::endl;
     
+
     if ( !inputPtr || !outputPtr )
       return;
     
@@ -87,15 +79,15 @@ namespace itk
 
 
 
-  template<class TInputImage, class TOutputImage>
+  template<class TInputImage, class TOutputValue>
   void
-  GradientTensorImageFilter<TInputImage,TOutputImage>
+  GradientTensorImageFilter<TInputImage,TOutputValue>
   ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
   {
     
     ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
     ConstNeighborhoodIterator<TInputImage> bit;
-    ImageRegionIterator<TOutputImage> it;
+    ImageRegionIterator<OutputImageType> it;
 
     
     typename OutputImageType::Pointer       output = this->GetOutput();
@@ -136,26 +128,107 @@ namespace itk
     }    
   }
   
+
+
+  // template<class TInputImage, class TOutputValue>
+  // void
+  // GradientTensorImageFilter<TInputImage,TOutputValue>
+  // ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+  // {
+
+  //   typename OutputImageType::SizeType radius;
+  //   radius[0] = radius[1] = radius[2] = 1;
+    
+  //   ConstNeighborhoodIterator<InputImageType>  itIn (radius, this->GetInput(),  outputRegionForThread);
+  //   ImageRegionIterator<OutputImageType>      itOut (this->GetOutput(), outputRegionForThread);
+  //   typename OutputImageType::SpacingType spacing = this->GetInput()->GetSpacing();
+    
+  //   while (!itIn.IsAtEnd())
+  //   {
+  //     OutputPixelType G (0.0), gradient (0.0);
+  //     InputPixelType L = itIn.GetCenterPixel();
+      
+  //     if (L.GetTrace() > 0.0)
+  //     {
+  // 	G = L.GetEigenvector(2);
+	
+  //     	// InputPixelType gradient (0.0);
+  //     	// for(unsigned int i=0; i< InputImageType::ImageDimension; i++)
+  //     	// {
+  //     	//   InputPixelType Ln = itIn.GetNext (i);
+  //     	//   InputPixelType Lmn = itIn.GetPrevious (i);
+	  
+  //     	//   bool isNzero = Ln.IsZero();
+  //     	//   bool isMNzero = Lmn.IsZero();
+	  
+  //     	//   if( !isNzero || !isMNzero )
+  //     	//   {
+  //     	//     // neuman conditions
+  //     	//     if(isNzero && !isMNzero)
+  //     	//       Ln = Lmn;
+  //     	//     if(isMNzero && !isNzero) 
+  //     	//       Lmn = Ln;
+  //     	//   }
+	  
+  //     	//   // gradient += ( Ln - Lmn ) / static_cast<double>( 2 * spacing[i]*spacing[i] );
+  //     	//   OutputPixelType V1 = Ln.GetEigenvector (2);
+  //     	//   OutputPixelType V2 = Lmn.GetEigenvector (2);
+  //     	//   G += (V1-V2);
+  // 	  // G /= static_cast<OutputValueType>( 2.0 * spacing[i]*spacing[i] );
+  //     	// }
+  //     }
+
+  //     itOut.SetIndex (itIn.GetIndex());
+  //     // itOut.Set (gradient);
+  //     itOut.Set (G);
+  //     ++itIn;
+  //   }
+    
+  // }
   
   
-  template<class TInputImage, class TOutputImage>
-  typename GradientMagnitudeTensorImageFilter<TInputImage,TOutputImage>::OutputPixelType
-  GradientMagnitudeTensorImageFilter<TInputImage,TOutputImage>
+  template<class TInputImage, class TOutputValue>
+  typename GradientTensorImageFilter<TInputImage,TOutputValue>::OutputPixelType
+  GradientTensorImageFilter<TInputImage,TOutputValue>
   ::FiniteDifferenceCalculation(const ConstNeighborhoodIteratorType &it)
   {
 
-    OutputPixelType G;    
-        
-    for (unsigned int i = 0; i < ImageDimension; ++i)
+    typename InputImageType::SpacingType spacing = this->GetInput()->GetSpacing();
+    
+    InputPixelType L = it.GetCenterPixel();
+    OutputPixelType G (0.0), gradient (0.0);
+    if (!L.IsZero())
+    {
+      
+      for (unsigned int i = 0; i <InputImageType::ImageDimension; ++i)
       {
+      
+        InputPixelType Ln = it.GetNext (i);
+        InputPixelType Lmn = it.GetPrevious (i);
+      
+        bool isNzero = Ln.IsZero();
+        bool isMNzero = Lmn.IsZero();
+      
+        if( !isNzero || !isMNzero )
+        {
+	  // neuman conditions
+	  if(isNzero && !isMNzero)
+	    Ln = Lmn;
+	  if(isMNzero && !isNzero) 
+	    Lmn = Ln;
+        }
 
-        G[i] = ( it.GetNext (i) - it.GetPrevious (i) )*0.5;
-        if(m_UseImageSpacing)
-          G[i] /= static_cast<RealType>(this->GetInput()->GetSpacing()[i]);
-        
+	InputPixelType T = ( Ln - Lmn ) / static_cast<OutputValueType>( 2.0 * spacing[i]);
+
+	if (Ln.GetNorm() > Lmn.GetNorm())
+	  gradient[i] = T.GetNorm();
+	else
+	  gradient[i] = -T.GetNorm();
       }
-
-    return G;
+      
+    }
+    
+    return gradient;
     
   }
   

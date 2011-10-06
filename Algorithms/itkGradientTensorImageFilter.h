@@ -20,7 +20,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
-#include "itkCovariantVector.h"
+#include "itkVector.h"
 #include "itkConstNeighborhoodIterator.h"
 
 
@@ -34,11 +34,8 @@ namespace itk
 
   template < class TInputImage, class TOutputValue=double >
     class ITK_EXPORT GradientTensorImageFilter :
-  public ImageToImageFilter(TInputImage,
-                            Image<
-                            CovariantVector<TOutputValueType, ::itk::GetImageDimension<TInputImage>::ImageDimension>,
-                            ::itk::GetImageDimension<TInputImage>::ImageDimension
-                            >)
+    public ImageToImageFilter < TInputImage, Image < Vector < TOutputValue, TInputImage::ImageDimension >, TInputImage::ImageDimension > >
+    /* public ImageToImageFilter < TInputImage, TInputImage > */
   {
     public:
     /** Extract dimension from input image. */
@@ -52,7 +49,8 @@ namespace itk
     
     /** Convenient typedefs for simplifying declarations. */
     typedef TInputImage                      InputImageType;
-    typedef Image<CovariantVector<TOutputValueType, itkGetStaticConstMacro(OutputImageDimension)>,  itkGetStaticConstMacro(OutputImageDimension)> OutputImageType;
+    typedef Image < Vector < TOutputValue, TInputImage::ImageDimension >, TInputImage::ImageDimension > OutputImageType;
+    /* typedef TInputImage OutputImageType; */
     
     /** Standard class typedefs. */
     typedef ImageToImageFilter< InputImageType, OutputImageType> Superclass;
@@ -68,11 +66,9 @@ namespace itk
 
     /** Image typedef support. */
     typedef typename InputImageType::PixelType    InputPixelType;
-    typedef TOutputValueType                      OutputValueType;
-    typedef CovariantVector<OutputValueType,
-    itkGetStaticConstMacro(OutputImageDimension)> OutputPixelType;
+    typedef TOutputValue                          OutputValueType;
+    typedef typename OutputImageType::PixelType   OutputPixelType;
     typedef typename OutputImageType::RegionType  OutputImageRegionType;
-
 
     typedef ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
     typedef typename ConstNeighborhoodIteratorType::RadiusType RadiusType;
@@ -101,25 +97,23 @@ namespace itk
     GradientTensorImageFilter()
     {
       m_UseImageSpacing = true;
-      for(unsigned int i=0;i<ImageDimension;i++)
+      for(unsigned int i=0;i<InputImageDimension;i++)
         m_NeighborhoodRadius[i]=1;      
     }
     
     virtual ~GradientTensorImageFilter(){};
 
-    void PrintSelf(std::ostream& os, Indent indent) const;
-    
     void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId );
 
-    void FiniteDifferenceCalculation (const ConstNeighborhoodIteratorType &it);
+    OutputPixelType FiniteDifferenceCalculation (const ConstNeighborhoodIteratorType &it);
     
 
     private:
 
     GradientTensorImageFilter (const Self&);
     void operator=(const Self&);
-
+    
     bool m_UseImageSpacing;
     RadiusType m_NeighborhoodRadius;
     

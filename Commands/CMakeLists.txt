@@ -195,6 +195,11 @@
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
   )
+  if (ITK_USE_REVIEW)
+    target_link_libraries(ttkUtilCommands
+      ITKIOReview
+      )
+  endif()
 
   add_executable(ttk-utils
     ttk-utils.cxx

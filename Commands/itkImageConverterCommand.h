@@ -20,6 +20,9 @@
 #include "itkCommandObjectBase.h"
 #include "itkImage.h"
 
+#include "itkGradientFileWriter.h"
+
+
 namespace itk {
 
   class ImageConverterCommand : public CommandObjectBase
@@ -31,6 +34,10 @@ namespace itk {
     typedef CommandObjectBase Superclass;
     typedef SmartPointer <Self> Pointer;
     typedef SmartPointer <const Self> ConstPointer;
+
+    typedef GradientFileWriter GradientWriterType;
+    typedef GradientWriterType::VectorListType VectorListType;
+    typedef GradientWriterType::VectorType VectorType;
     
     itkTypeMacro(ImageConverterCommand, CommandObjectBase);
     itkNewMacro(Self);
@@ -48,6 +55,7 @@ namespace itk {
 
     FloatImageType::DirectionType ExtractPARRECImageOrientation (const char* filename);
     FloatImageType::PointType ExtractPARRECImageOrigin (const char* filename, FloatImageType::DirectionType direction);
+    VectorListType ExtractPARRECGradientDirections (const char* filename, FloatImageType::DirectionType direction);
     
   private:
     ImageConverterCommand(const Self&);

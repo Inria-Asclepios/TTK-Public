@@ -53,7 +53,7 @@
   }									\
   catch (itk::ExceptionObject &e) {					\
     std::cerr << e;							\
-    return -1;								\
+    return EXIT_FAILURE;						\
   }									\
   if (isparrec)								\
   {									\
@@ -80,7 +80,7 @@
   }									\
   catch (itk::ExceptionObject &e) {					\
     std::cerr << e;							\
-    return -1;								\
+    return EXIT_FAILURE;						\
   }									\
 
 namespace itk
@@ -103,7 +103,7 @@ namespace itk
     if(narg!=3)
     {
       std::cout << this->GetLongDescription() << std::endl;
-      return -1;
+      return EXIT_FAILURE;
     }
   
     const char* filename1 = arg[1];
@@ -132,7 +132,7 @@ namespace itk
     catch(itk::ExceptionObject &e)
     {
       std::cerr << e;
-      return -1;
+      return EXIT_FAILURE;
     }
     
     std::cerr << "Dimension: " << informationreader->GetImageIO()->GetNumberOfDimensions() << std::endl;
@@ -142,7 +142,7 @@ namespace itk
     if(informationreader->GetImageIO()->GetPixelType() != itk::ImageIOBase::SCALAR)
     {
       std::cerr << "Only scalar images can be converted" << std::endl;
-      return -1;
+      return EXIT_FAILURE;
     }
     
     // real reading with dimension and type
@@ -239,8 +239,27 @@ namespace itk
     	  return -1;
     	  break;  
     }
+
+    if (isparrec)
+    {
+      std::ostringstream gradientfilename;
+      gradientfilename << itksys::SystemTools::GetFilenameWithoutExtension (filename2)
+		       <<".grad";
+      GradientWriterType::Pointer gradientwriter = GradientWriterType::New();
+      gradientwriter->SetGradientList (this->ExtractPARRECGradientDirections (filename1, correctdirection));
+      gradientwriter->SetFileName (gradientfilename.str().c_str());
+      try
+      {
+	gradientwriter->Update();
+      }
+      catch(itk::ExceptionObject &e)
+      {
+	std::cerr << e;
+	return EXIT_FAILURE;
+      }
+    }    
     
-    return 0;
+    return EXIT_SUCCESS;
     
   }
   
@@ -457,5 +476,65 @@ namespace itk
 #endif
   }
 
+  ImageConverterCommand::VectorListType ImageConverterCommand::ExtractPARRECGradientDirections (const char* filename, FloatImageType::DirectionType direction)
+  {
+    
+    VectorListType gradients;
+    
+#ifndef ITK_USE_REVIEW
+    std::cerr<<"cannot correct for PAR-REC gradients without ITK_USE_REVIEW to ON"<<std::endl;
+    return gradients;
+#else
+    
+    itk::PhilipsRECImageIO::Pointer philipsIO = itk::PhilipsRECImageIO::New();
+    
+    philipsIO->SetFileName(filename);
+    try
+    {
+      philipsIO->ReadImageInformation();
+    }
+    catch(itk::ExceptionObject &e)
+    {
+      std::cerr << e;
+    }
+    
+    itk::MetaDataDictionary PARheader = philipsIO->GetMetaDataDictionary();
+    
+    typedef itk::PhilipsRECImageIO::GradientDirectionType GradientDirectionType;
+    typedef itk::PhilipsRECImageIO::GradientDirectionContainerType GradientDirectionContainerType;
+    
+    GradientDirectionContainerType::Pointer parrecgradients = GradientDirectionContainerType::New();
+    
+    bool valid = itk::ExposeMetaData<GradientDirectionContainerType::Pointer>(PARheader, "PAR_GradientDirectionValues", parrecgradients);
+    if (!valid)
+    {
+      std::cerr<<"cannot find gradient information in PAR header..."<<std::endl;
+      return gradients;
+    }
+
+    
+    FloatImageType::DirectionType inverse =  FloatImageType::DirectionType (direction.GetInverse());
+    
+    FloatImageType::DirectionType AFRtoLPS;
+    AFRtoLPS.Fill (0);
+    AFRtoLPS[0][2] = 1;
+    AFRtoLPS[1][0] = 1;
+    AFRtoLPS[2][1] = 1;
+    
+    for (unsigned int i=0; i<parrecgradients->Size(); i++)
+    {
+      GradientDirectionType parrecgradient = parrecgradients->ElementAt (i);
+      VectorType gradient;
+      for (unsigned int j=0; j<3; j++) gradient[j] = parrecgradient[j];
+      gradient = inverse * AFRtoLPS * gradient;
+      gradients.push_back (gradient);
+    }
+    
+    return gradients;
+  
+#endif
+  }
+
+  
   
 }

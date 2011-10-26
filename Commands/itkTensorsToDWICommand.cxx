@@ -56,24 +56,19 @@ namespace itk
       std::cout << this->GetLongDescription() << std::endl;
       return -1;
     }
-
     
     const char* file_in = cl.follow ("NoFile",2,"-i","-I");
     const double bvalue = cl.follow (1.0, 2, "-b", "-B");
     const char* gradients_file = cl.follow ("NoFile",2,"-g","-G");
-    const char* extension= cl.follow ("*.nrrd", 2, "-e", "-E");
+    const char* extension= cl.follow ("mha", 2, "-e", "-E");
     const char* file_out= cl.follow ("NoFile", 2, "-o", "-O");
     
     typedef double                               ScalarType;
     typedef itk::TensorImageIO<ScalarType, 3, 3> TensorIOType;
     typedef TensorIOType::TensorType             TensorType;
     typedef TensorIOType::TensorImageType        TensorImageType;
-    
-    
     typedef itk::Image<double, 3>                ImageType;
     typedef itk::Image<unsigned short, 3>        LightImageType;
-    
-
     
     std::cout << "Reading: " << file_in;
     std::cout << std::flush;
@@ -94,7 +89,6 @@ namespace itk
     std::cout << " Done." << std::endl;
     
     TensorImageType::Pointer myTensorImage = myIO->GetOutput();
-    
 
     // create a B0 image by taking the norm of the tensor field * scale:
     typedef itk::TensorToScalarTensorImageFilter<TensorImageType, ImageType>
@@ -102,7 +96,6 @@ namespace itk
     
     typedef itk::TensorToL2NormFunction<TensorType, ScalarType>
       TensorFunctionType;
-  
 
     TensorToScalarFilterType::Pointer myFilter1 = TensorToScalarFilterType::New();
     TensorFunctionType::Pointer myFunction = TensorFunctionType::New();
@@ -120,7 +113,6 @@ namespace itk
     }
     
     ImageType::Pointer myB0 = myFilter1->GetOutput();
-
     
     itk::RescaleIntensityImageFilter<ImageType, LightImageType>::Pointer rescaler=
       itk::RescaleIntensityImageFilter<ImageType, LightImageType>::New();
@@ -137,14 +129,11 @@ namespace itk
       std::cerr << e;
       return -1;
     }
-    
-
 
     typedef itk::TensorsToDWITensorImageFilter<TensorImageType, LightImageType>
       TensorsToDWIFilter;
     typedef TensorsToDWIFilter::GradientType      GradientType;
     typedef TensorsToDWIFilter::GradientListType  GradientListType;
-    
   
     GradientListType myGradients;
     
@@ -174,13 +163,11 @@ namespace itk
       myGradients.push_back ( g );
     }
     
-    
     TensorsToDWIFilter::Pointer myFilter2 = TensorsToDWIFilter::New();
     myFilter2->SetBaselineImage (rescaler->GetOutput());
     myFilter2->SetBValue (bvalue);
     myFilter2->SetGradientList (myGradients);
     myFilter2->SetInput (myTensorImage);
-    
     
     try
     {
@@ -191,18 +178,14 @@ namespace itk
       std::cerr << e;
       return -1;
     }
-  
-    
     
     // save the results
     char filename[512];
-    sprintf (filename, "%s_%.2d.%s", file_out, 0, extension);
+    sprintf (filename, "%s%.2d.%s", file_out, 0, extension);
     std::cout << "Saving: " << filename;
     itk::ImageFileWriter<LightImageType>::Pointer writer0 = itk::ImageFileWriter<LightImageType>::New();
     writer0->SetFileName (filename);
     writer0->SetInput (rescaler->GetOutput());
-    
-    writer0->SetImageIO( itk::AnalyzeImageIO::New() );
     
     try
     {
@@ -218,12 +201,11 @@ namespace itk
     unsigned int numOutputs = myFilter2->GetNumberOfOutputs();
     for( unsigned int i=0; i<numOutputs; i++)
     {
-      sprintf (filename, "%s_%.2d.%s", file_out, i+1, extension);    
+      sprintf (filename, "%s%.2d.%s", file_out, i+1, extension);    
       std::cout << "Saving: " << filename;
       
       itk::ImageFileWriter<LightImageType>::Pointer writer = itk::ImageFileWriter<LightImageType>::New();
       writer->SetFileName (filename);
-      writer->SetImageIO( itk::AnalyzeImageIO::New() );
       writer->SetInput (myFilter2->GetOutput (i));
       
       try

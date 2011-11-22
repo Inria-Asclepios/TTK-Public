@@ -432,26 +432,20 @@ namespace itk
             VectorType vec = itIn.Get();
             TensorType tensor;
       
-	    int pos = 0;
-      
-            // Nrrd File : Stored in line first. Contrary to Inrimage
-            for( unsigned int j=0; j<TensorDimension; j++)
-      	      for ( unsigned int k=j; k<TensorDimension; k++)
+              for( unsigned int j=0; j<DegreesOfFreedom; j++)
               {
-                tensor.SetComponent(j,k,vec[pos]);
-	    	pos++;
+                  tensor[j] = static_cast<typename TensorType::ValueType>(vec[j]);
               }
-      
-            itOut.Set (tensor);
-      
-	    ++itOut;
-            ++itIn;
-            ++ind;
-
-            if( (ind%step)==0 )
-            {
-              this->UpdateProgress ( double(ind)/double(numPixels) );
-            }
+              
+              itOut.Set (tensor);      
+              ++itOut;
+              ++itIn;
+              ++ind;
+              
+              if( (ind%step)==0 )
+              {
+                  this->UpdateProgress ( double(ind)/double(numPixels) );
+              }
       
 	 }
 
@@ -1001,8 +995,8 @@ namespace itk
   ::WriteNrrd (const char* filename)
   {	
 
-    typedef itk::Vector<double, DegreesOfFreedom>     PixelType;
-    typedef itk::Image <PixelType, ImageDimension>    ImageType;
+    typedef itk::Vector<double, DegreesOfFreedom>     VectorType;
+    typedef itk::Image <VectorType, ImageDimension>    ImageType;
 
     typename ImageType::Pointer myTensorImage = ImageType::New();
 
@@ -1038,19 +1032,15 @@ namespace itk
     while( !it.IsAtEnd() )
     {
       TensorType tensor = it.Get();
-      PixelType d3d;
-      
-      int pos = 0;
+      VectorType vec;
       
       // storing convention is in line first
-      for ( unsigned int j = 0;j<TensorDimension;j++)
-      	for ( unsigned int k = j;k<TensorDimension;k++)
-	{
-          d3d[pos] = static_cast<double>(tensor.GetComponent (j,k)); 
-	  pos++;
-	}      
+      for( unsigned int i=0; i<DegreesOfFreedom; i++)
+      {
+        vec[i] = static_cast<double>(tensor[i]);
+      }    
      
-      itOut.Set (d3d);
+      itOut.Set (vec);
 
       ++it;
       ++itOut;

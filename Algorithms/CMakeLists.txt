@@ -16,3 +16,12 @@ target_link_libraries(ttkAlgorithms
 ${ITK_LIBRARIES}
 ${VTK_LIBRARIES}
 )
+
+if(NOT ${PROJECT_NAME}_INSTALL_NO_LIBRARIES)
+  install(TARGETS ttkAlgorithms 
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    )
+endif(NOT ${PROJECT_NAME}_INSTALL_NO_LIBRARIES)
+

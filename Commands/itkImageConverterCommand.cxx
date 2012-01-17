@@ -154,7 +154,6 @@ namespace itk
     FloatImageType::PointType correctorigin;
     if (isparrec)
     {
-      isparrec = 1;
       correctdirection = this->ExtractPARRECImageOrientation(filename1);
       correctorigin = this->ExtractPARRECImageOrigin (filename1, correctdirection);
     }

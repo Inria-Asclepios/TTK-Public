@@ -53,6 +53,7 @@ namespace itk
   ::ThreadedGenerateData ( const OutputImageRegionType &outputRegionForThread, int threadId )
   {
 
+    
     typedef ImageRegionIterator<OutputImageType>      IteratorOutputType;
     typedef ImageRegionConstIterator<InputImageType>  IteratorInputType;
     
@@ -92,11 +93,11 @@ namespace itk
       
       for( unsigned int i=0; i<NOutput; i++)
       {
-        OutputPixelType out = static_cast<OutputPixelType>(0.0);
-        
+        OutputPixelType out = static_cast<OutputPixelType>(0.0);	
+	
         if( b0 > 0)
         {
-          out = static_cast<OutputPixelType>( b0*exp ( -1.0 * m_BValue * T.ScalarProductWith (m_GradientList [i]) ) );
+	  out = static_cast<OutputPixelType>( b0*exp ( -1.0 * m_BValue * T.ScalarProductWith (m_GradientList [i]) ) );
         }
         
         IteratorOutputList[i].Set (out);

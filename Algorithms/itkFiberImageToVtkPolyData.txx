@@ -30,7 +30,7 @@
 
 namespace itk
 {
-  
+
   template<class TInputImage>
   FiberImageToVtkPolyData<TInputImage>::
   FiberImageToVtkPolyData()
@@ -56,8 +56,8 @@ namespace itk
   {
     return m_Output;
   }
-  
-  
+
+
   template<class TInputImage>
   void
   FiberImageToVtkPolyData<TInputImage>::
@@ -67,14 +67,14 @@ namespace itk
     {
       throw itk::ExceptionObject (__FILE__,__LINE__,"Error: Input is not set.");
     }
-    
+
     //m_Output->Reset();
     m_Output->Initialize();
     m_Output->Allocate();
 
     typedef ImageRegionConstIterator<InputImageType> InputIteratorType;
     InputIteratorType itIn (this->GetInput(), this->GetInput()->GetLargestPossibleRegion());
-    
+
     vtkPoints*            myPoints     = vtkPoints::New();
     vtkUnsignedCharArray* myColors     = vtkUnsignedCharArray::New();
     vtkUnsignedCharArray* myCellColors = vtkUnsignedCharArray::New();
@@ -86,7 +86,7 @@ namespace itk
     myFAArray->SetNumberOfComponents (1);
     tensorArray->SetName ("Tensors");
     tensorArray->SetNumberOfComponents (6);
-    
+
     unsigned long numPixels = this->GetInput()->GetLargestPossibleRegion().GetNumberOfPixels();
     unsigned long step      = numPixels/10;
     unsigned long progress  = 0;
@@ -98,7 +98,7 @@ namespace itk
       FiberType Fiber               = itIn.Get();
       FiberPointListType listPoints = Fiber.GetPointList();
       int npts = (int)(listPoints.size());
-      
+
       if(npts>1)
       {
         vtkIdType* ids = new vtkIdType[npts];
@@ -106,14 +106,14 @@ namespace itk
         // special case of the first point:
         VectorType diff = listPoints[1].Point-listPoints[0].Point;
         diff /= diff.GetNorm();
-	
+
         double fa = 0.0;
         TensorType t = listPoints[0].Tensor;
         if (!t.IsZero())
         {
           fa = t.GetFA();
-        }        
-        
+        }
+
         //double alpha = 1.0;
         for( unsigned int i=0; i<3; i++)
         {
@@ -125,19 +125,19 @@ namespace itk
 
 	for (unsigned int i=0; i<6; i++)
 	  tensorArray->InsertNextValue ( t[i] );
-	
+
         //myColors->InsertNextValue( (unsigned char)(alpha*255.0) );
         //myColors->InsertNextValue( (unsigned char)(255.0) );
-        
+
         PointType pt = listPoints[0].Point;
         ids[0] = myPoints->InsertNextPoint (pt[0],pt[1],pt[2]);
-        
+
         if( npts>1)
         {
           for( int i=1; i<npts-1; i++)
           {
-            PointType point = listPoints[i].Point;
-            
+//            PointType point = listPoints[i].Point;
+
             //alpha = 1.0;
             fa = 0.0;
             TensorType t = listPoints[i].Tensor;
@@ -145,7 +145,7 @@ namespace itk
             {
               fa = t.GetFA();
             }
-            
+
             diff = listPoints[i+1].Point-listPoints[i-1].Point;
             diff /= diff.GetNorm();
             for( unsigned int j=0; j<3; j++)
@@ -158,16 +158,16 @@ namespace itk
 
 	    for (unsigned int j=0; j<6; j++)
 	      tensorArray->InsertNextValue ( t[j] );
-	    
+
             //myColors->InsertNextValue( (unsigned char)(alpha*255.0) );
             //myColors->InsertNextValue( (unsigned char)(255.0) );
-            
+
             pt = listPoints[i].Point;
             ids[i] = myPoints->InsertNextPoint (pt[0],pt[1],pt[2]);
           }
-          
+
           // special case of the last point
-          
+
           fa = 0.0;
           //double alpha = 1.0;
           TensorType t = listPoints[npts-1].Tensor;
@@ -175,7 +175,7 @@ namespace itk
           {
             fa = t.GetFA();
           }
-          
+
           diff = listPoints[npts-2].Point-listPoints[npts-1].Point;
           diff /= diff.GetNorm();
           for( unsigned int i=0; i<3; i++)
@@ -188,15 +188,15 @@ namespace itk
 
 	  for (unsigned int i=0; i<6; i++)
 	    tensorArray->InsertNextValue ( t[i] );
-	  
+
           //myColors->InsertNextValue( (unsigned char)(255.0*alpha) );
           //myColors->InsertNextValue( (unsigned char)(255.0) );
-          
+
           pt = listPoints[npts-1].Point;
           ids[npts-1] = myPoints->InsertNextPoint (pt[0],pt[1],pt[2]);
 
         }
-        
+
         m_Output->InsertNextCell (VTK_POLY_LINE, npts, ids);
 
         // cell color
@@ -210,19 +210,19 @@ namespace itk
           unsigned char color = (unsigned char)(c>255.0?255.0:c);
           myCellColors->InsertNextValue ( color );
         }
-        
+
         delete [] ids;
       }
-      
+
 
       if( step>0)
-      {        
+      {
         if( (progress%step)==0 )
         {
           this->UpdateProgress ( double(progress)/double(numPixels) );
         }
       }
-      
+
       ++itIn;
       ++progress;
     }
@@ -232,7 +232,7 @@ namespace itk
     m_Output->GetPointData()->AddArray   (tensorArray);
     m_Output->GetPointData()->AddArray   (myFAArray);
     m_Output->GetCellData()->SetScalars  (myCellColors);
-    
+
     myPoints->Delete();
     myColors->Delete();
     myCellColors->Delete();
@@ -240,11 +240,11 @@ namespace itk
     tensorArray->Delete();
 
     this->UpdateProgress (1.0);
-    
+
   }
-  
-  
-  
+
+
+
 } // end of namespace
 
 #endif

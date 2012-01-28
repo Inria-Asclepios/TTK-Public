@@ -118,7 +118,7 @@ public:
 	virtual unsigned long GetNumberOfPixelsProcessed() const;
 
 	/** Set/Get the rms change in the deformation field. */
-	virtual void SetRMSChange(double RMSChange) { m_RMSChange = RMSChange;}
+    itkSetMacro(RMSChange, double);
 	virtual const double &GetRMSChange() const;
 
 	/** Set/Get the type of used image forces */

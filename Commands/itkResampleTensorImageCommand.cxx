@@ -42,7 +42,7 @@ namespace itk
   {
     m_ShortDescription = "Resample tensors w.r.t. a linear matrix and a reference image";
     m_LongDescription = "Usage:\n";
-    m_LongDescription += "<-i input> <-m matrix> <-r file> <-t threads> <-o output>\n\n";
+    m_LongDescription += "<-i input> <-m matrix> <-r file> <-l 0/1 (log-Euclidean on/off)> <-t threads> <-o output>\n\n";
     m_LongDescription += m_ShortDescription;
   }
 

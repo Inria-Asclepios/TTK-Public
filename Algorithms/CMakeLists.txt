@@ -8,11 +8,11 @@ if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
   )
 endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 
-add_library(ttkAlgorithms
+add_library(ttkAlgorithms ${TTK_BUILD_TYPE}
 itkFiberBundleStatisticsCalculator.cxx
 )
 
-target_link_libraries(ttkAlgorithms ${TTK_BUILD_TYPE}
+target_link_libraries(ttkAlgorithms
 ${ITK_LIBRARIES}
 ${VTK_LIBRARIES}
 )

@@ -12,7 +12,7 @@ add_library(ttkAlgorithms
 itkFiberBundleStatisticsCalculator.cxx
 )
 
-target_link_libraries(ttkAlgorithms
+target_link_libraries(ttkAlgorithms ${TTK_BUILD_TYPE}
 ${ITK_LIBRARIES}
 ${VTK_LIBRARIES}
 )

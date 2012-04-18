@@ -511,16 +511,12 @@ namespace itk
          {
        	   VectorType vec = itIn.Get();
            TensorType tensor;
-      	   int pos = 0;
-      
-           // Nrrd File : Stored in line first. Contrary to Inrimage
-           for( unsigned int j=0; j<TensorDimension; j++)
-      	     for ( unsigned int k=j; k<TensorDimension; k++)
-             {
-               tensor.SetComponent(j,k,vec[pos]);
-	       pos++;
-             }
-      
+           
+           for( unsigned int j=0; j<DegreesOfFreedom; j++)
+           {
+                tensor[j] = static_cast<typename TensorType::ValueType>(vec[j]);
+           }
+
            itOut.Set (tensor);
       
 	   ++itOut;

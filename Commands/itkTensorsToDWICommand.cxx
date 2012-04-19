@@ -37,7 +37,7 @@ namespace itk
   {
     m_ShortDescription = "Create DWI from tensors using the Stejskal & Tanner diffusion equation (and a list of gradients)";
     m_LongDescription = "Usage:\n";
-    m_LongDescription += "<-i input> <-b bvalue> <-g gradients> <-o output> <-e extension>\n\n";
+    m_LongDescription += "<-i input> <-b bvalue> <-m max value> <-g gradients> <-o output> <-e extension>\n\n";
     m_LongDescription += m_ShortDescription;
   }
 
@@ -62,6 +62,7 @@ namespace itk
     const char* gradients_file = cl.follow ("NoFile",2,"-g","-G");
     const char* extension= cl.follow ("mha", 2, "-e", "-E");
     const char* file_out= cl.follow ("NoFile", 2, "-o", "-O");
+    int b0value = cl.follow (32767, 2, "-m", "-M");
     
     typedef double                               ScalarType;
     typedef itk::TensorImageIO<ScalarType, 3, 3> TensorIOType;
@@ -118,7 +119,7 @@ namespace itk
       itk::RescaleIntensityImageFilter<ImageType, LightImageType>::New();
   
     rescaler->SetOutputMinimum ( 0 );
-    rescaler->SetOutputMaximum ( 32767 );
+    rescaler->SetOutputMaximum ( b0value );
     rescaler->SetInput ( myB0 );
     try
     {

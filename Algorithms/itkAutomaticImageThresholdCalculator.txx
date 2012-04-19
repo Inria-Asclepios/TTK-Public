@@ -58,8 +58,8 @@ namespace itk
     histogramGenerator->SetInput        ( m_Image );
     histogramGenerator->SetNumberOfBins ( maximum - minimum + 1 );
     histogramGenerator->SetMarginalScale( 1.0 );
-    histogramGenerator->SetHistogramMin ( maximum );
-    histogramGenerator->SetHistogramMax ( minimum );
+    histogramGenerator->SetHistogramMin ( minimum );
+    histogramGenerator->SetHistogramMax ( maximum );
     histogramGenerator->Compute();
 
 #ifdef ITK_USE_REVIEW_STATISTICS

@@ -104,6 +104,8 @@
     itkImageConverterCommandFactory.cxx
     itkConsolidateFiberBundleCommand.cxx
     itkConsolidateFiberBundleCommandFactory.cxx
+    itkNDImageToTensorImageCommand.cxx
+    itkNDImageToTensorImageCommandFactory.cxx
   )
 
   add_library(ttkConvertCommands ${TTK_BUILD_TYPE}

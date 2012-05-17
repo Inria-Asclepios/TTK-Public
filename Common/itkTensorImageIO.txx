@@ -629,7 +629,7 @@ namespace itk
   TensorImageIO<T,TensorDimension,ImageDimension>
   ::ReadNifti (const char* filename)
   {
-    typedef double                                   PixelType;
+    typedef T                                        PixelType;
     typedef itk::Image <PixelType, ImageDimension>   ImageType;
     
     itk::NiftiImageIO::Pointer myIO = itk::NiftiImageIO::New();
@@ -646,7 +646,7 @@ namespace itk
       throw itk::ExceptionObject(__FILE__,__LINE__,message);
     }
     
-    typedef itk::Vector<double, DegreesOfFreedom>     VectorType;
+    typedef itk::Vector<PixelType, DegreesOfFreedom>  VectorType;
     typedef itk::Image <VectorType, ImageDimension>   VectorImageType;
     
     typedef itk::ImageFileReader<VectorImageType> ReaderType;
@@ -707,7 +707,7 @@ namespace itk
       
       for( unsigned int j=0; j<DegreesOfFreedom; j++)
       {
-        tensor[j] = static_cast<typename TensorType::ValueType>(vec[j]);
+        tensor[j] = vec[j];
       }
       
       itOut.Set (tensor);
@@ -734,7 +734,7 @@ namespace itk
   ::ReadMha (const char* filename)
   {
 
-    typedef double                                   PixelType;
+    typedef T                                        PixelType;
     typedef itk::Image <PixelType, ImageDimension>   ImageType;
     
     itk::MetaImageIO::Pointer myIO = itk::MetaImageIO::New();
@@ -751,7 +751,7 @@ namespace itk
       throw itk::ExceptionObject(__FILE__,__LINE__,message);
     }
     
-    typedef itk::Vector<double, DegreesOfFreedom>     VectorType;
+    typedef itk::Vector<PixelType, DegreesOfFreedom>  VectorType;
     typedef itk::Image <VectorType, ImageDimension>   VectorImageType;
     
     typedef itk::ImageFileReader<VectorImageType> ReaderType;
@@ -1075,7 +1075,7 @@ namespace itk
   ::WriteNifti (const char* filename)
   {	
     
-    typedef itk::Vector<double, DegreesOfFreedom>    VectorType;
+    typedef itk::Vector<T,      DegreesOfFreedom>    VectorType;
     typedef itk::Image<VectorType, ImageDimension>   VectorImageType;
 
     typename VectorImageType::Pointer myTensorImage = VectorImageType::New();
@@ -1116,7 +1116,7 @@ namespace itk
 	  
       for( unsigned int i=0; i<DegreesOfFreedom; i++)
       {
-        vec[i] = static_cast<double>(tensor[i]);
+        vec[i] = tensor[i];
       }
       
       itOut.Set (vec);

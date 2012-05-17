@@ -19,6 +19,7 @@
 #include "itkTensorsToVTKUnstructuredGridCommandFactory.h"
 #include "itkImageConverterCommandFactory.h"
 #include "itkConsolidateFiberBundleCommandFactory.h"
+#include "itkNDImageToTensorImageCommandFactory.h"
 
 #include "itkCommandObjectFactory.h"
 
@@ -46,6 +47,7 @@ int main (int narg, char *args[])
   itk::TensorsToVTKUnstructuredGridCommandFactory::RegisterOneFactory();
   itk::ImageConverterCommandFactory::RegisterOneFactory();
   itk::ConsolidateFiberBundleCommandFactory::RegisterOneFactory();
+  itk::NDImageToTensorImageCommandFactory::RegisterOneFactory();
 
   if (narg<2) {
     std::cout << "Software Tensor ToolKit (c)INRIA 2010, version " << TTK_VERSION << "\n";

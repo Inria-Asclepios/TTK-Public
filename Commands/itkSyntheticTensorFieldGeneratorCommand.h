@@ -18,6 +18,7 @@
 #define _itk_SyntheticTensorFieldGeneratorCommand_h_
 
 #include "itkCommandObjectBase.h"
+#include <cstring>
 
 namespace itk {
 

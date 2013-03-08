@@ -21,6 +21,7 @@
 #include "itkCircleTensorImageSource.h"
 
 #include <iostream>
+#include <cstring>
 #include "GetPot.h"
 
 namespace itk

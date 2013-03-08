@@ -53,7 +53,6 @@ namespace itk
     }
     
     const char* file_in     = cl.follow ("",2,"-i","-I");
-    const char* file_out    = cl.follow ("",2,"-o","-O");
     
     vtkPolyDataReader *reader = vtkPolyDataReader::New();
     reader->SetFileName (file_in);

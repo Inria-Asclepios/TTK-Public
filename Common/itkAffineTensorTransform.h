@@ -75,6 +75,7 @@ namespace itk
     typedef typename Superclass::CenterType                CenterType;
     typedef typename Superclass::OffsetType                OffsetType;
     typedef typename Superclass::TranslationType           TranslationType;
+        typedef typename Superclass::TransformCategoryType TransformCategoryType;
     
 
     void Translate(const OutputVectorType &offset, bool pre=0);
@@ -118,6 +119,11 @@ namespace itk
     
     /** Print contents of an AffineTensorTransform */
     void PrintSelf(std::ostream &s, Indent indent) const;
+        
+        virtual TransformCategoryType GetTransformCategory() const
+        {
+            return Self::Linear;
+        }
     
     
     private:

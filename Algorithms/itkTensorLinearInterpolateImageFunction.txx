@@ -77,7 +77,7 @@ namespace itk
     for( dim = 0; dim < ImageDimension; dim++ )
     {
 #if ITK_VERSION_MAJOR>3 || (ITK_VERSION_MAJOR==3 && ITK_VERSION_MINOR>=16)
-      baseIndex[dim] = Math::Floor( index[dim] );
+      baseIndex[dim] = Math::Floor<IndexValueType>( index[dim] );
 #else
       baseIndex[dim] = (long)( index[dim] );
 #endif

@@ -21,7 +21,7 @@
 #include <itkImageFileWriter.h>
 
 #include <itkImageIOBase.h>
-#include <itkAnalyzeImageIOFactory.h>
+#include <itkNiftiImageIOFactory.h>
 #include <itkMetaDataDictionary.h>
 #include <itkMetaDataObject.h>
 
@@ -109,7 +109,7 @@ namespace itk
     const char* filename1 = arg[1];
     const char* filename2 = arg[2];
     
-    itk::AnalyzeImageIOFactory::RegisterOneFactory();
+    itk::NiftiImageIOFactory::RegisterOneFactory();
 #ifdef TTK_USE_MIPS
     itk::InrimageImageIOFactory::RegisterOneFactory();
 #endif

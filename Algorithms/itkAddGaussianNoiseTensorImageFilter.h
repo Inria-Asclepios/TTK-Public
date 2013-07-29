@@ -58,7 +58,7 @@ namespace itk
     ~AddGaussianNoiseTensorImageFilter(){};
 
     void BeforeThreadedGenerateData(void);
-    void ThreadedGenerateData(const OutputRegionType &, int);
+    void ThreadedGenerateData(const OutputRegionType &, ThreadIdType);
 
     
   private:

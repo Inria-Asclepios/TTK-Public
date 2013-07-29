@@ -158,7 +158,7 @@ namespace itk
   void 
   ResampleTensorImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
   ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                         int threadId)
+                         ThreadIdType threadId)
   {
     // Check whether the input or the output is a
     // SpecialCoordinatesImage.  If either are, then we cannot use the
@@ -202,7 +202,7 @@ namespace itk
   void 
   ResampleTensorImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
   ::NonlinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                  int threadId)
+                                  ThreadIdType threadId)
   {
 
     // Get the output pointers
@@ -315,7 +315,7 @@ namespace itk
   void 
   ResampleTensorImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
   ::LinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                               int threadId)
+                               ThreadIdType threadId)
   {
     
     // Get the output pointers

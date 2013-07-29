@@ -50,7 +50,7 @@ namespace itk
   template <class TInputImage, class TOutputImage>
   void
   TensorsToDWITensorImageFilter<TInputImage, TOutputImage>
-  ::ThreadedGenerateData ( const OutputImageRegionType &outputRegionForThread, int threadId )
+  ::ThreadedGenerateData ( const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId )
   {
 
     

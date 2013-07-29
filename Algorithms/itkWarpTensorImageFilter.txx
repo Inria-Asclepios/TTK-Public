@@ -201,7 +201,7 @@ void
 WarpTensorImageFilter<TInputImage,TOutputImage,TDeformationField>
 ::ThreadedGenerateData(
   const OutputImageRegionType& outputRegionForThread,
-  int threadId )
+  ThreadIdType threadId )
 {
 
   InputImageConstPointer inputPtr = this->GetInput();

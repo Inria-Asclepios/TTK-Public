@@ -87,7 +87,7 @@ namespace itk
  */
 template < typename TInputImage,
            typename TOutputImage = Image <
-              float,::itk::GetImageDimension<TInputImage>::ImageDimension >
+              float,TInputImage::ImageDimension >
 >
 class ITK_EXPORT WarpJacobianFilter :
     public ImageToImageFilter< TInputImage, TOutputImage >
@@ -164,7 +164,7 @@ typedef Vector<double, InputImageType::ImageDimension> VectorType;
   /** Directly Set/Get the array of weights used in the gradient calculations.
       Note that calling UseImageSpacingOn will clobber these values.*/
   void SetDerivativeWeights(double data[]);
-  itkGetVectorMacro(DerivativeWeights, const double, itk::GetImageDimension<TInputImage>::ImageDimension);
+  itkGetVectorMacro(DerivativeWeights, const double, TInputImage::ImageDimension);
 
 protected:
   WarpJacobianFilter();
@@ -188,7 +188,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            ThreadIdType threadId );
 
   void PrintSelf(std::ostream& os, Indent indent) const;
 
@@ -200,7 +200,7 @@ protected:
      (ConstNeighborhoodIteratorType &it);
 
   /** The weights used to scale partial derivatives during processing */
-  double m_DerivativeWeights[itk::GetImageDimension<TInputImage>::ImageDimension];
+  double m_DerivativeWeights[TInputImage::ImageDimension];
 
 private:
   bool m_UseImageSpacing;

@@ -122,7 +122,7 @@ namespace itk
     ~NormalizedGaussianInterpolationTensorImageFilter(){};
     
     /** Threaded implementation */
-    void ThreadedGenerateData(const OutputImageRegionType &,int);
+    void ThreadedGenerateData(const OutputImageRegionType &,ThreadIdType);
     void PrintSelf(std::ostream& os, Indent indent) const
     {
       Superclass::PrintSelf (os, indent);      

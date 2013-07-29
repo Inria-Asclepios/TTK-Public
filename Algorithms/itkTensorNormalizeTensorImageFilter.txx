@@ -29,7 +29,7 @@ namespace itk
   template <class TTensorInput, class TTensorOutput>
   void
   TensorNormalizeTensorImageFilter<TTensorInput, TTensorOutput>
-  ::ThreadedGenerateData (const OutputRegionType& outputRegion, int threadId)
+  ::ThreadedGenerateData (const OutputRegionType& outputRegion, ThreadIdType threadId)
   {
     
     typedef ImageRegionIterator<OutputImageType>       OutputIteratorType;

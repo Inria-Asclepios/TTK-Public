@@ -138,6 +138,13 @@ SET(ITKIO_LIBRARIES
   ITKIOStimulate
 )
 
+set(ITK_TRANSFORM_LIBRARIES
+  ITKIOTransformBase
+  ITKIOTransformInsightLegacy
+  ITKIOTransformHDF5
+  ITKIOTransformMatlab
+)
+
 ## #################################################################
 ## Options
 ## #################################################################

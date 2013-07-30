@@ -76,6 +76,8 @@
     ITKTensor
     ttkAlgorithms
     ${ITKIO_LIBRARIES}
+    ITKStatistics
+    ${ITK_TRANSFORM_LIBRARIES}
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
   )
@@ -134,6 +136,7 @@
     ITKProgramFactory
     ITKTensor
     ${ITKIO_LIBRARIES}
+    ITKSpatialObjects
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
   )
@@ -189,6 +192,7 @@
     ITKProgramFactory
     ITKTensor
     ${ITKIO_LIBRARIES}
+    ${ITK_TRANSFORM_LIBRARIES}
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
   )

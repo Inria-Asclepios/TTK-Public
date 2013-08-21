@@ -110,10 +110,6 @@ namespace itk
     }
     std::cout << " Done." << std::endl;
     
-
-    SizeType dims = myReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-    
-    
     // log the input
     typedef itk::LogTensorImageFilter<TensorImageType,TensorImageType>
       LogFilterType;

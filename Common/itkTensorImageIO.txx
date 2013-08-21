@@ -541,10 +541,10 @@ namespace itk
       }
     
     
-      typedef itk::DiffusionTensor3D<double>         PixelType;
-      typedef itk::Image <PixelType, ImageDimension> ImageType;
+      typedef itk::DiffusionTensor3D<double>             DiffPixelType;
+      typedef itk::Image <DiffPixelType, ImageDimension> DiffImageType;
     
-      typedef itk::ImageFileReader<ImageType> ReaderType;
+      typedef itk::ImageFileReader<DiffImageType> ReaderType;
     
       typename ReaderType::Pointer myReader = ReaderType::New();
       myReader->SetFileName (filename);
@@ -561,14 +561,14 @@ namespace itk
       }
 
     
-      typename ImageType::Pointer myImage = myReader->GetOutput();
+      typename DiffImageType::Pointer myImage = myReader->GetOutput();
 
       if( m_Output )
       {
 	m_Output->Initialize();
       }
 
-      typename ImageType::RegionType region = myImage->GetLargestPossibleRegion();
+      typename DiffImageType::RegionType region = myImage->GetLargestPossibleRegion();
     
       m_Output->SetRegions (region);
       m_Output->SetSpacing (myImage->GetSpacing());
@@ -585,7 +585,7 @@ namespace itk
         throw itk::ExceptionObject (__FILE__,__LINE__,"Error in TensorImageIO::Read() during allocation.");
       }
     
-      itk::ImageRegionConstIteratorWithIndex<ImageType>  itIn (myImage, myImage->GetLargestPossibleRegion());
+      itk::ImageRegionConstIteratorWithIndex<DiffImageType>  itIn (myImage, myImage->GetLargestPossibleRegion());
       itk::ImageRegionIteratorWithIndex<TensorImageType> itOut(m_Output, m_Output->GetLargestPossibleRegion());
 
       unsigned long numPixels = m_Output->GetLargestPossibleRegion().GetNumberOfPixels();
@@ -597,7 +597,7 @@ namespace itk
       while(!itOut.IsAtEnd())
       {
       
-        PixelType d3d = itIn.Get();
+        DiffPixelType d3d = itIn.Get();
       	TensorType tensor;
       	for( int j=0; j<3; j++)
         {

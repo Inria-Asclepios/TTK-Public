@@ -119,11 +119,6 @@ namespace itk
       GaussianFilterType;
     GaussianFilterType::Pointer gaussianFilter = GaussianFilterType::New();
     gaussianFilter->SetInput ( myTensorImage );
-    double variance[3];
-    for( int i=0; i<3; i++)
-    {
-      variance[i] = sigma;
-    }
     gaussianFilter->SetVariance ( sigma );
     gaussianFilter->SetUseImageSpacingOn ();
     

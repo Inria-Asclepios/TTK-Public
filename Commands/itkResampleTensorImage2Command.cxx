@@ -73,9 +73,9 @@ namespace itk
     const char* tensorFile = cl.follow("NoFile",2,"-I","-i");
     const char* outFile = cl.follow("NoFile",2,"-O","-o");
     const char* mat = cl.follow("NoFile",2,"-m","-M");
-    const int x = cl.follow(0,2,"-X","-x");
-    const int y = cl.follow(0,2,"-Y","-y");
-    const int z = cl.follow(0,2,"-Z","-z");
+    const unsigned x = cl.follow(0,2,"-X","-x");
+    const unsigned y = cl.follow(0,2,"-Y","-y");
+    const unsigned z = cl.follow(0,2,"-Z","-z");
     const double sx = cl.follow(1.0,2,"-SX","-sx");
     const double sy = cl.follow(1.0,2,"-SY","-sy");
     const double sz = cl.follow(1.0,2,"-SZ","-sz");

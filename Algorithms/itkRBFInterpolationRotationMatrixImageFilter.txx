@@ -47,7 +47,7 @@ namespace itk
     
     // compute the RotationMatrices mean:
     m_Mean = this->ComputeMeanOfRotationMatrices( m_RotationMatrices );
-    VectorType vMean = this->RotationMatrixToVector (m_Mean );
+    //VectorType vMean = this->RotationMatrixToVector (m_Mean );
 
     // Solve the system
     unsigned int numMatrices = m_RotationMatrices.size();

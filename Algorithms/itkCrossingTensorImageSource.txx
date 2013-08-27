@@ -20,7 +20,6 @@
 #include "itkCrossingTensorImageSource.h"
 #include "itkImageRegionIteratorWithIndex.h"
 
-
 #define PI 3.14159265
 
 

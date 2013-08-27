@@ -83,6 +83,7 @@ namespace itk
      * equation has met the criteria to stop solving. */
     bool Halt(void);
 
+    using Superclass::GetRMSChange;
     /** Get an energy criterion used to evaluate the convergence */
     const double GetRMSChange(void);
 

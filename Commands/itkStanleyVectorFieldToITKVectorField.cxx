@@ -16,6 +16,7 @@
 =========================================================================*/
 #include <iostream>
 #include <fstream>
+#include <cstddef> // For ITK 3.20 that does not define correctly ptrdiff_t
 
 #include <itkVector.h>
 #include <itkImage.h>
@@ -72,8 +73,8 @@ int main (int narg, char* arg[])
   
   buffer_in >> data; // DimSize
   buffer_in >> data; // =
-  int dims[3];
-  for( int i=0; i<3; i++)
+  unsigned dims[3];
+  for(int i=0;i<3;++i)
     buffer_in >> dims[i];
  
   VectorImageType::SizeType size = {{dims[0], dims[1], dims[2]}};

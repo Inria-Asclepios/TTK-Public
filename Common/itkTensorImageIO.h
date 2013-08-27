@@ -76,6 +76,7 @@ namespace itk
     itkSetStringMacro(FileName);
     itkGetStringMacro(FileName);
 
+    using Superclass::SetInput;
     itkSetConstObjectMacro(Input,  TensorImageType);
     itkGetConstObjectMacro(Input,  TensorImageType);
     itkGetObjectMacro(Output, TensorImageType);

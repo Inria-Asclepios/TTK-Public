@@ -55,11 +55,7 @@ DisplacementFieldCompositionFilter<TInputImage,TOutputImage>
 ::GenerateData()
 {
   DisplacementFieldConstPointer leftField = this->GetInput(0);
-#if ( ITK_VERSION_MAJOR < 3 ) || ( ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR < 13 )
-  DisplacementFieldPointer rightField = const_cast<DisplacementFieldType*>(this->GetInput(1));
-#else
   DisplacementFieldConstPointer rightField = this->GetInput(1);
-#endif
 
   // Sanity checks
   if( !m_Warper )

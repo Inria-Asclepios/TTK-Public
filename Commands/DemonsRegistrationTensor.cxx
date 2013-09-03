@@ -977,9 +977,7 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
         typename FieldInterpolatorType::Pointer VectorInterpolator =
         FieldInterpolatorType::New();
 
-#if ( ITK_VERSION_MAJOR > 3 ) || ( ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR > 8 )
         multires->GetFieldExpander()->SetInterpolator(VectorInterpolator);
-#endif
 
         multires->SetRegistrationFilter( filter );
         multires->SetNumberOfLevels( args.numIterations.size() );
@@ -991,13 +989,7 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
 
         if ( inputDefField )
           {
-#if ( ITK_VERSION_MAJOR > 3 ) || ( ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR > 8 )
             multires->SetArbitraryInitialDeformationField( inputDefField );
-#else
-            std::cout << "Using an input deformation field is not supported with your version of ITK ("
-            << ITK_VERSION_STRING << ")."<< std::endl;
-            exit( EXIT_FAILURE );
-#endif
           }
 
         if ( args.verbosity > 0 )

@@ -36,7 +36,7 @@
 #endif
 
 
-#ifdef ITK_USE_REVIEW
+#ifdef Module_ITKIOPhilipsREC
 #include <itkPhilipsRECImageIOFactory.h>
 #include <itkPhilipsRECImageIO.h>
 #include <itkPhilipsPAR.h>
@@ -113,7 +113,7 @@ namespace itk
 #ifdef TTK_USE_MIPS
     itk::InrimageImageIOFactory::RegisterOneFactory();
 #endif
-#ifdef ITK_USE_REVIEW
+#ifdef Module_ITKIOPhilipsREC
   itk::PhilipsRECImageIOFactory::RegisterOneFactory();
 #endif
 #ifdef TTK_USE_VTKINRIA3D
@@ -269,8 +269,8 @@ namespace itk
     PointType nullorigin;
     nullorigin[0] = nullorigin[1] = nullorigin[2] = 0.0;
     
-#ifndef ITK_USE_REVIEW
-    std::cerr<<"cannot correct for PAR-REC angulation without ITK_USE_REVIEW to ON"<<std::endl;
+#ifndef Module_ITKIOPhilipsREC
+    std::cerr<<"cannot correct for PAR-REC angulation without Module_ITKIOPhilipsREC to ON"<<std::endl;
     return nullorigin;
 #else
     
@@ -339,8 +339,8 @@ namespace itk
     DirectionType eyedir;
     eyedir.SetIdentity();
     
-#ifndef ITK_USE_REVIEW
-    std::cerr<<"cannot correct for PAR-REC angulation without ITK_USE_REVIEW to ON"<<std::endl;
+#ifndef Module_ITKIOPhilipsREC
+    std::cerr<<"cannot correct for PAR-REC angulation without Module_ITKIOPhilipsREC to ON"<<std::endl;
     return eyedir;
 #else
     
@@ -480,8 +480,8 @@ namespace itk
     
     VectorListType gradients;
     
-#ifndef ITK_USE_REVIEW
-    std::cerr<<"cannot correct for PAR-REC gradients without ITK_USE_REVIEW to ON"<<std::endl;
+#ifndef Module_ITKIOPhilipsREC
+    std::cerr<<"cannot correct for PAR-REC gradients without Module_ITKIOPhilipsREC to ON"<<std::endl;
     return gradients;
 #else
     

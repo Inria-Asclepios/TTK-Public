@@ -20,19 +20,10 @@ MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TF
 	m_RegistrationFilter = static_cast<RegistrationType*>(registrator.GetPointer() );
 
 	///\todo Choose the right type of pyramid
-#if ( ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR == 12 && ITK_VERSION_PATCH == 0 )
-	// Work-around for http://public.kitware.com/Bug/view.php?id=503
-	itkWarningMacro("This version of ITK has a bug in MultiResolutionPyramidImageFilter - using RecursiveMultiResolutionPyramidImageFilter instead");
-	typedef RecursiveMultiResolutionPyramidImageFilter
-	<FixedImageType, FloatImageType >  ActualFixedImagePyramidType;
-	typedef RecursiveMultiResolutionPyramidImageFilter
-	<MovingImageType, FloatImageType > ActualMovingImagePyramidType;
-#else
 	typedef MultiResolutionPyramidTensorImageFilter <FixedImageType, FloatImageType >
 	ActualFixedImagePyramidType;
 	typedef MultiResolutionPyramidTensorImageFilter <MovingImageType, FloatImageType >
 	ActualMovingImagePyramidType;
-#endif
 
 	m_MovingImagePyramid  = ActualMovingImagePyramidType::New();
 	m_FixedImagePyramid     = ActualFixedImagePyramidType::New();

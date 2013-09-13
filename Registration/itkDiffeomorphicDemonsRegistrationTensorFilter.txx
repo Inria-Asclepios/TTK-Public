@@ -15,9 +15,9 @@ namespace itk
 /*
  * Default constructor
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 DiffeomorphicDemonsRegistrationTensorFilter
-<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::DiffeomorphicDemonsRegistrationTensorFilter()
 {
 
@@ -42,10 +42,10 @@ DiffeomorphicDemonsRegistrationTensorFilter
 
 /** Checks whether the DifferenceFunction is of type
  * ESMDemonsRegistrationTensorFunction.*/
-template < class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision >
+template < class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision >
 typename DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage, TMovingImage,
-TDeformationField, TSolverPrecision>::DemonsRegistrationFunctionType*
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage, TMovingImage, TDeformationField, TSolverPrecision>::DownCastDifferenceFunctionType()
+TDisplacementField, TSolverPrecision>::DemonsRegistrationFunctionType*
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage, TMovingImage, TDisplacementField, TSolverPrecision>::DownCastDifferenceFunctionType()
 {
   DemonsRegistrationFunctionType *drfp =
     dynamic_cast<DemonsRegistrationFunctionType *> (this->GetDifferenceFunction().GetPointer());
@@ -62,10 +62,10 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage, TMovingImage, TDeformat
 
 /** Checks whether the DifferenceFunction is of type
  * ESMDemonsRegistrationTensorFunction.*/
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
-const typename DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
+const typename DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::DemonsRegistrationFunctionType*
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::DownCastDifferenceFunctionType() const
 {
   const DemonsRegistrationFunctionType *drfp =
@@ -82,15 +82,15 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 
 /** Set the function state values before each iteration */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 void
 DiffeomorphicDemonsRegistrationTensorFilter
-<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::InitializeIteration()
 {
   // update variables in the equation object
   DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
-  f->SetDeformationField( this->GetDeformationField() );
+  f->SetDisplacementField( this->GetDisplacementField() );
 
   // call the superclass  implementation ( initializes f )
   Superclass::InitializeIteration();
@@ -98,9 +98,9 @@ DiffeomorphicDemonsRegistrationTensorFilter
 
 
 /** Get the metric value from the difference function */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 double
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::GetMetric() const
 {
   const DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -109,9 +109,9 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 
 /** Get the metric value from the difference function */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 unsigned long
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::GetNumberOfPixelsProcessed() const
 {
   const DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -121,9 +121,9 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 /** Get the threshold below which the absolute difference of
  * intensity yields a match. */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 double
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::GetIntensityDifferenceThreshold() const
 {
   const DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -133,9 +133,9 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 /** Set the threshold below which the absolute difference of
  * intensity yields a match. */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 void
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::SetIntensityDifferenceThreshold(double threshold)
 {
   DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -144,9 +144,9 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 
 /** Get the maximum update step length. */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 double
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::GetMaximumUpdateStepLength() const
 {
   const DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -155,9 +155,9 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 
 /** Set the maximum update step length. */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 void
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::SetMaximumUpdateStepLength(double threshold)
 {
   DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -166,9 +166,9 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 
 /** Get the metric value from the difference function. */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 const double &
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::GetRMSChange() const
 {
   const DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -177,10 +177,10 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 
 /** Get types of available image forces */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
-typename DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
+typename DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::GradientType
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::GetUseGradientType() const
 {
   const DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -189,9 +189,9 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 
 /** Set types of available image forces */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 void
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::SetUseGradientType(GradientType gtype)
 {
   DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -201,10 +201,10 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 /** Get types of rotation we use to optimize the registration wrt tensor
  * reorientation */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
-typename DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
+typename DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::RotationType
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::GetUseRotationType() const
 {
   const DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -214,9 +214,9 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 
 /** Set types of rotation we use to optimize the registration wrt tensor
  * reorientation */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 void
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::SetUseRotationType(RotationType rtype)
 {
   DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
@@ -224,14 +224,14 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 }
 
 /** This method allocates storage in m_UpdateBuffer.*/
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 void
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::AllocateUpdateBuffer()
 {
   // The update buffer looks just like the output.
-  DeformationFieldPointer output = this->GetOutput();
-  DeformationFieldPointer upbuf = this->GetUpdateBuffer();
+  DisplacementFieldPointer output = this->GetOutput();
+  DisplacementFieldPointer upbuf = this->GetUpdateBuffer();
 
   upbuf->SetLargestPossibleRegion(output->GetLargestPossibleRegion());
   upbuf->SetRequestedRegion(output->GetRequestedRegion());
@@ -243,9 +243,9 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
 }
 
 /** Solve update if necessary and then apply it. */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 void
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
 ::ApplyUpdate(TimeStepType dt)
 {
   DemonsRegistrationFunctionType *drfp = this->DownCastDifferenceFunctionType();
@@ -305,7 +305,7 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
   m_Warper->SetOutputDirection( this->GetUpdateBuffer()->GetDirection());
 
   m_Warper->SetInput( this->GetOutput() );
-  m_Warper->SetDeformationField( m_Exponentiator->GetOutput() );
+  m_Warper->SetDisplacementField( m_Exponentiator->GetOutput() );
 
   m_Adder->SetInput1( m_Warper->GetOutput() );
   m_Adder->SetInput2( m_Exponentiator->GetOutput() );
@@ -319,16 +319,16 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDeformatio
   this->SetRMSChange( drfp->GetRMSChange() );
 
   // Smooth the deformation field
-  if ( this->GetSmoothDeformationField() )
+  if ( this->GetSmoothDisplacementField() )
     {
-      this->SmoothDeformationField();
+      this->SmoothDisplacementField();
     }
 }
 
 
-template < class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision >
+template < class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision >
 void
-DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage, TMovingImage, TDeformationField, TSolverPrecision>
+DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage, TMovingImage, TDisplacementField, TSolverPrecision>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

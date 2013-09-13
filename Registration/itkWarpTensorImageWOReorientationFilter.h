@@ -14,7 +14,7 @@ namespace itk
 template <
   class TInputImage,
   class TOutputImage,
-  class TDeformationField
+  class TDisplacementField
   >
 class ITK_EXPORT WarpTensorImageWOReorientationFilter :
     public ImageToImageFilter<TInputImage, TOutputImage>
@@ -52,23 +52,23 @@ public:
                       TOutputImage::ImageDimension );
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension );
-  itkStaticConstMacro(DeformationFieldDimension, unsigned int,
-                      TDeformationField::ImageDimension );
+  itkStaticConstMacro(DisplacementFieldDimension, unsigned int,
+                      TDisplacementField::ImageDimension );
 
   itkStaticConstMacro(VectorDimension, unsigned int,
-	  TDeformationField::PixelType::Dimension);
+	  TDisplacementField::PixelType::Dimension);
 
   typedef Matrix<double, ImageDimension, VectorDimension> JacobianType;
   typedef Image<JacobianType, ImageDimension>             JacobianImageType;
   typedef typename JacobianImageType::Pointer             JacobianPointer;
-  typedef WarpJacobianFilter<TDeformationField, JacobianImageType>  JacobianFilterType;
+  typedef WarpJacobianFilter<TDisplacementField, JacobianImageType>  JacobianFilterType;
 
   itkGetObjectMacro(Jacobian, JacobianImageType);
 
-  /** Deformation field typedef support. */
-  typedef TDeformationField    DeformationFieldType;
-  typedef typename DeformationFieldType::Pointer  DeformationFieldPointer;
-  typedef typename DeformationFieldType::PixelType DisplacementType;
+  /** Displacement field typedef support. */
+  typedef TDisplacementField    DisplacementFieldType;
+  typedef typename DisplacementFieldType::Pointer  DisplacementFieldPointer;
+  typedef typename DisplacementFieldType::PixelType DisplacementType;
 
   /** Interpolator typedef support. */
   typedef double CoordRepType;
@@ -81,10 +81,10 @@ public:
   typedef Point<CoordRepType,itkGetStaticConstMacro(ImageDimension)> PointType;
 
   /** Set the deformation field. */
-  void SetDeformationField( const DeformationFieldType * field );
+  void SetDisplacementField( const DisplacementFieldType * field );
 
   /** Get a pointer the deformation field. */
-  DeformationFieldType * GetDeformationField(void);
+  DisplacementFieldType * GetDisplacementField(void);
 
   /** Set the interpolator function. */
   itkSetObjectMacro( Interpolator, InterpolatorType );
@@ -146,11 +146,11 @@ public:
   itkConceptMacro(SameDimensionCheck1,
     (Concept::SameDimension<ImageDimension, InputImageDimension>));
   itkConceptMacro(SameDimensionCheck2,
-    (Concept::SameDimension<ImageDimension, DeformationFieldDimension>));
+    (Concept::SameDimension<ImageDimension, DisplacementFieldDimension>));
   /** itkConceptMacro(InputHasNumericTraitsCheck,
       (Concept::HasNumericTraits<typename TInputImage::PixelType>)); **/ 
-  itkConceptMacro(DeformationFieldHasNumericTraitsCheck,
-    (Concept::HasNumericTraits<typename TDeformationField::PixelType::ValueType>));
+  itkConceptMacro(DisplacementFieldHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TDisplacementField::PixelType::ValueType>));
   /** End concept checking */
 #endif
 

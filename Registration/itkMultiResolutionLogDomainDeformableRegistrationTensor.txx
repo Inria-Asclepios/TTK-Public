@@ -613,15 +613,15 @@ MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TF
 
 template <class TFixedImage, class TMovingImage, class TField, class TRealType, class TSolverPrecision>
 typename MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TField,TRealType,TSolverPrecision>
-::DeformationFieldPointer
+::DisplacementFieldPointer
 MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TField,TRealType,TSolverPrecision>
-::GetDeformationField()
+::GetDisplacementField()
 {
-	//std::cout<<"MultiResolutionLogDomainDeformableRegistrationTensor::GetDeformationField"<<std::endl;
+	//std::cout<<"MultiResolutionLogDomainDeformableRegistrationTensor::GetDisplacementField"<<std::endl;
 	m_Exponentiator->SetInput( this->GetVelocityField() );
 	m_Exponentiator->ComputeInverseOff();
 	m_Exponentiator->Update();
-	DeformationFieldPointer field = m_Exponentiator->GetOutput();
+	DisplacementFieldPointer field = m_Exponentiator->GetOutput();
 	field->DisconnectPipeline();
 	return field;
 }
@@ -629,15 +629,15 @@ MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TF
 
 template <class TFixedImage, class TMovingImage, class TField, class TRealType, class TSolverPrecision>
 typename MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TField,TRealType,TSolverPrecision>
-::DeformationFieldPointer
+::DisplacementFieldPointer
 MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TField,TRealType,TSolverPrecision>
-::GetInverseDeformationField()
+::GetInverseDisplacementField()
 {
-	//std::cout<<"MultiResolutionLogDomainDeformableRegistrationTensor::GetInverseDeformationField"<<std::endl;
+	//std::cout<<"MultiResolutionLogDomainDeformableRegistrationTensor::GetInverseDisplacementField"<<std::endl;
 	m_Exponentiator->SetInput( this->GetVelocityField() );
 	m_Exponentiator->ComputeInverseOn();
 	m_Exponentiator->Update();
-	DeformationFieldPointer field = m_Exponentiator->GetOutput();
+	DisplacementFieldPointer field = m_Exponentiator->GetOutput();
 	field->DisconnectPipeline();
 	// Reset compute inverse back to off to avoid some broder effects
 	m_Exponentiator->ComputeInverseOff();

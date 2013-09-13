@@ -51,11 +51,11 @@ struct arguments
 {
   std::string fixedImageFile; /* -f option */
   std::string movingImageFile; /* -m option */
-  std::string inputDeformationFieldFile; /* -d option */
+  std::string inputDisplacementFieldFile; /* -d option */
   std::string outputResultsFile; /* -k option */
   std::string outputMSEFile; /* -o option */
   std::string outputLMSEFile; /* -O option */
-  std::string trueDeformationFieldFile; /* -t option */
+  std::string trueDisplacementFieldFile; /* -t option */
   unsigned int reorientationType; /* -r option */
 
   friend std::ostream&
@@ -65,13 +65,13 @@ struct arguments
     << args.fixedImageFile << std::endl << "  Moving image file: "
     << args.movingImageFile << std::endl
     << "  Input deformation field file: "
-    << args.inputDeformationFieldFile << std::endl
+    << args.inputDisplacementFieldFile << std::endl
     << "Output results file: " << args.outputResultsFile << std::endl
     << "Output MSE file: " << args.outputMSEFile << std::endl
     << "Output LMSE file: " << args.outputLMSEFile << std::endl
     << "  Tensor reorientation type: " << args.reorientationType
     << std::endl << "  True deformation field file: "
-    << args.trueDeformationFieldFile << std::endl;
+    << args.trueDisplacementFieldFile << std::endl;
   }
 };
 
@@ -115,10 +115,10 @@ parseOpts(int argc, char **argv, struct arguments & args)
   command.AddOptionField("MovingImageFile", "filename", MetaCommand::STRING,
       true);
 
-  command.SetOption("InputDeformationFieldFile", "d", true,
+  command.SetOption("InputDisplacementFieldFile", "d", true,
       "Input deformation field filename");
-  command.SetOptionLongTag("InputDeformationFieldFile", "input-def-field");
-  command.AddOptionField("InputDeformationFieldFile", "filename",
+  command.SetOptionLongTag("InputDisplacementFieldFile", "input-def-field");
+  command.AddOptionField("InputDisplacementFieldFile", "filename",
       MetaCommand::STRING, true);
 
   command.SetOption("OutputResultsFile", "k", true, "Output results filename");
@@ -134,12 +134,12 @@ parseOpts(int argc, char **argv, struct arguments & args)
   command.AddOptionField("OutputLMSEFile", "filename", MetaCommand::STRING, true, "LMSE.nii.gz");
 
   command.SetOption(
-      "TrueDeformationFieldFile",
+      "TrueDisplacementFieldFile",
       "t",
       false,
       "Specify a \"true\" deformation field to compare the registration result with (useful for synthetic experiments)");
-  command.SetOptionLongTag("TrueDeformationFieldFile", "true-def-field");
-  command.AddOptionField("TrueDeformationFieldFile", "filename",
+  command.SetOptionLongTag("TrueDisplacementFieldFile", "true-def-field");
+  command.AddOptionField("TrueDisplacementFieldFile", "filename",
       MetaCommand::STRING, true);
 
   command.SetOption(
@@ -162,13 +162,13 @@ parseOpts(int argc, char **argv, struct arguments & args)
   args.fixedImageFile = command.GetValueAsString("FixedImageFile", "filename");
   args.movingImageFile = command.GetValueAsString("MovingImageFile",
       "filename");
-  args.inputDeformationFieldFile = command.GetValueAsString(
-      "InputDeformationFieldFile", "filename");
+  args.inputDisplacementFieldFile = command.GetValueAsString(
+      "InputDisplacementFieldFile", "filename");
   args.outputResultsFile = command.GetValueAsString("OutputResultsFile", "filename");
   args.outputMSEFile = command.GetValueAsString("OutputMSEFile", "filename");
   args.outputLMSEFile = command.GetValueAsString("OutputLMSEFile", "filename");
-  args.trueDeformationFieldFile = command.GetValueAsString(
-      "TrueDeformationFieldFile", "filename");
+  args.trueDisplacementFieldFile = command.GetValueAsString(
+      "TrueDisplacementFieldFile", "filename");
   args.reorientationType = command.GetValueAsInt("ReorientationType", "type");
 }
 
@@ -191,7 +191,7 @@ main(int argc, char *argv[])
 
   typedef itk::Image<TensorRealType, 3> TensorRealImageType;
   typedef itk::Image<VectorRealType, 3> VectorRealImageType;
-  typedef itk::Image<VectorPixelType, 3> DeformationFieldType;
+  typedef itk::Image<VectorPixelType, 3> DisplacementFieldType;
   typedef itk::Image<TensorPixelType, 3> TensorImageType;
 
   typedef itk::ExpTensorImageFilter<TensorImageType, TensorImageType>
@@ -200,13 +200,13 @@ main(int argc, char *argv[])
   // FIRST WE COMPUTE STATS ON THE DEFORMATION FIELD
 
   // READ FOUND DEFORMATION FIELD
-  typedef itk::ImageFileReader<DeformationFieldType>
-  DeformationFieldReaderType;
+  typedef itk::ImageFileReader<DisplacementFieldType>
+  DisplacementFieldReaderType;
 
-  DeformationFieldReaderType::Pointer inputFieldReader =
-    DeformationFieldReaderType::New();
+  DisplacementFieldReaderType::Pointer inputFieldReader =
+    DisplacementFieldReaderType::New();
 
-  inputFieldReader->SetFileName(args.inputDeformationFieldFile.c_str());
+  inputFieldReader->SetFileName(args.inputDisplacementFieldFile.c_str());
   try
   {
     inputFieldReader->Update();
@@ -217,15 +217,15 @@ main(int argc, char *argv[])
     std::cout << err << std::endl;
     exit(EXIT_FAILURE);
   }
-  DeformationFieldType::Pointer inputDefField = inputFieldReader->GetOutput();
+  DisplacementFieldType::Pointer inputDefField = inputFieldReader->GetOutput();
 
   // READ TRUE DEFORMATION FIELD
-  DeformationFieldReaderType::Pointer trueFieldReader =
-    DeformationFieldReaderType::New();
-  DeformationFieldType::Pointer trueDefField = DeformationFieldType::New();
-  if ( !args.trueDeformationFieldFile.empty() )
+  DisplacementFieldReaderType::Pointer trueFieldReader =
+    DisplacementFieldReaderType::New();
+  DisplacementFieldType::Pointer trueDefField = DisplacementFieldType::New();
+  if ( !args.trueDisplacementFieldFile.empty() )
     {
-      trueFieldReader->SetFileName(args.trueDeformationFieldFile.c_str());
+      trueFieldReader->SetFileName(args.trueDisplacementFieldFile.c_str());
       try
       {
         trueFieldReader->Update();
@@ -240,7 +240,7 @@ main(int argc, char *argv[])
     }
 
   // COMPUTE SOME STATS ON THE FOUND DEFORMATION FIELD
-  typedef itk::WarpHarmonicEnergyCalculator<DeformationFieldType>
+  typedef itk::WarpHarmonicEnergyCalculator<DisplacementFieldType>
   HarmonicEnergyCalculatorType;
 
   HarmonicEnergyCalculatorType::Pointer harmonicEnergyCalculator =
@@ -250,7 +250,7 @@ main(int argc, char *argv[])
   const double harmonicEnergy = harmonicEnergyCalculator->GetHarmonicEnergy();
 
   typedef itk::DisplacementFieldJacobianDeterminantFilter<
-  DeformationFieldType, VectorRealType> JacobianFilterType;
+  DisplacementFieldType, VectorRealType> JacobianFilterType;
   JacobianFilterType::Pointer jacobianFilter = JacobianFilterType::New();
   jacobianFilter->SetUseImageSpacing(true);
   jacobianFilter->ReleaseDataFlagOn();
@@ -301,9 +301,9 @@ main(int argc, char *argv[])
   // (AND THEIR JACOBIANS)
   double fieldDist = -1.0;
   double fieldGradDist = -1.0;
-  if ( !args.trueDeformationFieldFile.empty() )
+  if ( !args.trueDisplacementFieldFile.empty() )
     {
-      typedef itk::VectorCentralDifferenceImageFunction<DeformationFieldType>
+      typedef itk::VectorCentralDifferenceImageFunction<DisplacementFieldType>
       WarpGradientCalculatorType;
 
       typedef WarpGradientCalculatorType::OutputType WarpGradientType;
@@ -314,7 +314,7 @@ main(int argc, char *argv[])
       WarpGradientCalculatorType::Pointer trueWarpGradientCalculator = WarpGradientCalculatorType::New();
       trueWarpGradientCalculator->SetInputImage( trueDefField );
 
-      typedef itk::ImageRegionConstIteratorWithIndex<DeformationFieldType>
+      typedef itk::ImageRegionConstIteratorWithIndex<DisplacementFieldType>
       FieldIteratorType;
       FieldIteratorType inputIter( inputDefField, inputDefField->GetLargestPossibleRegion() );
       FieldIteratorType trueIter( trueDefField, inputDefField->GetLargestPossibleRegion() );
@@ -370,13 +370,13 @@ main(int argc, char *argv[])
   TensorImageType::Pointer movingImage = movingImageReader->GetOutput();
 
   typedef itk::WarpTensorImageFilter
-  < TensorImageType, TensorImageType, DeformationFieldType > WarperType;
+  < TensorImageType, TensorImageType, DisplacementFieldType > WarperType;
   WarperType::Pointer warper = WarperType::New();
   warper->SetInput( movingImage );
   warper->SetOutputSpacing( fixedImage->GetSpacing() );
   warper->SetOutputOrigin( fixedImage->GetOrigin() );
   warper->SetOutputDirection( fixedImage->GetDirection() );
-  warper->SetDeformationField( inputDefField );
+  warper->SetDisplacementField( inputDefField );
   if ( args.reorientationType == 1 )
     {
       warper->SetReorientationStrategy( PPD );
@@ -432,7 +432,7 @@ main(int argc, char *argv[])
   warper->SetOutputSpacing( fixedImage->GetSpacing() );
   warper->SetOutputOrigin( fixedImage->GetOrigin() );
   warper->SetOutputDirection( fixedImage->GetDirection() );
-  warper->SetDeformationField( inputDefField );
+  warper->SetDisplacementField( inputDefField );
   if ( args.reorientationType == 1 )
     {
       warper->SetReorientationStrategy( PPD );
@@ -550,7 +550,7 @@ main(int argc, char *argv[])
   <<"99.8% |Jac|, "
   <<"max|Jac|, "
   <<"ratio(|Jac|<=0), ";
-  if ( !args.trueDeformationFieldFile.empty() )
+  if ( !args.trueDisplacementFieldFile.empty() )
     {
       fid
       <<"dist(warp,true warp), "
@@ -569,7 +569,7 @@ main(int argc, char *argv[])
   << Q998 << ", "
   << maxJac << ", "
   << jacBelowZeroPrc;
-  if ( !args.trueDeformationFieldFile.empty() )
+  if ( !args.trueDisplacementFieldFile.empty() )
     {
       fid
       << ", "

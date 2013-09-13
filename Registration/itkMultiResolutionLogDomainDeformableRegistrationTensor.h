@@ -1,7 +1,7 @@
 #ifndef __itkMultiResolutionLogDomainDeformableRegistrationTensor_h
 #define __itkMultiResolutionLogDomainDeformableRegistrationTensor_h
 
-#include "itkExponentialDeformationFieldImageFilter2.h"
+#include "itkExponentialDisplacementFieldImageFilter2.h"
 #include "itkImage.h"
 #include "itkImageToImageFilter.h"
 #include "itkLogDomainDeformableRegistrationFilter.h"
@@ -111,9 +111,9 @@ public:
 	typedef TField                                 VelocityFieldType;
 	typedef typename VelocityFieldType::Pointer    VelocityFieldPointer;
 
-	/** Deformation field image type. */
-	typedef TField                                 DeformationFieldType;
-	typedef typename DeformationFieldType::Pointer DeformationFieldPointer;
+	/** Displacement field image type. */
+	typedef TField                                 DisplacementFieldType;
+	typedef typename DisplacementFieldType::Pointer DisplacementFieldPointer;
 
 	/** ImageDimension. */
 	itkStaticConstMacro(ImageDimension, unsigned int, FixedImageType::ImageDimension);
@@ -178,10 +178,10 @@ public:
 	VelocityFieldType * GetVelocityField() { return this->GetOutput(); }
 
 	/** Get output deformation field. */
-	DeformationFieldPointer GetDeformationField();
+	DisplacementFieldPointer GetDisplacementField();
 
 	/** Get output inverse deformation field. */
-	DeformationFieldPointer GetInverseDeformationField();
+	DisplacementFieldPointer GetInverseDisplacementField();
 
 	/** Get the number of valid inputs.  For
 	 * MultiResolutionLogDomainDeformableRegistrationTensor, this checks whether the
@@ -248,7 +248,7 @@ protected:
 	void PrintSelf(std::ostream& os, Indent indent) const;
 
 	/** Exponential type */
-	typedef ExponentialDeformationFieldImageFilter<VelocityFieldType, DeformationFieldType >      FieldExponentiatorType;
+	typedef ExponentialDisplacementFieldImageFilter<VelocityFieldType, DisplacementFieldType >      FieldExponentiatorType;
 
 	typedef typename FieldExponentiatorType::Pointer FieldExponentiatorPointer;
 

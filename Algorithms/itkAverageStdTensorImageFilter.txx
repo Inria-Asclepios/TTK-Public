@@ -29,7 +29,7 @@ namespace itk
   ::BeforeThreadedGenerateData()
   {
 
-     if( this->GetNumberOfInputs()==0 )
+     if( this->GetNumberOfIndexedInputs()==0 )
 	 {
 		throw itk::ExceptionObject(__FILE__,__LINE__,"Error: Input is not set.");
 	 }
@@ -58,7 +58,7 @@ namespace itk
 	typedef ImageRegionIterator<CovMatrixImageType>   IteratorCovMatrixType;
     typedef ImageRegionConstIterator<InputImageType>  IteratorInputType;
 	    
-    unsigned int n = this->GetNumberOfInputs();
+    unsigned int n = this->GetNumberOfIndexedInputs();
     
 	IteratorOutputType    itOut(this->GetOutput(), outputRegionForThread);
 	IteratorCovMatrixType itCovMatrix(this->GetCovarianceMatrixImage(), outputRegionForThread);

@@ -107,6 +107,7 @@ namespace itk
 
       image = filter->GetOutput();
       image->DisconnectPipeline();
+        image->SetDirection(filter->GetInput(0)->GetDirection());
     }
 
 

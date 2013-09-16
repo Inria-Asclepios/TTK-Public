@@ -126,7 +126,7 @@ protected:
   /** This method applies changes from the m_UpdateBuffer to the output using
    * the ThreadedAPplyUpdate() method and a multithreading mechanism.  "dt" is
    * the time step to use for the update of each pixel. */
-  virtual void ApplyUpdate(TimeStepType dt);
+  virtual void ApplyUpdate(const TimeStepType &dt);
 
   /** Method to allow subclasses to get direct access to the update
    * buffer */
@@ -143,8 +143,8 @@ private:
   {
     DenseFiniteDifferenceImageFilter2 *Filter;
     TimeStepType TimeStep;
-    TimeStepType *TimeStepList;
-    bool *ValidTimeStepList;
+      std::vector <TimeStepType> TimeStepList;
+      std::vector <bool> ValidTimeStepList;
   };
   
   /** The type of region used for multithreading */
@@ -183,7 +183,7 @@ private:
   virtual
   void ThreadedApplyUpdate(TimeStepType dt,
                            const ThreadRegionType &regionToProcess,
-                           int threadId);
+                           ThreadIdType threadId);
   // FOR ALL: iterator(output, splitRegion), iterator(update, splitRegion)
 
   /** Does the actual work of calculating change over a region supplied by
@@ -192,7 +192,7 @@ private:
    * \sa CalculateChangeThreaderCallback */
   virtual
   TimeStepType ThreadedCalculateChange(const ThreadRegionType &regionToProcess,
-                                       int threadId);
+                                       ThreadIdType threadId);
   // FOR ALL : iterator(input, splitRegion), iterator(update, splitRegion)
 
   /** The buffer that holds the updates for an iteration of the algorithm. */

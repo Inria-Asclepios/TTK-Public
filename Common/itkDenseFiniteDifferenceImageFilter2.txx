@@ -94,7 +94,7 @@ DenseFiniteDifferenceImageFilter2<TInputImage, TOutputImage>
 template<class TInputImage, class TOutputImage>
 void
 DenseFiniteDifferenceImageFilter2<TInputImage, TOutputImage>
-::ApplyUpdate(TimeStepType dt)
+::ApplyUpdate(const TimeStepType &dt)
 {
   // Set up for multithreaded processing.
   DenseFDThreadStruct str;
@@ -157,8 +157,8 @@ DenseFiniteDifferenceImageFilter2<TInputImage, TOutputImage>
   // various threads.  There is one distinct slot for each possible thread,
   // so this data structure is thread-safe.
   threadCount = this->GetMultiThreader()->GetNumberOfThreads();  
-  str.TimeStepList = new TimeStepType[threadCount];                 
-  str.ValidTimeStepList = new bool[threadCount];
+  str.TimeStepList.resize(threadCount);                 
+  str.ValidTimeStepList.resize(threadCount);
   for (int i =0; i < threadCount; ++i)
     {      str.ValidTimeStepList[i] = false;    } 
 
@@ -166,9 +166,7 @@ DenseFiniteDifferenceImageFilter2<TInputImage, TOutputImage>
   this->GetMultiThreader()->SingleMethodExecute();
 
   // Resolve the single value time step to return
-  dt = this->ResolveTimeStep(str.TimeStepList, str.ValidTimeStepList, threadCount);
-  delete [] str.TimeStepList;
-  delete [] str.ValidTimeStepList;
+  dt = this->ResolveTimeStep(str.TimeStepList, str.ValidTimeStepList);
 
   return  dt;
 }
@@ -208,13 +206,13 @@ template <class TInputImage, class TOutputImage>
 void
 DenseFiniteDifferenceImageFilter2<TInputImage, TOutputImage>
 ::ThreadedApplyUpdate(TimeStepType dt, const ThreadRegionType &regionToProcess,
-                      int)
+                      ThreadIdType)
 {
   ImageRegionIterator<UpdateBufferType> u(m_UpdateBuffer,    regionToProcess);
   ImageRegionIterator<OutputImageType>  o(this->GetOutput(), regionToProcess);
 
-  u = u.Begin();
-  o = o.Begin();
+  u.GoToBegin();
+  o.GoToBegin();
 
   while ( !u.IsAtEnd() )
     {
@@ -228,7 +226,7 @@ template <class TInputImage, class TOutputImage>
 typename
 DenseFiniteDifferenceImageFilter2<TInputImage, TOutputImage>::TimeStepType
 DenseFiniteDifferenceImageFilter2<TInputImage, TOutputImage>
-::ThreadedCalculateChange(const ThreadRegionType &regionToProcess, int)
+::ThreadedCalculateChange(const ThreadRegionType &regionToProcess, ThreadIdType)
 {
   typedef typename OutputImageType::RegionType RegionType;
   typedef typename OutputImageType::SizeType   SizeType;

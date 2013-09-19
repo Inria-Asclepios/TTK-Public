@@ -373,7 +373,7 @@ public:
   static bool IsNonpositive(Tensor< float,3 > val);
   static bool IsNegative(Tensor< float,3 > val);
   static bool IsNonnegative(Tensor< float,3 > val);
-    static unsigned int GetLength(Tensor<float, 3> &t);
+  static unsigned int GetLength(Tensor<float, 3> &t);
   
   typedef double  ScalarRealType;
   const static bool is_integer=false;
@@ -397,7 +397,7 @@ public:
   static bool IsNonpositive(Tensor< double,3 > val);
   static bool IsNegative(Tensor< double,3 > val);
   static bool IsNonnegative(Tensor< double,3 > val);
-    static unsigned int GetLength(Tensor<double, 3> &t);
+  static unsigned int GetLength(Tensor<double, 3> &t);
   typedef double ScalarRealType;
   const static bool is_integer=false;
   const static bool is_signed=true;
@@ -410,7 +410,7 @@ public:
   typedef Tensor<long double, 3> AccumulateType;
   typedef Tensor<long double, 3> RealType;
   typedef long double ScalarRealType;
-    static const Tensor< long double,3 > ITK_EXPORT Zero;
+  static const Tensor< long double,3 > ITK_EXPORT Zero;
   const static bool is_integer=false;
 };
 
@@ -761,7 +761,7 @@ public:
   typedef Tensor<long double, 6> AccumulateType;
   typedef Tensor<double, 6> RealType;
   typedef double ScalarRealType;
-    static unsigned int GetLength(Tensor<double, 6> &t);
+  static unsigned int GetLength(Tensor<double, 6> &t);
   const static bool is_integer=false;
 };
 template <> class NumericTraits<Tensor<long double, 6> > {

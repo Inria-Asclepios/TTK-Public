@@ -117,12 +117,12 @@ namespace itk
     typedef OutputVectorType                          OffsetType;
     
     typedef OutputVectorType                          TranslationType;
-        typedef typename Superclass::TransformCategoryType TransformCategoryType;
-
-        virtual TransformCategoryType GetTransformCategory() const
-        {
-            return Self::Linear;
-        }
+    typedef typename Superclass::TransformCategoryType TransformCategoryType;
+    
+    virtual TransformCategoryType GetTransformCategory() const
+    {
+      return Self::Linear;
+    }
 
     virtual void SetIdentity( void );
     

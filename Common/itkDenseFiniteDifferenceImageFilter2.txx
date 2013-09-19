@@ -105,6 +105,7 @@ DenseFiniteDifferenceImageFilter2<TInputImage, TOutputImage>
                                             &str);
   // Multithread the execution
   this->GetMultiThreader()->SingleMethodExecute();
+  
 }
 
 template<class TInputImage, class TOutputImage>
@@ -159,15 +160,20 @@ DenseFiniteDifferenceImageFilter2<TInputImage, TOutputImage>
   threadCount = this->GetMultiThreader()->GetNumberOfThreads();  
   str.TimeStepList.resize(threadCount);                 
   str.ValidTimeStepList.resize(threadCount);
-  for (int i =0; i < threadCount; ++i)
-    {      str.ValidTimeStepList[i] = false;    } 
-
+  str.ValidTimeStepList.resize( threadCount, false );
+  
   // Multithread the execution
   this->GetMultiThreader()->SingleMethodExecute();
 
   // Resolve the single value time step to return
   dt = this->ResolveTimeStep(str.TimeStepList, str.ValidTimeStepList);
 
+  // Explicitely call Modified on m_UpdateBuffer here
+  // since ThreadedCalculateChange changes this buffer
+  // through iterators which do not increment the
+  // update buffer timestamp
+  this->m_UpdateBuffer->Modified();
+  
   return  dt;
 }
 

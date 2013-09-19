@@ -143,8 +143,8 @@ private:
   {
     DenseFiniteDifferenceImageFilter2 *Filter;
     TimeStepType TimeStep;
-      std::vector <TimeStepType> TimeStepList;
-      std::vector <bool> ValidTimeStepList;
+    std::vector <TimeStepType> TimeStepList;
+    std::vector <bool> ValidTimeStepList;
   };
   
   /** The type of region used for multithreading */

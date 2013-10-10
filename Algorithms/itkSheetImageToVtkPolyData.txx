@@ -135,9 +135,7 @@ namespace itk
         if( npts>1)
         {
           for( int i=1; i<npts-1; i++)
-          {
-            PointType point = listPoints[i].Point;
-            
+          {            
             //alpha = 1.0;
             fa = 0.0;
             TensorType t = listPoints[i].Tensor;

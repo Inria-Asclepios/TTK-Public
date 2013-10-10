@@ -36,7 +36,7 @@ std::string ttk_trim(std::string const& source, char const* delims = " \t\r\n")
   {
     result.erase(++index);
   }
-  
+
   index = result.find_first_not_of(delims);
   if(index != std::string::npos)
   {
@@ -50,7 +50,7 @@ std::string ttk_trim(std::string const& source, char const* delims = " \t\r\n")
 }
 
 
-  
+
 /** Constructor */
 GradientFileReader
 ::GradientFileReader()
@@ -69,7 +69,7 @@ void GradientFileReader
 ::Update()
 {
   m_GradientList.clear();
-  
+
   std::ifstream in;
   in.open ( m_FileName.c_str(), std::ios::in | std::ios::binary );
   if( in.fail() )
@@ -92,8 +92,8 @@ void GradientFileReader
   // allocate memory to contain file data
   char* buffer=new char[size+1];
 
-  // get file data  
-  pbuf->sgetn (buffer,size); 
+  // get file data
+  pbuf->sgetn (buffer,size);
   buffer[size]='\0';
   itkDebugMacro ( "Read file gradient Data" );
   InData << buffer;
@@ -104,7 +104,7 @@ void GradientFileReader
 
   // Read line by line
   std::string::size_type position = 0;
-  
+
   // check for line end convention
   std::string line_end("\n");
   if(data.find('\n') == std::string::npos)
@@ -121,7 +121,7 @@ void GradientFileReader
   std::string fileextension = itksys::SystemTools::GetFilenameLastExtension(m_FileName);
 
   itkDebugMacro (<< "reading file: " << m_FileName <<"; extension found: "<< fileextension.c_str() << std::endl);
-  
+
   if (firstline == "#Insight GradientList File V1.0")
     this->ReadInsightStyleFile (data);
   else if (fileextension == ".bvec")
@@ -130,34 +130,29 @@ void GradientFileReader
     this->ReadSimpleTextFile (data);
 
   itkDebugMacro (<< "Number of gradients found: "<< m_GradientList.size() << std::endl);
-  
+
   for (unsigned int i=0; i<m_GradientList.size(); i++)
   {
     itkDebugMacro (<< i << ": "<< m_GradientList[i] << std::endl);
   }
 }
-  
-  
+
+
 /** Update the Reader */
 void GradientFileReader
 ::ReadBvecFile(std::string data)
 {
   itkDebugMacro (<< "reading bvec format. " << std::endl);
-  
-  // check for line end convention
-  std::string line_end("\n");
-  // Read line by line
-  std::string::size_type position = 0;
 
+  // Read line by line
   unsigned int line_id = -1;
-  
-  while ( position < data.size() )
+  std::string line;
+  std::istringstream stream(data);
+  while ( std::getline(stream, line) )
   {
-    // Find the next string
-    std::string::size_type end = data.find ( line_end, position );
-    std::string line = ttk_trim ( data.substr ( position, end - position ) );
+    line = ttk_trim (line);
     itkDebugMacro ("Found line: \"" << line << "\"" );
-    
+
     if ( line.length() == 0 )
     {
       continue;
@@ -165,7 +160,6 @@ void GradientFileReader
     if ( line[0] == '#' || std::string::npos == line.find_first_not_of ( " \t" ) )
     {
       // Skip lines beginning with #, or blank lines
-      position = end+1;
       continue;
     }
 
@@ -173,42 +167,38 @@ void GradientFileReader
     if (line_id > 2)
     {
       /// weird, we can't have that
-      position = end+1;
       itkExceptionMacro(<<"Found more than 3 lines in bvec file "<<m_FileName<<"; File is of wrong type"<<std::endl)
-      continue;
+      break;
     }
-    
+
     itksys_ios::istringstream parse ( line );
-    
+
     std::vector<ScalarType> values;
 
     // Read the line
     unsigned int column_id = 0;
     bool line_finished = parse.eof();
-    
+
     while ( !line_finished )
     {
       ScalarType value;
       parse >> value;
       if (parse.eof())
-	line_finished = true;
-      
+        line_finished = true;
+
       if (m_GradientList.size() > column_id)
-	m_GradientList[column_id][line_id] = value;
+        m_GradientList[column_id][line_id] = value;
       else
       {
-	VectorType gradient;
-	gradient[line_id] = value;
-	m_GradientList.push_back (gradient);
+        VectorType gradient;
+        gradient[line_id] = value;
+        m_GradientList.push_back (gradient);
       }
 
       column_id++;
     }
-    
-    position = end+1;
-  }  
+  }
 }
-  
 
 /** Update the Reader */
 void GradientFileReader
@@ -217,18 +207,14 @@ void GradientFileReader
 
   itkDebugMacro (<< "reading simple txt format. " << std::endl);
 
-  // check for line end convention
-  std::string line_end("\n");
   // Read line by line
-  std::string::size_type position = 0;
-  while ( position < data.size() )
+  std::string line;
+  std::istringstream stream(data);
+  while ( std::getline(stream, line) )
   {
-    // Find the next string
-    std::string::size_type end = data.find ( line_end, position );
-    std::string line = ttk_trim ( data.substr ( position, end - position ) );
-    position = end+1;
+    line = ttk_trim(line);
     itkDebugMacro ("Found line: \"" << line << "\"" );
-    
+
     if ( line.length() == 0 )
     {
       continue;
@@ -239,12 +225,12 @@ void GradientFileReader
       continue;
     }
     if (line.length() < 5)
-    {      
+    {
       // Skip the line showing the Nb of gradients as it is automatic now
       continue;
     }
-    
-    itksys_ios::istringstream parse ( line );    
+
+    itksys_ios::istringstream parse ( line );
 
     VectorType gradient;
     ScalarType value;
@@ -257,7 +243,7 @@ void GradientFileReader
     m_GradientList.push_back (gradient);
   }
 }
-  
+
 
 
 /** Update the Reader */
@@ -267,19 +253,15 @@ void GradientFileReader
 
   itkDebugMacro (<< "reading insight style format. " << std::endl);
 
-  // check for line end convention
-  std::string line_end("\n");
   // Read line by line
-  std::string::size_type position = 0;
-  
-  while ( position < data.size() )
+  std::string line;
+  std::istringstream stream(data);
+  while ( std::getline(stream, line) )
   {
     // Find the next string
-    std::string::size_type end = data.find ( line_end, position );
-    std::string line = ttk_trim ( data.substr ( position, end - position ) );
-    position = end+1;
+    line = ttk_trim ( line );
     itkDebugMacro ("Found line: \"" << line << "\"" );
-    
+
     if ( line.length() == 0 )
     {
       continue;
@@ -289,18 +271,18 @@ void GradientFileReader
       // Skip lines beginning with #, or blank lines
       continue;
     }
-    
+
     // Get the name
-    end = line.find ( ":" );
-    if ( end == std::string::npos )
+    std::string::size_type colonPos = line.find ( ":" );
+    if ( colonPos == std::string::npos )
     {
       // Throw an error
       itkExceptionMacro ( "Tags must be delimited by :" );
     }
-    std::string Name = ttk_trim ( line.substr ( 0, end ) );
-    std::string Value = ttk_trim ( line.substr ( end + 1, line.length() ) );
-    
-    // Push back 
+    std::string Name = ttk_trim ( line.substr ( 0, colonPos ) );
+    std::string Value = ttk_trim ( line.substr ( colonPos + 1, line.length() ) );
+
+    // Push back
     itkDebugMacro ( "Name: \"" << Name << "\"" );
     itkDebugMacro ( "Value: \"" << Value << "\"" );
     itksys_ios::istringstream parse ( Value );

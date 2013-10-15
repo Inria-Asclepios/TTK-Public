@@ -138,6 +138,13 @@ SET(ITKIO_LIBRARIES
   ITKIOStimulate
 )
 
+if (ITK_USE_REVIEW)
+  set(ITKIO_LIBRARIES
+    ${ITKIO_LIBRARIES}
+    ITKReview
+  )
+endif()
+
 set(ITK_TRANSFORM_LIBRARIES
   ITKIOTransformBase
   ITKIOTransformInsightLegacy

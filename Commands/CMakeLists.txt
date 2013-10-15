@@ -215,7 +215,6 @@
   TARGET_LINK_LIBRARIES(itkStanleyToITK
 	ITKCommon
 	${ITKIO_LIBRARIES}
-	ITKReview
   )
 
   

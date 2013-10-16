@@ -140,7 +140,7 @@ namespace itk
                 typename ExtractFilterType::Pointer extractor = ExtractFilterType::New();
                 extractor->SetExtractionRegion(region);
                 extractor->SetInput(image);
-                extractor->SetDirectionCollapseToSubmatrix();
+                extractor->SetDirectionCollapseToGuess();
 
                 typename MaskFilterType::Pointer masker = MaskFilterType::New();
                 masker->SetInput1 (extractor->GetOutput());

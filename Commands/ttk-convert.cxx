@@ -33,10 +33,7 @@
 #include "itkGISImageIOFactory.h"
 #endif
 
-#ifdef ITK_USE_REVIEW
 #include <itkPhilipsRECImageIOFactory.h>
-#endif
-
 
 
 int main (int narg, char *args[])

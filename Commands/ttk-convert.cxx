@@ -74,9 +74,7 @@ int main (int narg, char *args[])
     itk::GISImageIOFactory::RegisterOneFactory();
 #endif
 
-#ifdef ITK_USE_REVIEW
   itk::PhilipsRECImageIOFactory::RegisterOneFactory();
-#endif
 	
   const char *programName = args[1];
   

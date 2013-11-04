@@ -22,7 +22,6 @@
 #include "itkTensorsToDWITensorImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkRescaleIntensityImageFilter.h"
-#include "itkAnalyzeImageIO.h"
 #include <itkImage.h>
 #include <itkImageFileWriter.h>
 

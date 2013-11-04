@@ -75,7 +75,7 @@ LogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField,TSolverP
 {
 	// update variables in the equation object
 	DemonsRegistrationFunctionType *f = this->DownCastDifferenceFunctionType();
-	f->SetDeformationField( this->GetDeformationField() );
+	f->SetDisplacementField( this->GetDisplacementField() );
 
 	// call the superclass  implementation ( initializes f )
 	Superclass::InitializeIteration();
@@ -232,8 +232,8 @@ LogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField,TSolverP
 ::AllocateUpdateBuffer()
 {
 	// The update buffer looks just like the output.
-	DeformationFieldPointer output = this->GetOutput();
-	DeformationFieldPointer upbuf = this->GetUpdateBuffer();
+	DisplacementFieldPointer output = this->GetOutput();
+	DisplacementFieldPointer upbuf = this->GetUpdateBuffer();
 
 	upbuf->SetLargestPossibleRegion(output->GetLargestPossibleRegion());
 	upbuf->SetRequestedRegion(output->GetRequestedRegion());
@@ -291,7 +291,7 @@ LogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField,TSolverP
 	else
 	{
 		// Work-around for http://www.itk.org/Bug/view.php?id=8672
-		m_BCHFilter->GraftOutput( DeformationFieldType::New() );
+		m_BCHFilter->GraftOutput( DisplacementFieldType::New() );
 	}
 	m_BCHFilter->GetOutput()->SetRequestedRegion( this->GetOutput()->GetRequestedRegion() );
 

@@ -25,6 +25,7 @@
 #include <itkTransformFileReader.h>
 #include <itkTransformFactory.h>
 #include <itkMatrixOffsetTransformBase.h>
+#include <itkAffineTransform.h>
 
 #include "GetPot.h"
 

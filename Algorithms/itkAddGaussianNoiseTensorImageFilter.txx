@@ -39,7 +39,7 @@ namespace itk
   template <class TInputImage, class TOutputImage>
   void
   AddGaussianNoiseTensorImageFilter<TInputImage, TOutputImage>
-  ::ThreadedGenerateData(const OutputRegionType &outputRegion, int threadId)
+  ::ThreadedGenerateData(const OutputRegionType &outputRegion, ThreadIdType threadId)
   {
 
     typedef ImageRegionIterator<OutputImageType>      OutputIteratorType;

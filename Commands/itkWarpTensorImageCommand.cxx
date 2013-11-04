@@ -65,7 +65,7 @@ namespace itk
     typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
     typedef IOType::TensorImageType               TensorImageType;
     typedef Vector<ScalarType, 3>                 VectorType;
-    typedef Image<VectorType, 3>                  DeformationFieldType;
+    typedef Image<VectorType, 3>                  DisplacementFieldType;
     
     typedef LogTensorImageFilter<TensorImageType,TensorImageType> LogFilterType;
     typedef ExpTensorImageFilter<TensorImageType,TensorImageType> ExpFilterType;
@@ -113,11 +113,11 @@ namespace itk
     
 
 
-    DeformationFieldType::Pointer Deformation = 0;
+    DisplacementFieldType::Pointer Displacement = 0;
     {
       std::cout << "Reading: " << def << std::flush;
-      itk::ImageFileReader<DeformationFieldType>::Pointer reader3 = 
-	itk::ImageFileReader<DeformationFieldType>::New();
+      itk::ImageFileReader<DisplacementFieldType>::Pointer reader3 = 
+	itk::ImageFileReader<DisplacementFieldType>::New();
       reader3->SetFileName( def );
       try
       {
@@ -129,7 +129,7 @@ namespace itk
 	return -1;
       }
       
-      Deformation = reader3->GetOutput();
+      Displacement = reader3->GetOutput();
       
       std::cout << " Done." << std::endl;
     }
@@ -145,13 +145,13 @@ namespace itk
     
       // warp the result
       typedef itk::WarpTensorImageFilter
-	< TensorImageType, TensorImageType, DeformationFieldType >  WarperType;
+	< TensorImageType, TensorImageType, DisplacementFieldType >  WarperType;
       WarperType::Pointer warper = WarperType::New();
       warper->SetInput( Input );
-      warper->SetOutputSpacing( Deformation->GetSpacing() );
-      warper->SetOutputOrigin( Deformation->GetOrigin() );
-      warper->SetOutputDirection( Deformation->GetDirection() );
-      warper->SetDeformationField( Deformation );
+      warper->SetOutputSpacing( Displacement->GetSpacing() );
+      warper->SetOutputOrigin( Displacement->GetOrigin() );
+      warper->SetOutputDirection( Displacement->GetDirection() );
+      warper->SetDisplacementField( Displacement );
       warper->SetInterpolator ( interpolator );
       warper->SetNumberOfThreads (1);
       

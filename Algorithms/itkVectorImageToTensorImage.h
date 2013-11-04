@@ -50,7 +50,7 @@ protected:
     virtual ~VectorImageToTensorImage(void){};
 
     void BeforeThreadedGenerateData(void);
-    void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId);
+    void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId);
     void PrintSelf(std::ostream& os, Indent indent) const
     {
         Superclass::PrintSelf(os,indent);

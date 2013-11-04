@@ -37,7 +37,7 @@ namespace itk
   public:
 
     typedef SheetImageToVtkPolyData  Self;
-    typedef Object                   Superclass;
+    typedef ProcessObject            Superclass;
     typedef SmartPointer<Self>       Pointer;
     typedef SmartPointer<const Self> ConstPointer;
 
@@ -54,7 +54,7 @@ namespace itk
     typedef typename SheetType::ScalarType     ScalarType;
     typedef vtkPolyData                        OutputType;
 
-
+      using Superclass::SetInput;
     itkSetObjectMacro (Input, InputImageType);
     itkGetObjectMacro (Input, InputImageType);
 

@@ -26,6 +26,7 @@
 
 #include <iostream>
 #include "GetPot.h"
+#include <errno.h>
 
 int atoi_check(const char * str)
 {

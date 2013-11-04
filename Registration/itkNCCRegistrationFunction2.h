@@ -33,16 +33,16 @@ namespace itk {
  * \sa NCCRegistrationFilter
  * \ingroup FiniteDifferenceFunctions
  */
-template<class TFixedImage, class TMovingImage, class TDeformationField>
+template<class TFixedImage, class TMovingImage, class TDisplacementField>
 class ITK_EXPORT NCCRegistrationFunction2 : 
   public PDEDeformableRegistrationFunction< TFixedImage,
-    TMovingImage, TDeformationField>
+    TMovingImage, TDisplacementField>
 {
 public:
   /** Standard class typedefs. */
   typedef NCCRegistrationFunction2    Self;
   typedef PDEDeformableRegistrationFunction< TFixedImage,
-    TMovingImage, TDeformationField > Superclass;
+    TMovingImage, TDisplacementField > Superclass;
   typedef SmartPointer<Self>          Pointer;
   typedef SmartPointer<const Self>    ConstPointer;
 
@@ -64,10 +64,10 @@ public:
   typedef typename FixedImageType::SizeType       SizeType;
   typedef typename FixedImageType::SpacingType    SpacingType;
   
-  /** Deformation field type. */
-  typedef typename Superclass::DeformationFieldType    DeformationFieldType;
-  typedef typename Superclass::DeformationFieldTypePointer   
-    DeformationFieldTypePointer;
+  /** Displacement field type. */
+  typedef typename Superclass::DisplacementFieldType    DisplacementFieldType;
+  typedef typename Superclass::DisplacementFieldTypePointer   
+    DisplacementFieldTypePointer;
 
   /** Inherit some enums from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);

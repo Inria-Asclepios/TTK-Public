@@ -13,10 +13,10 @@ namespace itk
 /*
  * Default constructor
  */
-template < class TFixedImage, class TMovingImage, class TDeformationField,
+template < class TFixedImage, class TMovingImage, class TDisplacementField,
     class TSolverPrecision >
   MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage, TMovingImage,
-      TDeformationField, TSolverPrecision>::MultiResolutionPDEDeformableRegistration2Tensor()
+      TDisplacementField, TSolverPrecision>::MultiResolutionPDEDeformableRegistration2Tensor()
   {
 
     this->SetNumberOfRequiredInputs(2);
@@ -48,11 +48,11 @@ template < class TFixedImage, class TMovingImage, class TDeformationField,
 /*
  * Set the moving image image.
  */
-template < class TFixedImage, class TMovingImage, class TDeformationField,
+template < class TFixedImage, class TMovingImage, class TDisplacementField,
     class TSolverPrecision >
   void
   MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage, TMovingImage,
-      TDeformationField, TSolverPrecision>::SetMovingImage(
+      TDisplacementField, TSolverPrecision>::SetMovingImage(
       const MovingImageType * ptr)
   {
     this->ProcessObject::SetNthInput(2, const_cast<MovingImageType *> (ptr));
@@ -61,11 +61,11 @@ template < class TFixedImage, class TMovingImage, class TDeformationField,
 /*
  * Get the moving image image.
  */
-template < class TFixedImage, class TMovingImage, class TDeformationField,
+template < class TFixedImage, class TMovingImage, class TDisplacementField,
     class TSolverPrecision >
-const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::MovingImageType *
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::GetMovingImage(void) const
     {
       return dynamic_cast< const MovingImageType * >
@@ -75,9 +75,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
   /*
    * Set the fixed image.
    */
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   void
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::SetFixedImage(
       const FixedImageType * ptr )
     {
@@ -87,10 +87,10 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
   /*
    * Get the fixed image.
    */
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
-  const typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
+  const typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::FixedImageType *
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::GetFixedImage(void) const
     {
       return dynamic_cast< const FixedImageType * >
@@ -100,9 +100,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
   /*
    *
    */
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   std::vector<SmartPointer<DataObject> >::size_type
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::GetNumberOfValidRequiredInputs() const
     {
       typename std::vector<SmartPointer<DataObject> >::size_type num = 0;
@@ -123,9 +123,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
   /*
    * Set the number of multi-resolution levels
    */
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   void
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::SetNumberOfLevels(
       unsigned int num )
     {
@@ -149,9 +149,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
   /*
    * Standard PrintSelf method.
    */
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   void
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::PrintSelf(std::ostream& os, Indent indent) const
     {
       Superclass::PrintSelf(os, indent);
@@ -190,9 +190,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
    * registrator and field_expander.
    *
    */
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   void
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::GenerateData()
     {
 
@@ -232,7 +232,7 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
       unsigned int fixedLevel = vnl_math_min( (int) m_CurrentLevel,
           (int) m_FixedImagePyramid->GetNumberOfLevels() );
 
-      DeformationFieldPointer tempField = NULL;
+      DisplacementFieldPointer tempField = NULL;
       bool lastShrinkFactorsAllOnes = false;
 
       while ( !this->Halt() )
@@ -242,7 +242,7 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
             {
               // TODO: What to do if there is an input deformation field?
               // Will need a VectorMultiResolutionPyramidImageFilter to downsample it.
-              m_RegistrationFilter->SetInitialDeformationField( NULL );
+              m_RegistrationFilter->SetInitialDisplacementField( NULL );
 
             }
           else
@@ -267,7 +267,7 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
               tempField = fieldExpander->GetOutput();
               tempField->DisconnectPipeline();
 
-              m_RegistrationFilter->SetInitialDeformationField( tempField );
+              m_RegistrationFilter->SetInitialDisplacementField( tempField );
 
             }
 
@@ -351,18 +351,18 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
 
     }
 
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   void
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::StopRegistration()
     {
       m_RegistrationFilter->StopRegistration();
       m_StopRegistrationFlag = true;
     }
 
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   bool
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::Halt()
     {
       // Halt the registration after the user-specified number of levels
@@ -388,9 +388,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
 
     }
 
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   void
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::GenerateOutputInformation()
     {
 
@@ -421,9 +421,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
 
     }
 
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   void
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::GenerateInputRequestedRegion()
     {
       // call the superclass's implementation
@@ -439,9 +439,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
 
       // just propagate up the output requested region for
       // the fixed image and initial deformation field.
-      DeformationFieldPointer inputPtr =
-      const_cast< DeformationFieldType * >( this->GetInput() );
-      DeformationFieldPointer outputPtr = this->GetOutput();
+      DisplacementFieldPointer inputPtr =
+      const_cast< DisplacementFieldType * >( this->GetInput() );
+      DisplacementFieldPointer outputPtr = this->GetOutput();
       FixedImagePointer fixedPtr =
       const_cast< FixedImageType *>( this->GetFixedImage() );
 
@@ -457,9 +457,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
 
     }
 
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   void
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::EnlargeOutputRequestedRegion(
       DataObject * ptr )
     {
@@ -467,8 +467,8 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
       Superclass::EnlargeOutputRequestedRegion( ptr );
 
       // set the output requested region to largest possible.
-      DeformationFieldType * outputPtr;
-      outputPtr = dynamic_cast<DeformationFieldType*>( ptr );
+      DisplacementFieldType * outputPtr;
+      outputPtr = dynamic_cast<DisplacementFieldType*>( ptr );
 
       if( outputPtr )
         {
@@ -477,9 +477,9 @@ const  typename MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMov
 
     }
 
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+  template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
   void
-  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDeformationField,TSolverPrecision>
+  MultiResolutionPDEDeformableRegistration2Tensor<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
   ::SetSchedule(const ScheduleType& schedule)
     {
       // This method is more powerful than SetNumberOfLevels(). This means that it will overwrite

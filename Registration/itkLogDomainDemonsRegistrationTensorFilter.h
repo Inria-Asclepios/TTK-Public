@@ -38,11 +38,11 @@ namespace itk
    *
    * The input fixed and moving images are set via methods SetFixedImage
    * and SetMovingImage respectively. An initial deformation field maybe set via
-   * SetInitialDeformationField or SetInput. If no initial field is set,
+   * SetInitialDisplacementField or SetInput. If no initial field is set,
    * a zero field is used as the initial condition.
    *
    * The output deformation field can be obtained via methods GetOutput
-   * or GetDeformationField.
+   * or GetDisplacementField.
    *
    * This class make use of the finite difference solver hierarchy. Update
    * for each iteration is computed in ESMDemonsRegistrationTensorFunction.
@@ -89,10 +89,10 @@ public:
   typedef TField VelocityFieldType;
   typedef typename VelocityFieldType::Pointer VelocityFieldPointer;
 
-  /** Deformation field type. */
-  typedef typename Superclass::DeformationFieldType DeformationFieldType;
-  typedef typename Superclass::DeformationFieldPointer
-  DeformationFieldPointer;
+  /** Displacement field type. */
+  typedef typename Superclass::DisplacementFieldType DisplacementFieldType;
+  typedef typename Superclass::DisplacementFieldPointer
+  DisplacementFieldPointer;
 
   /** Types inherited from the superclass */
   typedef typename Superclass::OutputImageType OutputImageType;
@@ -106,7 +106,7 @@ public:
 
   /** DemonsRegistrationFilterFunction type. */
   typedef ESMDemonsRegistrationTensorFunction<FixedImageType, MovingImageType,
-  DeformationFieldType, TSolverPrecision> DemonsRegistrationFunctionType;
+  DisplacementFieldType, TSolverPrecision> DemonsRegistrationFunctionType;
   typedef typename DemonsRegistrationFunctionType::Pointer
   DemonsRegistrationFunctionPointer;
 

@@ -89,7 +89,7 @@ namespace itk
   template< class TInputImage, class TOutputImage >
   void
   ResampleTensorImageFilter<TInputImage, TOutputImage >
-  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId)
+  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId)
   {
     
     typedef ZeroFluxNeumannBoundaryCondition<TOutputImage>                   BoundaryConditionType;

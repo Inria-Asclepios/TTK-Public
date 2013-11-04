@@ -32,7 +32,7 @@ namespace itk
 template <
   class TInputImage,
   class TOutputImage,
-  class TDeformationField
+  class TDisplacementField
   >
 class ITK_EXPORT WarpTensorImageFilter :
     public ImageToImageFilter<TInputImage, TOutputImage>
@@ -69,23 +69,23 @@ public:
                       TOutputImage::ImageDimension );
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension );
-  itkStaticConstMacro(DeformationFieldDimension, unsigned int,
-                      TDeformationField::ImageDimension );
+  itkStaticConstMacro(DisplacementFieldDimension, unsigned int,
+                      TDisplacementField::ImageDimension );
 
   itkStaticConstMacro(VectorDimension, unsigned int,
-	  TDeformationField::PixelType::Dimension);
+	  TDisplacementField::PixelType::Dimension);
 
   typedef Matrix<double, ImageDimension, VectorDimension> JacobianType;
   typedef Image<JacobianType, ImageDimension>             JacobianImageType;
   typedef typename JacobianImageType::Pointer             JacobianPointer;
-  typedef WarpJacobianFilter<TDeformationField, JacobianImageType>  JacobianFilterType;
+  typedef WarpJacobianFilter<TDisplacementField, JacobianImageType>  JacobianFilterType;
 
   itkGetObjectMacro(Jacobian, JacobianImageType);
 
-  /** Deformation field typedef support. */
-  typedef TDeformationField    DeformationFieldType;
-  typedef typename DeformationFieldType::Pointer  DeformationFieldPointer;
-  typedef typename DeformationFieldType::PixelType DisplacementType;
+  /** Displacement field typedef support. */
+  typedef TDisplacementField    DisplacementFieldType;
+  typedef typename DisplacementFieldType::Pointer  DisplacementFieldPointer;
+  typedef typename DisplacementFieldType::PixelType DisplacementType;
 
   /** Interpolator typedef support. */
   typedef double CoordRepType;
@@ -100,10 +100,10 @@ public:
   typedef typename TOutputImage::DirectionType     DirectionType;
 
   /** Set the deformation field. */
-  void SetDeformationField( const DeformationFieldType * field );
+  void SetDisplacementField( const DisplacementFieldType * field );
 
   /** Get a pointer the deformation field. */
-  DeformationFieldType * GetDeformationField(void);
+  DisplacementFieldType * GetDisplacementField(void);
 
   /** Set the interpolator function. */
   itkSetObjectMacro( Interpolator, InterpolatorType );
@@ -173,7 +173,7 @@ protected:
    * As such, it needs to provide and implementation for 
    * ThreadedGenerateData(). */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            ThreadIdType threadId );
 
 private:
   WarpTensorImageFilter(const Self&); //purposely not implemented

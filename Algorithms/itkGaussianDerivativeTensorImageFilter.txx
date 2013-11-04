@@ -93,7 +93,7 @@ namespace itk
   template<class TInputImage, class TOutputImage>
   void
   GaussianDerivativeTensorImageFilter<TInputImage,TOutputImage>
-  ::ThreadedGenerateData (const OutputImageRegionType& outputRegion, int threadId)
+  ::ThreadedGenerateData (const OutputImageRegionType& outputRegion, ThreadIdType threadId)
   {
 
     typedef ImageRegionIterator<OutputImageType>      OutputIteratorType;

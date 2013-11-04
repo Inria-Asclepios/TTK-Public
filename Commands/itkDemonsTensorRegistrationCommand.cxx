@@ -35,7 +35,7 @@
 #include <itkMinimumMaximumImageCalculator.h>
 #include <itkMultiResolutionPDEDeformableRegistration2Tensor.h>
 #include <itkTransformFileReader.h>
-#include <itkTransformToDeformationFieldSource.h>
+#include <itkTransformToDisplacementFieldSource.h>
 #include <itkVectorCentralDifferenceImageFunction.h>
 #include <itkVectorLinearInterpolateNearestNeighborExtrapolateImageFunction.h>
 #include <itkWarpHarmonicEnergyCalculator.h>
@@ -131,7 +131,7 @@ struct DemonsTensorRegistrationCommandArguments
         << args.trueFieldFile << std::endl
         << "  Number of multiresolution levels: " << args.numIterations.size()
         << std::endl << "  Number of demons iterations: " << iterstr
-        << std::endl << "  Deformation field sigma: " << args.sigmaDef
+        << std::endl << "  Displacement field sigma: " << args.sigmaDef
         << std::endl << "  Update field sigma: " << args.sigmaUp << std::endl
         << "  Maximum update step length: " << args.maxStepLength << std::endl
         << "  Type of gradient: " << gtypeStr << std::endl
@@ -158,33 +158,33 @@ template < unsigned int VImageDimension = 3, class SolverPrecision = float, clas
     typedef itk::Image<itk::Tensor<TensorRealType, VImageDimension>, VImageDimension> TensorImageType;
     typedef itk::Image<VectorRealType, VImageDimension> InternalImageType;
     typedef itk::Vector<VectorRealType, VImageDimension> VectorPixelType;
-    typedef itk::Image<VectorPixelType, VImageDimension> DeformationFieldType;
+    typedef itk::Image<VectorPixelType, VImageDimension> DisplacementFieldType;
 
     typedef itk::DiffeomorphicDemonsRegistrationTensorFilter<TensorImageType,
-        TensorImageType, DeformationFieldType, SolverPrecision>
+        TensorImageType, DisplacementFieldType, SolverPrecision>
         DiffeomorphicDemonsRegistrationFilterType;
 
     typedef itk::MultiResolutionPDEDeformableRegistration2Tensor<
-        TensorImageType, TensorImageType, DeformationFieldType, SolverPrecision>
+        TensorImageType, TensorImageType, DisplacementFieldType, SolverPrecision>
         MultiResRegistrationFilterType;
 
     typedef itk::DisplacementFieldJacobianDeterminantFilter<
-        DeformationFieldType, VectorRealType> JacobianFilterType;
+        DisplacementFieldType, VectorRealType> JacobianFilterType;
 
     typedef itk::MinimumMaximumImageCalculator<InternalImageType>
         MinMaxFilterType;
 
-    typedef itk::WarpHarmonicEnergyCalculator<DeformationFieldType>
+    typedef itk::WarpHarmonicEnergyCalculator<DisplacementFieldType>
         HarmonicEnergyCalculatorType;
 
-    typedef itk::VectorCentralDifferenceImageFunction<DeformationFieldType>
+    typedef itk::VectorCentralDifferenceImageFunction<DisplacementFieldType>
         WarpGradientCalculatorType;
 
 typedef    typename WarpGradientCalculatorType::OutputType WarpGradientType;
 
     itkNewMacro( Self );
 
-    void SetTrueField(const DeformationFieldType * truefield)
+    void SetTrueField(const DisplacementFieldType * truefield)
       {
         m_TrueField = truefield;
 
@@ -206,7 +206,7 @@ typedef    typename WarpGradientCalculatorType::OutputType WarpGradientType;
             return;
           }
 
-        typename DeformationFieldType::ConstPointer deffield = 0;
+        typename DisplacementFieldType::ConstPointer deffield = 0;
         unsigned int iter = -1;
         double metricbefore = -1.0;
 
@@ -216,7 +216,7 @@ typedef    typename WarpGradientCalculatorType::OutputType WarpGradientType;
             iter = dfilter->GetElapsedIterations() - 1;
             metricbefore = dfilter->GetMetric();
             deffield = const_cast<DiffeomorphicDemonsRegistrationFilterType *>(
-                dfilter)->GetDeformationField();
+                dfilter)->GetDisplacementField();
           }
         else if ( const MultiResRegistrationFilterType * multiresfilter =
             dynamic_cast< const MultiResRegistrationFilterType * >( object ) )
@@ -238,7 +238,7 @@ typedef    typename WarpGradientCalculatorType::OutputType WarpGradientType;
             double tmp;
             if (m_TrueField)
               {
-                typedef itk::ImageRegionConstIteratorWithIndex<DeformationFieldType>
+                typedef itk::ImageRegionConstIteratorWithIndex<DisplacementFieldType>
                 FieldIteratorType;
                 FieldIteratorType currIter(
                     deffield, deffield->GetLargestPossibleRegion() );
@@ -400,7 +400,7 @@ typedef    typename WarpGradientCalculatorType::OutputType WarpGradientType;
     typename JacobianFilterType::Pointer m_JacobianFilter;
     typename MinMaxFilterType::Pointer m_Minmaxfilter;
     typename HarmonicEnergyCalculatorType::Pointer m_HarmonicEnergyCalculator;
-    typename DeformationFieldType::ConstPointer m_TrueField;
+    typename DisplacementFieldType::ConstPointer m_TrueField;
     typename WarpGradientCalculatorType::Pointer m_TrueWarpGradientCalculator;
     typename WarpGradientCalculatorType::Pointer m_CompWarpGradientCalculator;
   };
@@ -430,13 +430,13 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
     typedef itk::Tensor<TensorRealType, Dimension> TensorPixelType;
 
     typedef itk::Image<VectorRealType, Dimension> ScalarImageType;
-    typedef itk::Image<VectorPixelType, Dimension> DeformationFieldType;
+    typedef itk::Image<VectorPixelType, Dimension> DisplacementFieldType;
     typedef itk::Image<TensorPixelType, Dimension> TensorImageType;
 
     // Images we use
     typename TensorImageType::Pointer fixedImage = 0;
     typename TensorImageType::Pointer movingImage = 0;
-    typename DeformationFieldType::Pointer inputDefField = 0;
+    typename DisplacementFieldType::Pointer inputDefField = 0;
 
     // Set up log/exp maps for tensor images
     typedef itk::LogTensorImageFilter<TensorImageType,TensorImageType>     LogTensorFilterType;
@@ -444,7 +444,7 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
 
     // Set up the file readers
     typedef itk::TensorImageIO<TensorRealType, Dimension, Dimension>  TensorIOType;
-    typedef itk::ImageFileReader< DeformationFieldType > FieldReaderType;
+    typedef itk::ImageFileReader< DisplacementFieldType > FieldReaderType;
     typedef itk::TransformFileReader TransformReaderType;
 
       {//for mem allocations
@@ -533,9 +533,9 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
                 exit( EXIT_FAILURE );
               }
 
-            // Set up the TransformToDeformationFieldFilter
-            typedef itk::TransformToDeformationFieldSource
-            <DeformationFieldType> FieldGeneratorType;
+            // Set up the TransformToDisplacementFieldFilter
+            typedef itk::TransformToDisplacementFieldSource
+            <DisplacementFieldType> FieldGeneratorType;
             typedef typename FieldGeneratorType::TransformType TransformType;
 
             TransformType* trsf = dynamic_cast<TransformType*>(baseTrsf);
@@ -620,17 +620,17 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
 
 
     // Set up the demons filter output
-    typename DeformationFieldType::Pointer defField = 0;
+    typename DisplacementFieldType::Pointer defField = 0;
 
       {//for mem allocations
 
         // Set up the demons filter
         typedef typename itk::PDEDeformableRegistrationFilter
-        < TensorImageType, TensorImageType, DeformationFieldType> BaseRegistrationFilterType;
+        < TensorImageType, TensorImageType, DisplacementFieldType> BaseRegistrationFilterType;
         typename BaseRegistrationFilterType::Pointer filter;
 
         typedef typename itk::DiffeomorphicDemonsRegistrationTensorFilter
-        < TensorImageType, TensorImageType, DeformationFieldType, SolverPrecision>
+        < TensorImageType, TensorImageType, DisplacementFieldType, SolverPrecision>
         ActualRegistrationFilterType;
         typedef typename ActualRegistrationFilterType::GradientType GradientType;
         typedef typename ActualRegistrationFilterType::RotationType RotationType;
@@ -648,12 +648,12 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
 
         if ( args.sigmaDef > 0.1 )
           {
-            filter->SmoothDeformationFieldOn();
+            filter->SmoothDisplacementFieldOn();
             filter->SetStandardDeviations( args.sigmaDef );
           }
         else
           {
-            filter->SmoothDeformationFieldOff();
+            filter->SmoothDisplacementFieldOff();
           }
 
         if ( args.sigmaUp > 0.1 )
@@ -706,18 +706,16 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
 
         // Set up the multi-resolution filter
         typedef typename itk::MultiResolutionPDEDeformableRegistration2Tensor<
-        TensorImageType, TensorImageType, DeformationFieldType, SolverPrecision > MultiResRegistrationFilterType;
+        TensorImageType, TensorImageType, DisplacementFieldType, SolverPrecision > MultiResRegistrationFilterType;
         typename MultiResRegistrationFilterType::Pointer multires = MultiResRegistrationFilterType::New();
 
         typedef itk::VectorLinearInterpolateNearestNeighborExtrapolateImageFunction<
-        DeformationFieldType, double> FieldInterpolatorType;
+        DisplacementFieldType, double> FieldInterpolatorType;
 
         typename FieldInterpolatorType::Pointer VectorInterpolator =
         FieldInterpolatorType::New();
 
-#if ( ITK_VERSION_MAJOR > 3 ) || ( ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR > 8 )
         multires->GetFieldExpander()->SetInterpolator(VectorInterpolator);
-#endif
 
         multires->SetRegistrationFilter( filter );
         multires->SetNumberOfLevels( args.numIterations.size() );
@@ -729,13 +727,7 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
 
         if ( inputDefField )
           {
-#if ( ITK_VERSION_MAJOR > 3 ) || ( ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR > 8 )
-            multires->SetArbitraryInitialDeformationField( inputDefField );
-#else
-            std::cout << "Using an input deformation field is not supported with your version of ITK ("
-            << ITK_VERSION_STRING << ")."<< std::endl;
-            exit( EXIT_FAILURE );
-#endif
+            multires->SetArbitraryInitialDisplacementField( inputDefField );
           }
 
         if ( args.verbosity > 0 )
@@ -767,13 +759,13 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
 
     // warp the result
     typedef itk::WarpTensorImageFilter
-    < TensorImageType, TensorImageType, DeformationFieldType > WarperType;
+    < TensorImageType, TensorImageType, DisplacementFieldType > WarperType;
     typename WarperType::Pointer warper = WarperType::New();
     warper->SetInput( movingImage );
     warper->SetOutputSpacing( fixedImage->GetSpacing() );
     warper->SetOutputOrigin( fixedImage->GetOrigin() );
     warper->SetOutputDirection( fixedImage->GetDirection() );
-    warper->SetDeformationField( defField );
+    warper->SetDisplacementField( defField );
 
     try
     {
@@ -829,7 +821,7 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
         // Note that the file format used for writing the deformation field must be
         // capable of representing multiple components per pixel. This is the case
         // for the MetaImage and VTK file formats for example.
-        typedef itk::ImageFileWriter< DeformationFieldType > FieldWriterType;
+        typedef itk::ImageFileWriter< DisplacementFieldType > FieldWriterType;
         typename FieldWriterType::Pointer fieldWriter = FieldWriterType::New();
         fieldWriter->SetFileName( args.outputFieldFile.c_str() );
         fieldWriter->SetInput( defField );
@@ -892,13 +884,13 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
           }
 
         typedef itk::WarpImageFilter
-        < GridImageType, GridImageType, DeformationFieldType > GridWarperType;
+        < GridImageType, GridImageType, DisplacementFieldType > GridWarperType;
         typename GridWarperType::Pointer gridwarper = GridWarperType::New();
         gridwarper->SetInput( gridImage );
         gridwarper->SetOutputSpacing( fixedImage->GetSpacing() );
         gridwarper->SetOutputOrigin( fixedImage->GetOrigin() );
         gridwarper->SetOutputDirection( fixedImage->GetDirection() );
-        gridwarper->SetDeformationField( defField );
+        gridwarper->SetDisplacementField( defField );
 
         // Write warped grid to file
         typedef itk::ImageFileWriter< GridImageType > GridWriterType;
@@ -924,7 +916,7 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
     if ( args.verbosity > 0 )
       {
         typedef itk::Image< unsigned char, Dimension > GridImageType;
-        typedef itk::GridForwardWarpImageFilter<DeformationFieldType, GridImageType> GridForwardWarperType;
+        typedef itk::GridForwardWarpImageFilter<DisplacementFieldType, GridImageType> GridForwardWarperType;
 
         typename GridForwardWarperType::Pointer fwWarper = GridForwardWarperType::New();
         fwWarper->SetInput(defField);
@@ -993,7 +985,7 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
     if ( args.verbosity > 0 )
       {
         typedef itk::DisplacementFieldJacobianDeterminantFilter
-        <DeformationFieldType, VectorRealType> JacobianFilterType;
+        <DisplacementFieldType, VectorRealType> JacobianFilterType;
         typename JacobianFilterType::Pointer jacobianFilter = JacobianFilterType::New();
         jacobianFilter->SetInput( defField );
         jacobianFilter->SetUseImageSpacing( true );
@@ -1172,12 +1164,12 @@ namespace itk
       MetaCommand::STRING, true, "15x10x5");
 
   command.SetOption(
-      "DeformationFieldSigma",
+      "DisplacementFieldSigma",
       "s",
       false,
       "Smoothing sigma for the deformation field (pixel units). Setting it value below 0.5 means no smoothing will be performed");
-  command.SetOptionLongTag("DeformationFieldSigma", "def-field-sigma");
-  command.AddOptionField("DeformationFieldSigma", "floatval",
+  command.SetOptionLongTag("DisplacementFieldSigma", "def-field-sigma");
+  command.AddOptionField("DisplacementFieldSigma", "floatval",
       MetaCommand::FLOAT, true, "1.5");
 
   command.SetOption(
@@ -1290,7 +1282,7 @@ namespace itk
       exit(EXIT_FAILURE);
     }
 
-  args.sigmaDef = command.GetValueAsFloat("DeformationFieldSigma", "floatval");
+  args.sigmaDef = command.GetValueAsFloat("DisplacementFieldSigma", "floatval");
   args.sigmaUp = command.GetValueAsFloat("UpdateFieldSigma", "floatval");
   args.maxStepLength = command.GetValueAsFloat("MaximumUpdateStepLength",
       "floatval");

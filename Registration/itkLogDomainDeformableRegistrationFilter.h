@@ -2,7 +2,7 @@
 #define __itkLogDomainDeformableRegistrationFilter_h
 
 #include "itkDenseFiniteDifferenceImageFilter.h"
-#include "itkExponentialDeformationFieldImageFilter2.h"
+#include "itkExponentialDisplacementFieldImageFilter2.h"
 #include "itkPDEDeformableRegistrationFunction.h"
 
 #include "stdio.h"
@@ -40,7 +40,7 @@ namespace itk {
  * The output velocity field can be obtained via methods GetOutput
  * or GetVelocityField.
  *
- * The output deformation field can be obtained via method GetDeformationField.
+ * The output deformation field can be obtained via method GetDisplacementField.
  *
  * The PDE-like algorithm is run for a user defined number of iterations.
  * Typically the PDE-like algorithm requires period Gaussian smoothing of the
@@ -95,9 +95,9 @@ public:
 	typedef TField                                  VelocityFieldType;
 	typedef typename VelocityFieldType::Pointer     VelocityFieldPointer;
 
-	/** Deformation field type. */
-	typedef TField                                  DeformationFieldType;
-	typedef typename DeformationFieldType::Pointer  DeformationFieldPointer;
+	/** Displacement field type. */
+	typedef TField                                  DisplacementFieldType;
+	typedef typename DisplacementFieldType::Pointer  DisplacementFieldPointer;
 
 	/** Types inherited from the superclass */
 	typedef typename Superclass::OutputImageType    OutputImageType;
@@ -108,7 +108,7 @@ public:
 
 	/** PDEDeformableRegistrationFunction type. */
 	typedef PDEDeformableRegistrationFunction<FixedImageType,MovingImageType,
-	DeformationFieldType>                       PDEDeformableRegistrationFunctionType;
+	DisplacementFieldType>                       PDEDeformableRegistrationFunctionType;
 
 	/** Inherit some enums and typedefs from the superclass. */
 	itkStaticConstMacro(ImageDimension, unsigned int,
@@ -134,10 +134,10 @@ public:
 	VelocityFieldType * GetVelocityField() { return this->GetOutput(); }
 
 	/** Get output deformation field. */
-	DeformationFieldPointer GetDeformationField();
+	DisplacementFieldPointer GetDisplacementField();
 
 	/** Get output inverse deformation field. */
-	DeformationFieldPointer GetInverseDeformationField();
+	DisplacementFieldPointer GetInverseDisplacementField();
 
 	/** Get the number of valid inputs.  For LogDomainDeformableRegistration,
 	 * this checks whether the fixed and moving images have been
@@ -229,8 +229,8 @@ protected:
 	void PrintSelf(std::ostream& os, Indent indent) const;
 
 	/** Exponential type */
-	typedef ExponentialDeformationFieldImageFilter<
-	VelocityFieldType, DeformationFieldType >      FieldExponentiatorType;
+	typedef ExponentialDisplacementFieldImageFilter<
+	VelocityFieldType, DisplacementFieldType >      FieldExponentiatorType;
 
 	typedef typename FieldExponentiatorType::Pointer FieldExponentiatorPointer;
 

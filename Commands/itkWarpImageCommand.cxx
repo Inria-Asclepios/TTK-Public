@@ -116,7 +116,7 @@ namespace itk
     warper->SetOutputSpacing( readerDefField->GetOutput()->GetSpacing() );
     warper->SetOutputOrigin( readerDefField->GetOutput()->GetOrigin() );
     warper->SetOutputDirection( readerDefField->GetOutput()->GetDirection() );
-    warper->SetDeformationField( readerDefField->GetOutput() );
+    warper->SetDisplacementField( readerDefField->GetOutput() );
     
     std::cout << "Warping..." << std::endl;
     try

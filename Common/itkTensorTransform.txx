@@ -64,7 +64,7 @@ template < class TScalarType,
 std::string TensorTransform< TScalarType,NInputDimensions,NOutputDimensions>
 ::GetTransformTypeAsString () const
 {
-  OStringStream n;
+    std::ostringstream n;
   n << GetNameOfClass();
   n << "_";
   if ( typeid ( TScalarType ) == typeid ( float ) )

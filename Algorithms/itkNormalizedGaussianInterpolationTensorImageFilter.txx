@@ -38,7 +38,7 @@ namespace itk
   template< class TInputImage, class TOutputImage >
   void
   NormalizedGaussianInterpolationTensorImageFilter< TInputImage, TOutputImage >
-  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId)
+  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId)
   {
 
     // alpha controls the weight to give to the rotation invariant constrain

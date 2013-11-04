@@ -52,7 +52,7 @@ namespace itk
   template <class TTensorImage>
   void
   CrossingTensorImageSource<TTensorImage>
-  ::ThreadedGenerateData( const RegionType &region, int threadId)
+  ::ThreadedGenerateData( const RegionType &region, ThreadIdType threadId)
   {
 
     typedef ImageRegionIteratorWithIndex<TTensorImage> IteratorType;

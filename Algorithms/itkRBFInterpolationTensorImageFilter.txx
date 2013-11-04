@@ -213,7 +213,7 @@ namespace itk
   template< class TInputImage, class TOutputImage>
   void
   RBFInterpolationTensorImageFilter<TInputImage, TOutputImage>
-  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId)
+  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId)
   {
   
     typedef ImageRegionIterator<OutputImageType>               OutputImageIteratorType;

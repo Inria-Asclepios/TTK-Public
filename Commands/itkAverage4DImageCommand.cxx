@@ -71,6 +71,7 @@ namespace itk
       typename Extract4DFilterType::Pointer extractor = Extract4DFilterType::New();
       extractor->SetInput (image);
       extractor->SetExtractionRegion (region);
+        extractor->SetDirectionCollapseToGuess();
       try
       {
 	extractor->Update();
@@ -106,6 +107,7 @@ namespace itk
 
       image = filter->GetOutput();
       image->DisconnectPipeline();
+        image->SetDirection(filter->GetInput(0)->GetDirection());
     }
 
 
@@ -122,6 +124,7 @@ namespace itk
       typename ExtractFilterType::Pointer extractor = ExtractFilterType::New();
       extractor->SetInput (image);
       extractor->SetExtractionRegion (region);
+        extractor->SetDirectionCollapseToGuess();
       try
       {
 	extractor->Update();

@@ -85,7 +85,7 @@ SymmetricLogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField
 {
 	// update variables in the equation object
 	DemonsRegistrationFunctionType *f = this->GetForwardRegistrationFunctionType();
-	f->SetDeformationField( this->GetDeformationField() );
+	f->SetDisplacementField( this->GetDisplacementField() );
 
 	// call the superclass  implementation ( initializes f )
 	Superclass::InitializeIteration();
@@ -259,8 +259,8 @@ SymmetricLogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField
 ::AllocateUpdateBuffer()
 {
 	// The update buffer looks just like the output.
-	DeformationFieldPointer output = this->GetOutput();
-	DeformationFieldPointer upbuf = this->GetUpdateBuffer();
+	DisplacementFieldPointer output = this->GetOutput();
+	DisplacementFieldPointer upbuf = this->GetUpdateBuffer();
 
 	upbuf->SetLargestPossibleRegion(output->GetLargestPossibleRegion());
 	upbuf->SetRequestedRegion(output->GetRequestedRegion());
@@ -398,7 +398,7 @@ SymmetricLogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField
 	globalDataf = dff->GetGlobalDataPointer();
 	drfpf->SetFixedImage( this->GetMovingImage() );
 	drfpf->SetMovingImage( this->GetFixedImage() );
-	drfpf->SetDeformationField( this->GetInverseDeformationField() );
+	drfpf->SetDisplacementField( this->GetInverseDisplacementField() );
 	drfpf->InitializeIteration();
 
 	// Process the non-boundary region.

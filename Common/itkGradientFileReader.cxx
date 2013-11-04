@@ -79,7 +79,7 @@ void GradientFileReader
                         << std::endl << "Filename: \"" << m_FileName << "\"" );
     }
 
-  OStringStream InData;
+    std::ostringstream InData;
 
   // in.get ( InData );
   std::filebuf *pbuf;

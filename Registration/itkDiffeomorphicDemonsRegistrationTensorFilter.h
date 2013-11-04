@@ -5,7 +5,7 @@
 #include "itkESMDemonsRegistrationTensorFunction.h"
 
 #include "itkMultiplyByConstantImageFilter.h"
-#include "itkExponentialDeformationFieldImageFilter.h"
+#include "itkExponentialDisplacementFieldImageFilter.h"
 #include "itkWarpVectorImageFilter.h"
 #include "itkVectorLinearInterpolateNearestNeighborExtrapolateImageFunction.h"
 #include "itkAddImageFilter.h"
@@ -36,11 +36,11 @@ namespace itk
  *
  * The input fixed and moving images are set via methods SetFixedImage
  * and SetMovingImage respectively. An initial deformation field maybe set via
- * SetInitialDeformationField or SetInput. If no initial field is set,
+ * SetInitialDisplacementField or SetInput. If no initial field is set,
  * a zero field is used as the initial condition.
  *
  * The output deformation field can be obtained via methods GetOutput
- * or GetDeformationField.
+ * or GetDisplacementField.
  *
  * This class make use of the finite difference solver hierarchy. Update
  * for each iteration is computed in ESMDemonsRegistrationTensorFunction.
@@ -53,16 +53,16 @@ namespace itk
  * \ingroup DeformableImageRegistration MultiThreaded
  * \author Thomas Yeo.
  */
-template < class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template < class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 class ITK_EXPORT DiffeomorphicDemonsRegistrationTensorFilter :
 public PDEDeformableRegistrationFilter<TFixedImage, TMovingImage,
-TDeformationField>
+TDisplacementField>
 {
 public:
   /** Standard class typedefs. */
   typedef DiffeomorphicDemonsRegistrationTensorFilter Self;
   typedef PDEDeformableRegistrationFilter<TFixedImage, TMovingImage,
-  TDeformationField> Superclass;
+  TDisplacementField> Superclass;
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
 
@@ -81,10 +81,10 @@ public:
   typedef typename Superclass::MovingImageType MovingImageType;
   typedef typename Superclass::MovingImagePointer MovingImagePointer;
 
-  /** Deformation field type. */
-  typedef typename Superclass::DeformationFieldType DeformationFieldType;
-  typedef typename Superclass::DeformationFieldPointer
-  DeformationFieldPointer;
+  /** Displacement field type. */
+  typedef typename Superclass::DisplacementFieldType DisplacementFieldType;
+  typedef typename Superclass::DisplacementFieldPointer
+  DisplacementFieldPointer;
 
   /** FiniteDifferenceFunction type. */
   typedef typename Superclass::FiniteDifferenceFunctionType
@@ -95,19 +95,19 @@ public:
 
   /** DemonsRegistrationFilterFunction type. */
   typedef ESMDemonsRegistrationTensorFunction<FixedImageType,
-  MovingImageType, DeformationFieldType, TSolverPrecision> DemonsRegistrationFunctionType;
+  MovingImageType, DisplacementFieldType, TSolverPrecision> DemonsRegistrationFunctionType;
 
   /** Exp and composition typedefs */
-  typedef MultiplyByConstantImageFilter<DeformationFieldType,
-  TimeStepType, DeformationFieldType> MultiplyByConstantType;
-  typedef ExponentialDeformationFieldImageFilter<DeformationFieldType,
-  DeformationFieldType> FieldExponentiatorType;
+  typedef MultiplyByConstantImageFilter<DisplacementFieldType,
+  TimeStepType, DisplacementFieldType> MultiplyByConstantType;
+  typedef ExponentialDisplacementFieldImageFilter<DisplacementFieldType,
+  DisplacementFieldType> FieldExponentiatorType;
 
-  typedef WarpVectorImageFilter< DeformationFieldType, DeformationFieldType,
-  DeformationFieldType> VectorWarperType;
+  typedef WarpVectorImageFilter< DisplacementFieldType, DisplacementFieldType,
+  DisplacementFieldType> VectorWarperType;
   typedef VectorLinearInterpolateNearestNeighborExtrapolateImageFunction
-  <DeformationFieldType, double> FieldInterpolatorType;
-  typedef AddImageFilter<DeformationFieldType, DeformationFieldType, DeformationFieldType>
+  <DisplacementFieldType, double> FieldInterpolatorType;
+  typedef AddImageFilter<DisplacementFieldType, DisplacementFieldType, DisplacementFieldType>
   AdderType;
 
   typedef typename MultiplyByConstantType::Pointer MultiplyByConstantPointer;

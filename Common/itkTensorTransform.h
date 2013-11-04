@@ -182,7 +182,7 @@ namespace itk
     
     
     /** Return the number of parameters that completely define the Transfom  */
-    virtual unsigned int GetNumberOfParameters(void) const 
+    virtual NumberOfParametersType GetNumberOfParameters(void) const 
     { return m_Parameters.Size(); }
     
     /** Return the inverse of the transform.
@@ -206,6 +206,13 @@ namespace itk
      * 
      **/
     virtual bool IsLinear() const { return false; }
+        
+    typedef typename Superclass::TransformCategoryType TransformCategoryType;
+    
+    virtual TransformCategoryType GetTransformCategory() const
+    {
+      return Self::UnknownTransformCategory;
+    }
     
     protected:
     TensorTransform(); 

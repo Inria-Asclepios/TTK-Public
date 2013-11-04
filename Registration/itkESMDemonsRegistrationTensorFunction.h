@@ -58,15 +58,15 @@ namespace itk
  * \ingroup FiniteDifferenceFunctions
  *
  */
-template < class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision >
+template < class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision >
 class ITK_EXPORT ESMDemonsRegistrationTensorFunction : public
-PDEDeformableRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
+PDEDeformableRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>
 {
 public:
   /** Standard class typedefs. */
   typedef ESMDemonsRegistrationTensorFunction Self;
   typedef PDEDeformableRegistrationFunction<TFixedImage, TMovingImage,
-  TDeformationField> Superclass;
+  TDisplacementField> Superclass;
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
 
@@ -91,16 +91,16 @@ public:
   typedef typename FixedImageType::SpacingType SpacingType;
   typedef typename FixedImageType::DirectionType  DirectionType;
 
-  /** Deformation field type. */
-  typedef typename Superclass::DeformationFieldType DeformationFieldType;
-  typedef typename Superclass::DeformationFieldTypePointer
-  DeformationFieldTypePointer;
-  typedef typename DeformationFieldType::PixelType DeformationFieldVectorType;
-  typedef typename DeformationFieldVectorType::ValueType DeformationFieldRealType;
-  typedef Matrix<DeformationFieldRealType, Superclass::ImageDimension, Superclass::ImageDimension> DeformationFieldMatrixType;
-  typedef vnl_matrix_fixed<DeformationFieldRealType, Superclass::ImageDimension, Superclass::ImageDimension> DeformationFieldMatrixInternalType;
-  typedef vnl_vector<DeformationFieldRealType> DeformationFieldVectorInternalType;
-  typedef Tensor<DeformationFieldRealType, Superclass::ImageDimension> DeformationFieldTensorType;
+  /** Displacement field type. */
+  typedef typename Superclass::DisplacementFieldType DisplacementFieldType;
+  typedef typename Superclass::DisplacementFieldTypePointer
+  DisplacementFieldTypePointer;
+  typedef typename DisplacementFieldType::PixelType DisplacementFieldVectorType;
+  typedef typename DisplacementFieldVectorType::ValueType DisplacementFieldRealType;
+  typedef Matrix<DisplacementFieldRealType, Superclass::ImageDimension, Superclass::ImageDimension> DisplacementFieldMatrixType;
+  typedef vnl_matrix_fixed<DisplacementFieldRealType, Superclass::ImageDimension, Superclass::ImageDimension> DisplacementFieldMatrixInternalType;
+  typedef vnl_vector<DisplacementFieldRealType> DisplacementFieldVectorInternalType;
+  typedef Tensor<DisplacementFieldRealType, Superclass::ImageDimension> DisplacementFieldTensorType;
 
   /** Inherit some enums from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
@@ -116,12 +116,12 @@ public:
 
   /** Warper type */
   typedef WarpTensorImageFilter<MovingImageType, MovingImageType,
-  DeformationFieldType> WarperType;
+  DisplacementFieldType> WarperType;
   typedef typename WarperType::Pointer WarperPointer;
 
   /** Warper type */
   typedef WarpTensorImageWOReorientationFilter<MovingImageType,
-  MovingImageType, DeformationFieldType> WarperWOReorientationType;
+  MovingImageType, DisplacementFieldType> WarperWOReorientationType;
   typedef typename WarperWOReorientationType::Pointer
   WarperWOReorientationPointer;
 
@@ -181,7 +181,7 @@ public:
       void *globalData, const FloatOffsetType &offset = FloatOffsetType(0.0));
 
   /** This method actually solves the system to find an update */
-  virtual void SolveUpdate(DeformationFieldTypePointer);
+  virtual void SolveUpdate(DisplacementFieldTypePointer);
 
   /** Set/Get the minimum allowable tensor variance */
   virtual void SetTensorMinimumVariance(double tensorMinimumVariance)
@@ -295,9 +295,9 @@ private:
   WarperWOReorientationPointer m_MovingImageWOReorientationWarper;
 
   /* WarpJacobianImage */
-  typedef Image<DeformationFieldMatrixType, Superclass::ImageDimension> JacobianImageType;
+  typedef Image<DisplacementFieldMatrixType, Superclass::ImageDimension> JacobianImageType;
   typedef typename JacobianImageType::Pointer JacobianImagePointer;
-  typedef WarpJacobianFilter<DeformationFieldType, JacobianImageType> JacobianFilterType;
+  typedef WarpJacobianFilter<DisplacementFieldType, JacobianImageType> JacobianFilterType;
 
   /** The global timestep. */
   TimeStepType m_TimeStep;
@@ -373,7 +373,7 @@ private:
   TensorGradientType InsertTensorsInTensorGradient(const TensorType, const TensorType, const TensorType);
 
   /** Perform reorientation on a tensor gradient. */
-  TensorGradientType ReorientateMovingGradient(const DeformationFieldMatrixType, const TensorGradientType);
+  TensorGradientType ReorientateMovingGradient(const DisplacementFieldMatrixType, const TensorGradientType);
 
   /** Insert a single tensor into the residual in the system to solve */
   void InsertTensorIntoResidual(const TensorType, unsigned long);
@@ -383,7 +383,7 @@ private:
   void InsertTensorGradientIntoGradient(const TensorGradientType, unsigned long, unsigned long);
 
   /** Creates the 'cross product' operating matrix of a vector. */
-  DeformationFieldMatrixType CreateCrossProductMatrix(const DeformationFieldVectorType);
+  DisplacementFieldMatrixType CreateCrossProductMatrix(const DisplacementFieldVectorType);
 };
 
 } // end namespace itk

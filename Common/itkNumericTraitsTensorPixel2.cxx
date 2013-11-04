@@ -25,8 +25,11 @@ namespace itk
   const Tensor<float , 3>  
   NumericTraits<Tensor<float, 3> >::Zero = Tensor<float , 3>( NumericTraits<float >::Zero );
   
-  const Tensor<double , 3>  
-  NumericTraits<Tensor<double, 3> >::Zero = Tensor<double , 3>( NumericTraits<double >::Zero );
+    const Tensor<double , 3>
+    NumericTraits<Tensor<double, 3> >::Zero = Tensor<double , 3>( NumericTraits<double >::Zero );
+
+    const Tensor<long double , 3>
+    NumericTraits<Tensor<long double, 3> >::Zero = Tensor<long double , 3>( NumericTraits<long double >::Zero );
   
   const Tensor<double , 3>  
   NumericTraits<Tensor<double, 3> >::One = Tensor<double , 3>( NumericTraits<double>::One );
@@ -39,6 +42,8 @@ namespace itk
   Tensor< double,3 > NumericTraits<Tensor<float, 3> >::min() { return vcl_numeric_limits<double>::min(); }
 
   Tensor< double,3 > NumericTraits<Tensor<float, 3> >::max() { return vcl_numeric_limits<double>::max(); }
+    
+    unsigned int NumericTraits<Tensor<float, 3> >::GetLength(Tensor<float, 3> &t) { return 6; }
 
   Tensor< float,3 > NumericTraits<Tensor<float, 3> >::NonpositiveMin() { 
     return Tensor< float,3 >(-NumericTraits<float>::NonpositiveMin()); }
@@ -57,7 +62,9 @@ namespace itk
 
   Tensor< double,3 > NumericTraits<Tensor<double, 3> >::max() { return vcl_numeric_limits<double>::max(); }
 
-  Tensor< double,3 > NumericTraits<Tensor<double, 3> >::NonpositiveMin() { 
+    unsigned int NumericTraits<Tensor<double, 3> >::GetLength(Tensor<double, 3> &t) { return 6; }
+
+    Tensor< double,3 > NumericTraits<Tensor<double, 3> >::NonpositiveMin() {
     return Tensor< double,3 >(-NumericTraits<double>::NonpositiveMin()); }
 
   bool NumericTraits<Tensor<double, 3> >::IsPositive(Tensor< double,3 > val) { return val.IsPositive(); }
@@ -66,6 +73,8 @@ namespace itk
   
   bool NumericTraits<Tensor<double, 3> >::IsNegative(Tensor< double,3 > val) { return val.IsNegative(); }
   
-  bool NumericTraits<Tensor<double, 3> >::IsNonnegative(Tensor< double,3 > val) {return !val.IsNegative(); }  
+  bool NumericTraits<Tensor<double, 3> >::IsNonnegative(Tensor< double,3 > val) {return !val.IsNegative(); }
+    
+    unsigned int NumericTraits<Tensor<double, 6> >::GetLength(Tensor<double, 6> &t) { return 21; }
   
 }

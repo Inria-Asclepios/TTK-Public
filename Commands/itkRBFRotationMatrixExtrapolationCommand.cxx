@@ -218,7 +218,7 @@ namespace itk
   
 
     MatrixImageType::Pointer itkMatImage = myFilter->GetOutput();
-    MatrixImageType::SizeType size = itkMatImage->GetLargestPossibleRegion().GetSize();
+    //MatrixImageType::SizeType size = itkMatImage->GetLargestPossibleRegion().GetSize();
     MatrixImageType::PointType origin = itkMatImage->GetOrigin();
     MatrixImageType::SpacingType spacing = itkMatImage->GetSpacing();
     

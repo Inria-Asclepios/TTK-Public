@@ -58,7 +58,7 @@ namespace itk
     NormalizeTensorImageFilter(){};
     ~NormalizeTensorImageFilter(){};
     
-    void ThreadedGenerateData(const OutputRegionType &, int);
+    void ThreadedGenerateData(const OutputRegionType &, ThreadIdType);
     void PrintSelf(std::ostream &os, Indent indent) const
     {
       Superclass::PrintSelf(os,indent);

@@ -95,7 +95,7 @@ namespace itk
 
     /** Threaded implementation */
     void BeforeThreadedGenerateData(void);
-    void ThreadedGenerateData(const OutputImageRegionType &,int);
+    void ThreadedGenerateData(const OutputImageRegionType &,ThreadIdType);
     void PrintSelf(std::ostream& os, Indent indent) const
     {
       Superclass::PrintSelf(os,indent);

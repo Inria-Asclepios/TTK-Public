@@ -20,19 +20,10 @@ MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TF
 	m_RegistrationFilter = static_cast<RegistrationType*>(registrator.GetPointer() );
 
 	///\todo Choose the right type of pyramid
-#if ( ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR == 12 && ITK_VERSION_PATCH == 0 )
-	// Work-around for http://public.kitware.com/Bug/view.php?id=503
-	itkWarningMacro("This version of ITK has a bug in MultiResolutionPyramidImageFilter - using RecursiveMultiResolutionPyramidImageFilter instead");
-	typedef RecursiveMultiResolutionPyramidImageFilter
-	<FixedImageType, FloatImageType >  ActualFixedImagePyramidType;
-	typedef RecursiveMultiResolutionPyramidImageFilter
-	<MovingImageType, FloatImageType > ActualMovingImagePyramidType;
-#else
 	typedef MultiResolutionPyramidTensorImageFilter <FixedImageType, FloatImageType >
 	ActualFixedImagePyramidType;
 	typedef MultiResolutionPyramidTensorImageFilter <MovingImageType, FloatImageType >
 	ActualMovingImagePyramidType;
-#endif
 
 	m_MovingImagePyramid  = ActualMovingImagePyramidType::New();
 	m_FixedImagePyramid     = ActualFixedImagePyramidType::New();
@@ -622,15 +613,15 @@ MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TF
 
 template <class TFixedImage, class TMovingImage, class TField, class TRealType, class TSolverPrecision>
 typename MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TField,TRealType,TSolverPrecision>
-::DeformationFieldPointer
+::DisplacementFieldPointer
 MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TField,TRealType,TSolverPrecision>
-::GetDeformationField()
+::GetDisplacementField()
 {
-	//std::cout<<"MultiResolutionLogDomainDeformableRegistrationTensor::GetDeformationField"<<std::endl;
+	//std::cout<<"MultiResolutionLogDomainDeformableRegistrationTensor::GetDisplacementField"<<std::endl;
 	m_Exponentiator->SetInput( this->GetVelocityField() );
 	m_Exponentiator->ComputeInverseOff();
 	m_Exponentiator->Update();
-	DeformationFieldPointer field = m_Exponentiator->GetOutput();
+	DisplacementFieldPointer field = m_Exponentiator->GetOutput();
 	field->DisconnectPipeline();
 	return field;
 }
@@ -638,15 +629,15 @@ MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TF
 
 template <class TFixedImage, class TMovingImage, class TField, class TRealType, class TSolverPrecision>
 typename MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TField,TRealType,TSolverPrecision>
-::DeformationFieldPointer
+::DisplacementFieldPointer
 MultiResolutionLogDomainDeformableRegistrationTensor<TFixedImage,TMovingImage,TField,TRealType,TSolverPrecision>
-::GetInverseDeformationField()
+::GetInverseDisplacementField()
 {
-	//std::cout<<"MultiResolutionLogDomainDeformableRegistrationTensor::GetInverseDeformationField"<<std::endl;
+	//std::cout<<"MultiResolutionLogDomainDeformableRegistrationTensor::GetInverseDisplacementField"<<std::endl;
 	m_Exponentiator->SetInput( this->GetVelocityField() );
 	m_Exponentiator->ComputeInverseOn();
 	m_Exponentiator->Update();
-	DeformationFieldPointer field = m_Exponentiator->GetOutput();
+	DisplacementFieldPointer field = m_Exponentiator->GetOutput();
 	field->DisconnectPipeline();
 	// Reset compute inverse back to off to avoid some broder effects
 	m_Exponentiator->ComputeInverseOff();

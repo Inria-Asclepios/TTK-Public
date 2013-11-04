@@ -75,7 +75,9 @@
     ITKProgramFactory
     ITKTensor
     ttkAlgorithms
-    ${ITK_LIBRARIES}
+    ${ITKIO_LIBRARIES}
+    ITKStatistics
+    ${ITK_TRANSFORM_LIBRARIES}
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
   )
@@ -87,7 +89,7 @@
   target_link_libraries(ttk
     ttkCommands	
     ITKProgramFactory
-    ${ITK_LIBRARIES}
+    ${ITKIO_LIBRARIES}
   )
 
 
@@ -133,15 +135,11 @@
     ${TTK_VTKINRIA3D_LIBRARIES}
     ITKProgramFactory
     ITKTensor
-    ${ITK_LIBRARIES}
+    ${ITKIO_LIBRARIES}
+    ITKSpatialObjects
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
   )
-  if (ITK_USE_REVIEW)
-    target_link_libraries(ttkConvertCommands
-      ITKIOReview
-      )
-  endif()
   
   add_executable(ttk-convert
     ttk-convert.cxx
@@ -150,7 +148,7 @@
   target_link_libraries(ttk-convert
     ttkConvertCommands
     ITKProgramFactory
-    ${ITK_LIBRARIES}
+    ${ITKIO_LIBRARIES}
   )
  
  
@@ -193,15 +191,11 @@
     ${TTK_VTKINRIA3D_LIBRARIES}
     ITKProgramFactory
     ITKTensor
-    ${ITK_LIBRARIES}
+    ${ITKIO_LIBRARIES}
+    ${ITK_TRANSFORM_LIBRARIES}
     vtkIO
     ${TTK_LAPACK_LIBRARIES}
   )
-  if (ITK_USE_REVIEW)
-    target_link_libraries(ttkUtilCommands
-      ITKIOReview
-      )
-  endif()
 
   add_executable(ttk-utils
     ttk-utils.cxx
@@ -210,7 +204,7 @@
   target_link_libraries(ttk-utils
     ttkUtilCommands
     ITKProgramFactory
-    ${ITK_LIBRARIES}
+    ${ITKIO_LIBRARIES}
   )
 
 
@@ -219,8 +213,8 @@
   add_executable(itkStanleyToITK itkStanleyVectorFieldToITKVectorField.cxx)
 
   TARGET_LINK_LIBRARIES(itkStanleyToITK
-  ITKCommon
-  ITKIO
+	ITKCommon
+	${ITKIO_LIBRARIES}
   )
 
   
@@ -243,10 +237,7 @@
       ${TTK_MIPS_LIBRARIES}
       ${TTK_VTKINRIA3D_LIBRARIES}
       ${TTK_LAPACK_LIBRARIES}
-      ITKCommon
-      ITKIO
       ITKTensor
-      ITKBasicFilters
       vtkCommon
       vtkIO
       )
@@ -254,10 +245,7 @@
       ${TTK_MIPS_LIBRARIES}
       ${TTK_VTKINRIA3D_LIBRARIES}
       ${TTK_LAPACK_LIBRARIES}
-      ITKCommon
-      ITKIO
       ITKTensor
-      ITKBasicFilters
       vtkCommon
       vtkIO
       )
@@ -265,10 +253,7 @@
       ${TTK_MIPS_LIBRARIES}
       ${TTK_VTKINRIA3D_LIBRARIES}
       ${TTK_LAPACK_LIBRARIES}
-      ITKCommon
-      ITKIO
       ITKTensor
-      ITKBasicFilters
       vtkCommon
       vtkIO
       )

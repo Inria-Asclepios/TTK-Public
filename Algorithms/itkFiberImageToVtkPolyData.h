@@ -37,12 +37,12 @@ namespace itk
   public:
 
     typedef FiberImageToVtkPolyData  Self;
-    typedef Object                   Superclass;
+    typedef ProcessObject            Superclass;
     typedef SmartPointer<Self>       Pointer;
     typedef SmartPointer<const Self> ConstPointer;
 
     itkNewMacro  (Self);
-    itkTypeMacro (FiberImageToVtkPolyData, Object);
+    itkTypeMacro (FiberImageToVtkPolyData, ProcessObject);
 
     typedef TInputImage                        InputImageType;
     typedef typename InputImageType::PixelType FiberType;
@@ -54,7 +54,7 @@ namespace itk
     typedef typename FiberType::ScalarType     ScalarType;
     typedef vtkPolyData                        OutputType;
 
-
+      using Superclass::SetInput;
     itkSetObjectMacro (Input, InputImageType);
     itkGetObjectMacro (Input, InputImageType);
 

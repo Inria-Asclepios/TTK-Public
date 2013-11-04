@@ -14,7 +14,6 @@ add_executable(${KIT}Tests
 
 target_link_libraries(${KIT}Tests 
   ITKTensor
-  ${ITK_LIBRARIES}
   )
 
 FOREACH (test ${TTKTests})

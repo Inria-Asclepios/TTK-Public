@@ -52,7 +52,7 @@ namespace itk
     }
     ~TensorNormalizeTensorImageFilter(){};
 
-    void ThreadedGenerateData(const OutputRegionType &, int);
+    void ThreadedGenerateData(const OutputRegionType &, ThreadIdType);
 
   private:
     TensorNormalizeTensorImageFilter (const Self&);

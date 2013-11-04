@@ -104,7 +104,7 @@ namespace itk
     virtual ~GradientTensorImageFilter(){};
 
     void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            ThreadIdType threadId );
 
     OutputPixelType FiniteDifferenceCalculation (const ConstNeighborhoodIteratorType &it);
     

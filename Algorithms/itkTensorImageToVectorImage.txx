@@ -54,7 +54,7 @@ namespace itk
   template <class TInputImage, class TOutputImage>
   void
   TensorImageToVectorImage<TInputImage,TOutputImage>
-  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId)
+  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId)
   {
 
     typedef ImageRegionIterator<OutputImageType>      IteratorOutputType;

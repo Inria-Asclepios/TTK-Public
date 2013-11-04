@@ -162,7 +162,7 @@ template<typename TInputImage, typename TOutputImage>
 void
 WarpJacobianFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       ThreadIdType threadId)
 {
 
   ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;

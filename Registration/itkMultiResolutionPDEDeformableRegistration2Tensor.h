@@ -35,12 +35,12 @@ namespace itk
  * []. It is assumed that the vector elements behave like floating point
  * scalars.
  *
- * The internal PDEDeformationRegistrationFilter can be set using
+ * The internal PDEDisplacementRegistrationFilter can be set using
  * SetRegistrationFilter. By default a DemonsRegistrationFilter is used.
  *
  * The input fixed and moving images are set via methods SetFixedImage
  * and SetMovingImage respectively. An initial deformation field maybe set via
- * SetInitialDeformationField or SetInput. If no initial field is set
+ * SetInitialDisplacementField or SetInput. If no initial field is set
  * a zero field is used as the initial condition.
  *
  * MultiResolutionPyramidTensorImageFilters are used to downsample the fixed
@@ -48,7 +48,7 @@ namespace itk
  * the deformation as we move from a coarse to fine solution.
  *
  * This class is templated over the fixed image type, the moving image type,
- * and the Deformation Field type.
+ * and the Displacement Field type.
  *
  * \warning This class assumes that the fixed, moving and deformation
  * field image types all have the same number of dimensions.
@@ -62,14 +62,14 @@ namespace itk
  *
  * \ingroup DeformableImageRegistration
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TSolverPrecision>
+template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 class ITK_EXPORT MultiResolutionPDEDeformableRegistration2Tensor :
-    public ImageToImageFilter <TDeformationField, TDeformationField>
+    public ImageToImageFilter <TDisplacementField, TDisplacementField>
 {
 public:
   /** Standard class typedefs */
   typedef MultiResolutionPDEDeformableRegistration2Tensor Self;
-  typedef ImageToImageFilter<TDeformationField, TDeformationField>
+  typedef ImageToImageFilter<TDisplacementField, TDisplacementField>
   Superclass;
   typedef SmartPointer<Self>  Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
@@ -91,9 +91,9 @@ public:
   typedef typename MovingImageType::Pointer MovingImagePointer;
   typedef typename MovingImageType::ConstPointer MovingImageConstPointer;
 
-  /** Deformation field image type. */
-  typedef TDeformationField DeformationFieldType;
-  typedef typename DeformationFieldType::Pointer DeformationFieldPointer;
+  /** Displacement field image type. */
+  typedef TDisplacementField DisplacementFieldType;
+  typedef typename DisplacementFieldType::Pointer DisplacementFieldPointer;
 
   /** ImageDimension. */
   itkStaticConstMacro(ImageDimension, unsigned int,FixedImageType::ImageDimension);
@@ -104,18 +104,18 @@ public:
 
   /** The internal registration type. */
   typedef PDEDeformableRegistrationFilter<
-    TensorImageType, TensorImageType, DeformationFieldType > RegistrationType;
+    TensorImageType, TensorImageType, DisplacementFieldType > RegistrationType;
   typedef typename RegistrationType::Pointer RegistrationPointer;
 
   /** The default registration type. */
   typedef DiffeomorphicDemonsRegistrationTensorFilter<
-    TensorImageType, TensorImageType, DeformationFieldType, TSolverPrecision> DefaultRegistrationType;
+    TensorImageType, TensorImageType, DisplacementFieldType, TSolverPrecision> DefaultRegistrationType;
 
   typedef typename DefaultRegistrationType::Pointer DefaultRegistrationPointer;
 
   /** Tensor Registration Type */
   typedef DiffeomorphicDemonsRegistrationTensorFilter<
-    TensorImageType, TensorImageType, DeformationFieldType, TSolverPrecision> DiffeomorphicRegistrationType;
+    TensorImageType, TensorImageType, DisplacementFieldType, TSolverPrecision> DiffeomorphicRegistrationType;
 
   typedef typename DiffeomorphicRegistrationType::Pointer DiffeomorphicRegistrationPointer;
 
@@ -134,7 +134,7 @@ public:
 
   /** The deformation field expander type. */
   typedef VectorResampleImageFilter<
-    DeformationFieldType, DeformationFieldType > FieldExpanderType;
+    DisplacementFieldType, DisplacementFieldType > FieldExpanderType;
   typedef typename FieldExpanderType::Pointer  FieldExpanderPointer;
 
   /** Set the fixed image. */
@@ -150,23 +150,23 @@ public:
   const MovingImageType * GetMovingImage(void) const;
 
   /** Set initial deformation field. */
-  virtual void SetInitialDeformationField( DeformationFieldType * itkNotUsed(ptr) )
+  virtual void SetInitialDisplacementField( DisplacementFieldType * itkNotUsed(ptr) )
   {
-    itkExceptionMacro( << "SetInitialDeformationField: This feature not implemented yet"  );
+    itkExceptionMacro( << "SetInitialDisplacementField: This feature not implemented yet"  );
     // this->SetInput( ptr );
   }
 
   /** Set initial deformation field. No assumption is made on the
    *  input. It will therefore be smoothed and resampled to match the
    *  images characteristics at the coarsest level of the pyramid. */
-  virtual void SetArbitraryInitialDeformationField( DeformationFieldType * itkNotUsed(ptr) )
+  virtual void SetArbitraryInitialDisplacementField( DisplacementFieldType * itkNotUsed(ptr) )
   {
-    itkExceptionMacro( << "SetArbitraryInitialDeformationField: This feature not implemented yet"  );
+    itkExceptionMacro( << "SetArbitraryInitialDisplacementField: This feature not implemented yet"  );
     //this->SetInput( ptr );
   }
 
   /** Get output deformation field. */
-  const DeformationFieldType * GetDeformationField(void)
+  const DisplacementFieldType * GetDisplacementField(void)
   { return this->GetOutput(); }
 
   /** Get the number of valid inputs.  For

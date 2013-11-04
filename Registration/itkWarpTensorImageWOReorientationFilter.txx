@@ -14,8 +14,8 @@ namespace itk
 /**
  * Default constructor.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
 ::WarpTensorImageWOReorientationFilter()
 {
   // Setup the number of required inputs
@@ -42,9 +42,9 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
 /**
  * Standard PrintSelf method.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
 
@@ -65,9 +65,9 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
  * Set the output image spacing.
  *
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
 ::SetOutputSpacing(
   const double* spacing)
 {
@@ -80,9 +80,9 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
  * Set the output image origin.
  *
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
 ::SetOutputOrigin(
   const double* origin)
 {
@@ -96,15 +96,15 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
  * Set deformation field as Inputs[1] for this ProcessObject.
  *
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
-::SetDeformationField(
-  const DeformationFieldType * field )
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
+::SetDisplacementField(
+  const DisplacementFieldType * field )
 {
   // const cast is needed because the pipeline is not const-correct.
-  DeformationFieldType * input =  
-       const_cast< DeformationFieldType * >( field );
+  DisplacementFieldType * input =  
+       const_cast< DisplacementFieldType * >( field );
   this->ProcessObject::SetNthInput( 1, input );
 }
 
@@ -112,13 +112,13 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
 /**
  * Return a pointer to the deformation field.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
-typename WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
-::DeformationFieldType *
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
-::GetDeformationField(void)
+template <class TInputImage,class TOutputImage,class TDisplacementField>
+typename WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
+::DisplacementFieldType *
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
+::GetDisplacementField(void)
 {
-  return static_cast<DeformationFieldType *>
+  return static_cast<DisplacementFieldType *>
     ( this->ProcessObject::GetInput( 1 ));
 }
 
@@ -128,9 +128,9 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
  * InterpolatorType::SetInputImage is not thread-safe and hence
  * has to be setup before ThreadedGenerateData
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
 ::BeforeThreadedGenerateData()
 {
 
@@ -145,7 +145,7 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
   /*
   // compute the Jacobian:
   typename JacobianFilterType::Pointer jacobianFilter = JacobianFilterType::New();
-  jacobianFilter->SetInput( this->GetDeformationField() );
+  jacobianFilter->SetInput( this->GetDisplacementField() );
   jacobianFilter->SetUseImageSpacing( true );
   
   try
@@ -165,9 +165,9 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
 /**
  * Setup state of filter after multi-threading.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
 ::AfterThreadedGenerateData()
 {
   // Disconnect input image from interpolator
@@ -179,17 +179,17 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
 /**
  * Compute the output for the region specified by outputRegionForThread.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
 ::ThreadedGenerateData(
   const OutputImageRegionType& outputRegionForThread,
-  int threadId )
+  ThreadIdType threadId )
 {
 
   InputImageConstPointer inputPtr = this->GetInput();
   OutputImagePointer outputPtr = this->GetOutput();
-  DeformationFieldPointer fieldPtr = this->GetDeformationField();
+  DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
   //JacobianPointer jacobianPtr = this->GetJacobian();
 
   // support progress methods/callbacks
@@ -200,7 +200,7 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
     outputPtr, outputRegionForThread );
 
   // iterator for the deformation field
-  ImageRegionIterator<DeformationFieldType> fieldIt(
+  ImageRegionIterator<DisplacementFieldType> fieldIt(
     fieldPtr, outputRegionForThread );
     
   // iterator for the output image
@@ -256,9 +256,9 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
 }
 
 
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
 ::GenerateInputRequestedRegion()
 {
 
@@ -276,7 +276,7 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
 
   // just propagate up the output requested region for the 
   // deformation field.
-  DeformationFieldPointer fieldPtr = this->GetDeformationField();
+  DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
   OutputImagePointer outputPtr = this->GetOutput();
   if( fieldPtr )
     {
@@ -286,9 +286,9 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
 }
 
 
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
+WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
 ::GenerateOutputInformation()
 {
   // call the superclass's implementation of this method
@@ -300,7 +300,7 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDeformationField>
   outputPtr->SetOrigin( m_OutputOrigin );
   outputPtr->SetDirection( m_OutputDirection );
 
-  DeformationFieldPointer fieldPtr = this->GetDeformationField();
+  DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
   if( fieldPtr )
     {
     outputPtr->SetLargestPossibleRegion( fieldPtr->

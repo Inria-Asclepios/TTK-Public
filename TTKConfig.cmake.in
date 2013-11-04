@@ -1,0 +1,64 @@
+#-----------------------------------------------------------------------------
+#
+# TTKConfig.cmake - TTK CMake configuration file for external projects.
+#
+# This file is configured by TTK and used by the UseTTK.cmake module
+# to load TTK's settings for an external project.
+
+# The TTK source tree.
+SET(TTK_SOURCE_DIR "@TTK_SOURCE_DIR@")
+
+# The TTK include file directories.
+SET(TTK_INCLUDE_DIRS "@TTK_INCLUDE_DIRS_CONFIG@")
+
+# The TTK library directories.
+SET(TTK_LIBRARY_DIRS "@TTK_LIBRARY_DIRS_CONFIG@")
+
+# The TTK binary directories.
+SET(TTK_BINARY_DIR "@TTK_BINARY_DIR_CONFIG@")
+
+# The C and C++ flags added by TTK to the cmake-configured flags.
+SET(TTK_REQUIRED_C_FLAGS "@TTK_REQUIRED_C_FLAGS@")
+SET(TTK_REQUIRED_CXX_FLAGS "@TTK_REQUIRED_CXX_FLAGS@")
+
+# The TTK version number
+SET(TTK_VERSION_MAJOR "@TTK_VERSION_MAJOR@")
+SET(TTK_VERSION_MINOR "@TTK_VERSION_MINOR@")
+SET(TTK_VERSION_BUILD "@TTK_VERSION_BUILD@")
+
+# The location of the UseTTK.cmake file.
+SET(TTK_USE_FILE "@TTK_USE_FILE@")
+
+# The build settings file.
+SET(TTK_BUILD_SETTINGS_FILE "@TTK_BUILD_SETTINGS_FILE@")
+
+# Whether TTK was built with shared libraries.
+# SET(TTK_BUILD_SHARED "@BUILD_SHARED_LIBS@")
+
+# TTK Configuration options.
+SET(TTK_USE_GMM        "@TTK_USE_GMM@")
+SET(TTK_USE_MIPS       "@TTK_USE_MIPS@")
+SET(TTK_USE_VTKINRIA3D "@TTK_USE_VTKINRIA3D@")
+SET(TTK_USE_MKL        "@TTK_USE_MKL@")
+SET(TTK_USE_ACML       "@TTK_USE_ACML@")
+
+# Some libraries variables useful to keep.
+SET(ITK_DIR          "@ITK_DIR@")
+SET(VTK_DIR          "@VTK_DIR@")
+IF (TTK_USE_MIPS)
+  SET(MIPS_DIR         "@MIPS_DIR@")
+  FIND_PACKAGE(MIPS)
+  INCLUDE(${MIPS_USE_FILE})
+ENDIF (TTK_USE_MIPS)
+IF (TTK_USE_VTKINRIA3D)
+  SET(vtkINRIA3D_DIR   "@vtkINRIA3D_DIR@")
+  FIND_PACKAGE(vtkINRIA3D)
+  INCLUDE(${vtkINRIA3D_USE_FILE})
+ENDIF (TTK_USE_VTKINRIA3D)
+SET(GMM_INCLUDE_DIR  "@GMM_INCLUDE_DIR@")
+SET(MKL_DIR          "@MKL_DIR@")
+SET(ACML_DIR         "@ACML_DIR@")
+SET(TTK_LAPACK_LIBRARIES "@TTK_LAPACK_LIBRARIES@")
+SET(TTK_MIPS_LIBRARIES   "@TTK_MIPS_LIBRARIES@")
+SET(TTK_VTKINRIA3D_LIBRARIES   "@TTK_VTKINRIA3D_LIBRARIES@")
+SEt(IPF_DIR              "@IPF_DIR@")

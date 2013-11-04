@@ -1,0 +1,22 @@
+#
+# This file sets up include directories, link directories, and
+# compiler settings for a project to use TTK.  It should not be
+# included directly, but rather through the TTK_USE_FILE setting
+# obtained from TTKConfig.cmake.
+#
+
+# Load the compiler settings used for TTK.
+IF(TTK_BUILD_SETTINGS_FILE)
+  INCLUDE(${CMAKE_ROOT}/Modules/CMakeImportBuildSettings.cmake)
+  CMAKE_IMPORT_BUILD_SETTINGS(${TTK_BUILD_SETTINGS_FILE})
+ENDIF(TTK_BUILD_SETTINGS_FILE)
+
+# Add compiler flags needed to use TTK.
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${TTK_REQUIRED_C_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TTK_REQUIRED_CXX_FLAGS}")
+
+# Add include directories needed to use TTK.
+INCLUDE_DIRECTORIES(${TTK_INCLUDE_DIRS})
+
+# Add link directories needed to use TTK.
+LINK_DIRECTORIES(${TTK_LIBRARY_DIRS})

@@ -237,6 +237,7 @@
       ${TTK_MIPS_LIBRARIES}
       ${TTK_VTKINRIA3D_LIBRARIES}
       ${TTK_LAPACK_LIBRARIES}
+      ${ITKIO_LIBRARIES}
       ITKTensor
       vtkCommon
       vtkIO
@@ -245,6 +246,7 @@
       ${TTK_MIPS_LIBRARIES}
       ${TTK_VTKINRIA3D_LIBRARIES}
       ${TTK_LAPACK_LIBRARIES}
+      ${ITKIO_LIBRARIES}
       ITKTensor
       vtkCommon
       vtkIO
@@ -253,6 +255,7 @@
       ${TTK_MIPS_LIBRARIES}
       ${TTK_VTKINRIA3D_LIBRARIES}
       ${TTK_LAPACK_LIBRARIES}
+      ${ITKIO_LIBRARIES}
       ITKTensor
       vtkCommon
       vtkIO

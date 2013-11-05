@@ -2,7 +2,7 @@
 #define __itkExponentialDisplacementFieldImageFilter2_h
 
 #include "itkImageToImageFilter.h"
-#include "itkDivideByConstantImageFilter.h"
+#include "itkDivideImageFilter.h"
 #include "itkCastImageFilter.h"
 #include "itkOppositeImageFilter.h"
 #include "itkWarpVectorImageFilter.h"
@@ -129,9 +129,9 @@ protected:
 
   typedef typename InputImageType::RegionType          RegionType;
 
-  typedef DivideByConstantImageFilter<
+  typedef DivideImageFilter<
     InputImageType,
-    InputPixelRealValueType, OutputImageType >         DivideByConstantType;
+    itk::Image <InputPixelRealValueType, TInputImage::ImageDimension>, OutputImageType >         DivideByConstantType;
 
   typedef CastImageFilter<
     InputImageType, OutputImageType>                   CasterType;

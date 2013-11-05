@@ -4,7 +4,7 @@
 #include "itkPDEDeformableRegistrationFilter.h"
 #include "itkESMDemonsRegistrationTensorFunction.h"
 
-#include "itkMultiplyByConstantImageFilter.h"
+#include "itkMultiplyImageFilter.h"
 #include "itkExponentialDisplacementFieldImageFilter.h"
 #include "itkWarpVectorImageFilter.h"
 #include "itkVectorLinearInterpolateNearestNeighborExtrapolateImageFunction.h"
@@ -98,8 +98,8 @@ public:
   MovingImageType, DisplacementFieldType, TSolverPrecision> DemonsRegistrationFunctionType;
 
   /** Exp and composition typedefs */
-  typedef MultiplyByConstantImageFilter<DisplacementFieldType,
-  TimeStepType, DisplacementFieldType> MultiplyByConstantType;
+  typedef MultiplyImageFilter<DisplacementFieldType,
+    itk::Image <TimeStepType,TFixedImage::ImageDimension>, DisplacementFieldType> MultiplyByConstantType;
   typedef ExponentialDisplacementFieldImageFilter<DisplacementFieldType,
   DisplacementFieldType> FieldExponentiatorType;
 
@@ -174,7 +174,7 @@ protected:
   virtual void AllocateUpdateBuffer();
 
   /** Solve update (if necessary) and apply it update. */
-  virtual void ApplyUpdate(TimeStepType dt);
+  virtual void ApplyUpdate(const TimeStepType &dt);
 
 private:
   DiffeomorphicDemonsRegistrationTensorFilter(const Self&); //purposely not implemented

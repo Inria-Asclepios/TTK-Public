@@ -24,9 +24,7 @@
 
 #include "itkMultiResolutionPyramidTensorImageFilter.h"
 #include "itkShrinkImageFilter.h"
-#include "itkGaussianOperator.h"
 #include "itkCastImageFilter.h"
-#include "itkDiscreteGaussianImageFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"
 #include "itkExceptionObject.h"
 #include "itkImageRegionIterator.h"
@@ -103,8 +101,7 @@ MultiResolutionPyramidTensorImageFilter<TInputImage, TOutputImage>::SetNumberOfL
         // remove extra outputs
         for (idx = m_NumberOfLevels; idx < numOutputs; idx++)
           {
-            typename DataObject::Pointer output = this->GetOutputs()[idx];
-            this->RemoveOutput(output);
+            this->RemoveOutput(idx);
           }
       }
 
@@ -263,7 +260,6 @@ MultiResolutionPyramidTensorImageFilter<TInputImage, TOutputImage>
 
   // Create caster, smoother and shrinker filters
   typedef CastImageFilter<TInputImage, TOutputImage> CasterType;
-  //typedef DiscreteGaussianImageFilter<TOutputImage, TOutputImage> SmootherType;
   typedef RecursiveGaussianImageFilter<TOutputImage, TOutputImage> SmootherType;
   typedef ShrinkImageFilter<TOutputImage,TOutputImage> ShrinkerType;
 
@@ -579,28 +575,7 @@ MultiResolutionPyramidTensorImageFilter<TInputImage, TOutputImage>
       }
     baseRegion.SetIndex( baseIndex );
     baseRegion.SetSize( baseSize );
-
-    // compute requirements for the smoothing part
-    typedef typename TOutputImage::PixelType OutputPixelType;
-    typedef GaussianOperator<OutputPixelType,ImageDimension> OperatorType;
-
-    OperatorType *oper = new OperatorType;
-    typename TOutputImage::RegionType::SizeType radius;
     RegionType inputRequestedRegion = baseRegion;
-    refLevel = 0;
-
-    for( idim = 0; idim < TInputImage::ImageDimension; idim++ )
-      {
-        oper->SetDirection(idim);
-        oper->SetVariance( vnl_math_sqr( 0.5 * static_cast<float>(
-            m_Schedule[refLevel][idim] ) ) );
-        oper->SetMaximumError( m_MaximumError );
-        oper->CreateDirectional();
-        radius[idim] = oper->GetRadius()[idim];
-      }
-    delete oper;
-
-    inputRequestedRegion.PadByRadius( radius );
 
     // make sure the requested region is within the largest possible
     inputRequestedRegion.Crop( inputPtr->GetLargestPossibleRegion() );

@@ -151,7 +151,7 @@ namespace itk
 
     bool isparrec = !strcmp (informationreader->GetImageIO()->GetNameOfClass(), "PhilipsRECImageIO");
     FloatImageType::DirectionType correctdirection;
-    FloatImageType::PointType correctorigin;
+    FloatImageType::PointType correctorigin = 0.0;
     if (isparrec)
     {
       correctdirection = this->ExtractPARRECImageOrientation(filename1);

@@ -71,13 +71,8 @@ namespace itk
     const char* outFile = cl.follow("NoFile",2,"-O","-o");
     
     typedef double                                ScalarType;  
-    typedef itk::Image<ScalarType,3>              ImageType;
     typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
     typedef IOType::TensorImageType               TensorImageType;
-    typedef TensorImageType::SizeType    SizeType;
-    typedef TensorImageType::SpacingType SpacingType;
-    typedef TensorImageType::PointType   PointType;
-    
     
     std::cout<<"reading list : "<<tensorFile<<std::endl;
     IOType::Pointer reader = IOType::New();

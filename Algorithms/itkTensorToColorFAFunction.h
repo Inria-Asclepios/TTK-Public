@@ -18,6 +18,7 @@
 #define _itk_TensorToColorFAFunction_h_
 
 #include "itkTensorToScalarFunction.h"
+#include <itkImageBase.h>
 
 namespace itk
 {
@@ -41,6 +42,12 @@ namespace itk
     typedef TOutputPixelType  OutputPixelType;    
 
     OutputPixelType ComputeScalar (const InputPixelType&) const;
+      
+      void SetTransformColorWithDirection (bool value) {m_TransformColorWithDirection = value;}
+      
+      typedef itk::ImageBase <3>::DirectionType MatrixType;
+      //! Transform used if TransformColorWithDirection is on, has to be the image direction matrix
+      void SetDirection(const MatrixType &matrix) {m_Direction = matrix;}
 
   protected:
     TensorToColorFAFunction(){};
@@ -55,6 +62,10 @@ namespace itk
      TensorToColorFAFunction (const Self&);
      void operator=(const Self&);
     
+      bool m_TransformColorWithDirection;
+      MatrixType m_Direction;
+      
+      
   };
   
 

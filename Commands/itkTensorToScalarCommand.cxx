@@ -52,6 +52,7 @@ namespace itk
     m_LongDescription = "Usage:\n";
     m_LongDescription += "-i [fileIn]\n";
     m_LongDescription += "-f [Function: FA / LFA / CFA / ADC / VOL / CL / CP / CS / RA / VR / L1 / L2 / L3]\n";
+    m_LongDescription += "-c [correct for tensor image orientation]\n\n";
     m_LongDescription += "-o [fileOut]\n\n";
     m_LongDescription += m_ShortDescription;
   }
@@ -93,6 +94,7 @@ namespace itk
     const char* file_in = cl.follow("NoFile", 2, "-i","-I");
     const char* file_out = cl.follow("NoFile", 2, "-o","-O");
     const char* function = cl.follow ("NoFunction", 2, "-f", "-F");
+      const bool correction  = cl.search (2, "-c","-C");
     
     if(strcmp(file_in,"NoFile")==0 || strcmp(file_out,"NoFile")==0)
     {
@@ -252,7 +254,14 @@ namespace itk
       myFilter->SetTensorToScalarFunction (myFunction);
       myFilter->SetInput (io->GetOutput());
       
-      
+      if( strcmp (function, "cfa")==0 || strcmp (function, "CFA")==0 )
+      {
+          itk::TensorToColorFAFunction<TensorImageType::PixelType, ColorImageType::PixelType> *tmpFunction = dynamic_cast <itk::TensorToColorFAFunction<TensorImageType::PixelType, ColorImageType::PixelType> *> (myColorFunction.GetPointer());
+          
+          tmpFunction->SetTransformColorWithDirection(correction);
+          tmpFunction->SetDirection(io->GetOutput()->GetDirection());
+      }
+        
       try
       {
 	myFilter->Update();

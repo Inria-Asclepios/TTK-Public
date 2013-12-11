@@ -46,6 +46,20 @@ namespace itk
     typedef typename InputPixelType::VectorType VectorType;
     VectorType vec = T.GetEigenvector (2);
     
+    if (m_TransformColorWithDirection)
+    {
+        VectorType rotatedVec = vec;
+        
+        for (unsigned int i = 0;i < 3;++i)
+        {
+            rotatedVec[i] = 0;
+            for (unsigned int j = 0;j < 3;++j)
+                rotatedVec[i] += m_Direction(i,j) * vec[j];
+        }
+
+        vec = rotatedVec;
+    }
+    
     typedef typename OutputPixelType::ComponentType ComponentType;
 
     double r = fabs (vec[0])*255.0;

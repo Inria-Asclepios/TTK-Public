@@ -128,7 +128,8 @@ namespace itk
 	for (unsigned int j=0; j<3; j++)
 	  U[i][j] = pix.GetEigenvector (j)[i];
       
-      pix.SetVnlMatrix (U * D * U.GetTranspose());
+        TensorImageType::PixelType::MatrixType updatedTensor = U * D * U.GetTranspose();
+      pix.SetVnlMatrix (updatedTensor.GetVnlMatrix());
       
       itOut.Set ( pix );
       ++itIn;

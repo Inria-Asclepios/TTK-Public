@@ -247,6 +247,7 @@
       ${TTK_VTKINRIA3D_LIBRARIES}
       ${TTK_LAPACK_LIBRARIES}
       ${ITKIO_LIBRARIES}
+      ${ITK_TRANSFORM_LIBRARIES}
       ITKTensor
       vtkCommon
       vtkIO
@@ -256,6 +257,7 @@
       ${TTK_VTKINRIA3D_LIBRARIES}
       ${TTK_LAPACK_LIBRARIES}
       ${ITKIO_LIBRARIES}
+      ${ITK_TRANSFORM_LIBRARIES}
       ITKTensor
       vtkCommon
       vtkIO

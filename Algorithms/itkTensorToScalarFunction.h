@@ -17,24 +17,24 @@
 #ifndef _itk_TensorToScalarFunction_h_
 #define _itk_TensorToScalarFunction_h_
 
-#include <itkLightObject.h>
+#include <itkObject.h>
 
 namespace itk
 {
 
   template < class TInputPixelType, class TOutputPixelType >
-    class ITK_EXPORT TensorToScalarFunction : public LightObject
+    class ITK_EXPORT TensorToScalarFunction : public Object
   {
     
   public:
     
     typedef TensorToScalarFunction Self;
-    typedef LightObject Superclass;
+    typedef Object Superclass;
 
     typedef SmartPointer<Self>        Pointer;
     typedef SmartPointer<const Self>  ConstPointer;
 
-    itkTypeMacro (TensorToScalarFunction, LightObject);
+    itkTypeMacro (TensorToScalarFunction, Object);
 
     typedef TInputPixelType   InputPixelType;
     typedef TOutputPixelType  OutputPixelType;

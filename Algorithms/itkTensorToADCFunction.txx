@@ -28,7 +28,7 @@ namespace itk
   TensorToADCFunction<TInputPixelType,TOutputPixelType>
   ::ComputeScalar (const InputPixelType & T) const
   {    
-    return static_cast<OutputPixelType>( T.GetTrace() );
+    return static_cast<OutputPixelType>( T.GetTrace() / T.GetTensorDimension() );
   }
   
 

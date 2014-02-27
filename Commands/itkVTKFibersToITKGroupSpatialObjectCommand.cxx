@@ -90,7 +90,7 @@ namespace itk
     reader->Update();
     
     vtkPolyData* vtkFibers = reader->GetOutput();
-    vtkFibers->Update();
+    reader->Update();
     
 
     // read the inrimage tensor file

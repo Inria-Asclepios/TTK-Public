@@ -215,7 +215,7 @@ namespace itk
     
     vtkDataSetWriter* writer = vtkDataSetWriter::New();
     writer->SetFileName (outputfile);
-    writer->SetInput (crossvalidation);
+    writer->SetInputData (crossvalidation);
     writer->Update();
     
     

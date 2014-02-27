@@ -37,17 +37,17 @@ namespace itk
 
     InputIteratorType itIn  (this->GetInput(), this->GetInput()->GetLargestPossibleRegion());
     OutputIteratorType itOut(this->GetOutput(), this->GetOutput()->GetLargestPossibleRegion());
-    
+	
     while( !itOut.IsAtEnd() )
     {
       InputPixelType T = itIn.Get();
-      if (T != 0)
-      {
+      // if (T != 0)
+      // {
 	double real = this->GetNormalGenerator()->GetVariate() * std::sqrt ( this->GetVariance() );
 	double imag = this->GetNormalGenerator()->GetVariate() * std::sqrt ( this->GetVariance() );
 	double realplusT = static_cast<double>(T) + real;
 	T = static_cast<InputPixelType>( std::sqrt (realplusT*realplusT + imag*imag) );
-      }
+      // }
       
       itOut.Set (T);
       

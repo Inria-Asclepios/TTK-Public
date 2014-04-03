@@ -4,7 +4,7 @@
 #include <itkImageToImageFilter.h>
 #include <itkNaryAddImageFilter.h>
 #include <itkVelocityFieldLieBracketFilter.h>
-#include <itkMultiplyImageFilter.h>
+#include <itkMultiplyByConstantImageFilter.h>
 
 
 namespace itk
@@ -86,7 +86,7 @@ protected:
   typedef typename LieBracketFilterType::Pointer                              LieBracketFilterPointer;
 
   /** Multiplier type. */
-    typedef MultiplyImageFilter<InputFieldType,itk::Image <double, TInputImage::ImageDimension>,InputFieldType> MultiplierType;
+  typedef MultiplyByConstantImageFilter<InputFieldType,double,InputFieldType> MultiplierType;
   typedef typename MultiplierType::Pointer                                    MultiplierPointer;
 
   /** Set/Get the adder. */

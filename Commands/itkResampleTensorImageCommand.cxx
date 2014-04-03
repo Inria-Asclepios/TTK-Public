@@ -83,6 +83,10 @@ namespace itk
     typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
     typedef IOType::TensorImageType               TensorImageType;
     typedef itk::ResampleTensorImageFilter<TensorImageType,TensorImageType> FilterType;
+    typedef TensorImageType::SizeType    SizeType;
+    typedef TensorImageType::SpacingType SpacingType;
+    typedef TensorImageType::PointType   PointType;
+    
   
     IOType::Pointer myIO = IOType::New();
     myIO->SetFileName(tensorFile);

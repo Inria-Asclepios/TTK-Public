@@ -4,7 +4,7 @@
 #include "itkLogDomainDeformableRegistrationFilter.h"
 #include "itkESMDemonsRegistrationTensorFunction.h"
 
-#include "itkMultiplyImageFilter.h"
+#include "itkMultiplyByConstantImageFilter.h"
 
 namespace itk {
 
@@ -183,10 +183,10 @@ protected:
 	/** Does the actual work of calculating change over a region supplied by
 	 * the multithreading mechanism. */
 	virtual TimeStepType ThreadedCalculateChange(
-			const ThreadRegionType &regionToProcess, ThreadIdType threadId);
+			const ThreadRegionType &regionToProcess, int threadId);
 
 	/** Apply update. */
-	virtual void ApplyUpdate(const TimeStepType &dt);
+	virtual void ApplyUpdate(TimeStepType dt);
 
 private:
 	SymmetricLogDomainDemonsRegistrationTensorFilter(const Self&); //purposely not implemented
@@ -198,9 +198,9 @@ private:
 	const DemonsRegistrationFunctionType *  GetForwardRegistrationFunctionType() const;
 
 	/** Exp and composition typedefs */
-	typedef MultiplyImageFilter<
+	typedef MultiplyByConstantImageFilter<
 	VelocityFieldType,
-    itk::Image <TimeStepType, TFixedImage::ImageDimension>, VelocityFieldType >                   MultiplyByConstantType;
+	TimeStepType, VelocityFieldType >                   MultiplyByConstantType;
 
 	typedef AddImageFilter<
 	VelocityFieldType, VelocityFieldType>                AdderType;

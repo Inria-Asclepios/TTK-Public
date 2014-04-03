@@ -48,6 +48,7 @@ namespace itk
     typedef typename InputImageType::IndexType                 IndexType;
 
     typedef ImageRegionConstIteratorWithIndex<AuxiliaryImageType>  AuxiliaryImageIteratorType;
+    typedef typename AuxiliaryImageType::IndexType                 AuxiliaryIndexType;
 
     typedef LinearInterpolateImageFunction<AuxiliaryImageType, double> InterpolatorType;
     typename InterpolatorType::Pointer interpolator = InterpolatorType::New();

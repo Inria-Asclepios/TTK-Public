@@ -53,6 +53,7 @@ namespace itk
 
 
     typedef double ScalarType;  
+    typedef itk::Image<ScalarType, 3>                      ImageType;
     typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
     typedef IOType::TensorImageType                        TensorImageType;    
     typedef itk::NormalizeTensorImageFilter<TensorImageType,TensorImageType>

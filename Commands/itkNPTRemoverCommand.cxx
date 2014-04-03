@@ -66,6 +66,7 @@ namespace itk
     const int RemovingType = cl.follow (0,2,"-r","-R");
     
     typedef double ScalarType;  
+    typedef itk::Image<ScalarType, 3>                      ImageType;
     typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
     typedef IOType::TensorImageType                        TensorImageType;    
     typedef itk::RemoveNonPositiveTensorsTensorImageFilter<TensorImageType,TensorImageType>

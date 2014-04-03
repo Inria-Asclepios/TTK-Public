@@ -262,7 +262,7 @@ namespace itk
     }
     
     vtkStructuredPoints* tensors = reader->GetOutput();
-    tensors->Update();
+    reader->Update();
     
     // Allocate the output image
     if( m_Output )
@@ -970,12 +970,12 @@ namespace itk
     tensors->SetOrigin(origin);
     tensors->GetPointData()->SetTensors(data);
     data->Delete();
-    tensors->Update();
+    //tensors->Update();
 
     vtkStructuredPointsWriter* writer = vtkStructuredPointsWriter::New();
     writer->SetFileTypeToBinary();
     writer->SetFileName( m_FileName.c_str() );
-    writer->SetInput(tensors);
+    writer->SetInputData(tensors);
     writer->Write();
 
     tensors->Delete();

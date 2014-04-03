@@ -40,6 +40,7 @@ namespace itk
     int DWIBrainMaskExtractorCommandImplementation(const argument &arg)
     {
         typedef TImage ImageType;
+        typedef typename ImageType::PixelType IntegerType;
         typedef Image<unsigned char, 3>  MaskImageType;
 
         typedef itk::ImageFileReader<ImageType>     ImageReaderType;

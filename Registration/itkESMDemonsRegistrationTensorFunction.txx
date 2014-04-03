@@ -525,6 +525,7 @@ ESMDemonsRegistrationTensorFunction<TFixedImage, TMovingImage, TDisplacementFiel
     }
 
   TensorType sqSpeedValue = ElementWiseMultiplyTensor(speedValue, speedValue);
+  TensorType absSpeedValue = ElementWisePowerTensor(sqSpeedValue, 0.5);
 
   // limit the variance
   TensorType varValue = static_cast<TensorType>(sqSpeedValue);

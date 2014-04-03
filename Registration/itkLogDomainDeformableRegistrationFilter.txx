@@ -12,6 +12,8 @@
 #include "itkGaussianOperator.h"
 #include "itkVectorNeighborhoodOperatorImageFilter.h"
 
+#include "itkMultiplyByConstantImageFilter.h"
+
 #include "itkImageFileWriter.h"
 #include "itkImageFileReader.h"
 

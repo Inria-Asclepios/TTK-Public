@@ -127,7 +127,7 @@ namespace itk
     
     vtkPolyDataWriter* writer = vtkPolyDataWriter::New();
     writer->SetFileName (output);
-    writer->SetInputData (vtkOutput);
+    writer->SetInput (vtkOutput);
     writer->Update();
     
     reader1->Delete();

@@ -66,16 +66,14 @@ namespace itk
     std::cout << std::flush;
   
     // typedefs
-    typedef double                                                         ScalarType;
-    typedef itk::TensorImageIO<ScalarType, 3, 3>                           TensorIOType;
-    typedef TensorIOType::TensorImageType                                  TensorImageType;
-    typedef TensorImageType::PixelType                                     TensorType;
-    typedef itk::ImageRegionIterator<TensorImageType>                      TensorIteratorType;
-    typedef itk::Matrix<ScalarType, 3, 3>                                  MatrixType;
-    typedef itk::Vector<double, 3>                                         DisplacementType;
-    typedef TensorImageType::PointType                                     PointType;
-    typedef std::vector<TensorType> TensorArrayType;
-    typedef std::vector<PointType> PointArrayType;
+    typedef double                                    ScalarType;
+    typedef itk::TensorImageIO<ScalarType, 3, 3>      TensorIOType;
+    typedef TensorIOType::TensorImageType             TensorImageType;
+    typedef TensorImageType::PixelType                TensorType;
+    typedef itk::ImageRegionIterator<TensorImageType> TensorIteratorType;
+    typedef TensorImageType::PointType                PointType;
+    typedef std::vector<TensorType>                   TensorArrayType;
+    typedef std::vector<PointType>                    PointArrayType;
     
     // instantiation  
     
@@ -215,7 +213,7 @@ namespace itk
     
     vtkDataSetWriter* writer = vtkDataSetWriter::New();
     writer->SetFileName (outputfile);
-    writer->SetInputData (crossvalidation);
+    writer->SetInput (crossvalidation);
     writer->Update();
     
     

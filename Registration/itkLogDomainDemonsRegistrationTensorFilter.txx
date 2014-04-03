@@ -249,7 +249,7 @@ LogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField,TSolverP
 template <class TFixedImage, class TMovingImage, class TField, class TSolverPrecision>
 void
 LogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField,TSolverPrecision>
-::ApplyUpdate(TimeStepType dt)
+::ApplyUpdate(const TimeStepType &dt)
 {
 
   // need to solve update first if we're using any kind of rotation

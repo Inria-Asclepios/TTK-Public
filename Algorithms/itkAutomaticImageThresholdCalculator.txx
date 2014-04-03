@@ -62,8 +62,6 @@ namespace itk
     histogramGenerator->SetHistogramMax ( maximum );
     histogramGenerator->Compute();
 
-    typedef typename HistogramType::AbsoluteFrequencyType FrequencyType;
-
     typename HistogramType::ConstPointer histogram = histogramGenerator->GetOutput();
     typename HistogramType::ConstIterator it = histogram->Begin();
 

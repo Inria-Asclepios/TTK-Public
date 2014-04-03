@@ -183,8 +183,6 @@ namespace itk
       }
 
       typedef ImageRegionIteratorWithIndex <TensorImageType> TensorImageIteratorType;
-      typedef ImageRegionConstIteratorWithIndex <ImageType>  ImageIteratorType;
-
       typedef ImageType::IndexType ImageIndexType;
 
       TensorImageIteratorType it (tensorImage, tensorImage->GetLargestPossibleRegion());

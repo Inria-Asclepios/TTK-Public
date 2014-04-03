@@ -4,7 +4,7 @@
 #include "itkLogDomainDeformableRegistrationFilter.h"
 #include "itkESMDemonsRegistrationTensorFunction.h"
 
-#include "itkMultiplyByConstantImageFilter.h"
+#include "itkMultiplyImageFilter.h"
 #include "itkVelocityFieldBCHCompositionFilter.h"
 
 namespace itk
@@ -168,7 +168,7 @@ protected:
   virtual void AllocateUpdateBuffer();
 
   /** Solve update (if necessary) and apply it update. */
-  virtual void ApplyUpdate(TimeStepType dt);
+  virtual void ApplyUpdate(const TimeStepType &dt);
 
 private:
   LogDomainDemonsRegistrationTensorFilter(const Self&); //purposely not implemented
@@ -180,7 +180,7 @@ private:
   const DemonsRegistrationFunctionType * DownCastDifferenceFunctionType() const;
 
   /** Exp and composition typedefs */
-  typedef MultiplyByConstantImageFilter<VelocityFieldType, TimeStepType, VelocityFieldType > MultiplyByConstantType;
+    typedef MultiplyImageFilter<VelocityFieldType, itk::Image <TimeStepType, TFixedImage::ImageDimension>, VelocityFieldType > MultiplyByConstantType;
   typedef VelocityFieldBCHCompositionFilter<VelocityFieldType, VelocityFieldType> BCHFilterType;
 
   typedef typename MultiplyByConstantType::Pointer MultiplyByConstantPointer;

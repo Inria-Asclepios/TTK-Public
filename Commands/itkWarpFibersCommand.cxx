@@ -76,7 +76,6 @@ namespace itk
     typedef itk::Vector<double, 3>                VectorType;
     typedef itk::Image<VectorType, 3>             VectorImageType;
     typedef itk::ImageFileReader<VectorImageType> ReaderType;
-    typedef itk::InterpolateImageFilter<VectorImageType, VectorImageType>      InterpolateFilterType;
     typedef itk::VectorLinearInterpolateImageFunction<VectorImageType, double> InterpolateFunctionType;
     
     
@@ -84,7 +83,7 @@ namespace itk
     reader->SetFileName (file_in);
     
     vtkPolyData* bundle = reader->GetOutput();
-    reader->Update();
+    bundle->Update();
     
     if ( strcmp (file_vector, "")!=0 && strcmp (file_matrix, "")!=0 )
     {
@@ -172,8 +171,7 @@ namespace itk
       pt_i[2] = pt[2];
       
       
-      VectorImageType::PointType pt_n;
-      
+      VectorImageType::PointType pt_n = 0.0;
       
       if( !vector.IsNull() )
       {
@@ -214,7 +212,7 @@ namespace itk
     //bundle->SetPoints (new_points);
     vtkPolyDataWriter* writer = vtkPolyDataWriter::New();
     writer->SetFileName ( file_out );
-    writer->SetInputData ( bundle );
+    writer->SetInput ( bundle );
     writer->SetFileTypeToBinary();
     writer->Write();
     

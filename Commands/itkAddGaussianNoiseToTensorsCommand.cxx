@@ -65,7 +65,6 @@ namespace itk
     const double variance = cl.follow(1.0, 2,"-v","-V");
     
     typedef double ScalarType;  
-    typedef itk::Image<ScalarType, 3>                      ImageType;
     typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
     typedef IOType::TensorImageType                        TensorImageType;    
     typedef itk::AddGaussianNoiseTensorImageFilter<TensorImageType,TensorImageType>

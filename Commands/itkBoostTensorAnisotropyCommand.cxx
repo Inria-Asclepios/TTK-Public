@@ -71,13 +71,8 @@ namespace itk
     const char* outFile = cl.follow("NoFile",2,"-O","-o");
     
     typedef double                                ScalarType;  
-    typedef itk::Image<ScalarType,3>              ImageType;
     typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
     typedef IOType::TensorImageType               TensorImageType;
-    typedef TensorImageType::SizeType    SizeType;
-    typedef TensorImageType::SpacingType SpacingType;
-    typedef TensorImageType::PointType   PointType;
-    
     
     std::cout<<"reading list : "<<tensorFile<<std::endl;
     IOType::Pointer reader = IOType::New();
@@ -117,7 +112,6 @@ namespace itk
     
     TensorImageType::PixelType::MatrixType U;
     TensorImageType::PixelType::MatrixType D;
-    TensorImageType::PixelType::MatrixType res;
     
     std::cout<<"ratio : "<<ratio<<std::endl;
     
@@ -133,9 +127,9 @@ namespace itk
       for (unsigned int i=0; i<3; i++)
 	for (unsigned int j=0; j<3; j++)
 	  U[i][j] = pix.GetEigenvector (j)[i];
-
-      res = U * D * U.GetTranspose();      
-      pix.SetVnlMatrix (res.GetVnlMatrix());
+      
+        TensorImageType::PixelType::MatrixType updatedTensor = U * D * U.GetTranspose();
+      pix.SetVnlMatrix (updatedTensor.GetVnlMatrix());
       
       itOut.Set ( pix );
       ++itIn;

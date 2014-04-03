@@ -2,7 +2,6 @@
 #define __itkDiffeomorphicDemonsRegistrationTensorFilter_txx
 
 #include "itkDiffeomorphicDemonsRegistrationTensorFilter.h"
-#include "itkDivideByConstantImageFilter.h"
 
 #include "itkSmoothingRecursiveGaussianImageFilter.h"
 #include "itkImageRegionConstIterator.h"
@@ -246,7 +245,7 @@ DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplaceme
 template <class TFixedImage, class TMovingImage, class TDisplacementField, class TSolverPrecision>
 void
 DiffeomorphicDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TDisplacementField,TSolverPrecision>
-::ApplyUpdate(TimeStepType dt)
+::ApplyUpdate(const TimeStepType &dt)
 {
   DemonsRegistrationFunctionType *drfp = this->DownCastDifferenceFunctionType();
 

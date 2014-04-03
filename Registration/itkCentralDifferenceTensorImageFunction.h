@@ -45,7 +45,7 @@ class ITK_EXPORT CentralDifferenceTensorImageFunction :
   public ImageFunction< TInputImage,
                         Matrix<double, \
                         ::itk::GetNDegreesOfFreedom<typename TInputImage::PixelType>::DegreesOfFreedom, \
-                        ::itk::GetImageDimension<TInputImage>::ImageDimension>,
+                        TInputImage::ImageDimension>,
                         TCoordRep >
 {
 public:

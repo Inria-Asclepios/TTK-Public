@@ -79,6 +79,7 @@ namespace itk
     }
     std::cout << " Done." << std::endl;
     
+    std::cout << " Adding noise of variance "<<variance<<" and seeding to "<<IsReproducible<< "."<< std::endl;
     ImageType::Pointer image = reader->GetOutput();
     FilterType::Pointer filter = FilterType::New();
     filter->SetInput ( image );
@@ -87,13 +88,8 @@ namespace itk
     if (IsReproducible)
       seed = 5323;
     else
-    {
-      // time_t timer;
-      // time (&timer);
-      seed = (int) time (NULL);
-    }
-    
-    std::cout << " Adding noise of variance "<<variance<<" and seeding to "<<seed<< "."<< std::endl;
+      seed = (int) time(NULL);
+
     filter->GetNormalGenerator()->Initialize (seed);
     
     try

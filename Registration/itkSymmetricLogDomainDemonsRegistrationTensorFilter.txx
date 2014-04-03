@@ -312,7 +312,7 @@ template <class TFixedImage, class TMovingImage, class TField, class TSolverPrec
 typename
 SymmetricLogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField,TSolverPrecision>::TimeStepType
 SymmetricLogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField,TSolverPrecision>
-::ThreadedCalculateChange(const ThreadRegionType &regionToProcess, int)
+::ThreadedCalculateChange(const ThreadRegionType &regionToProcess, ThreadIdType)
 {
 	typedef typename VelocityFieldType::RegionType      RegionType;
 	typedef typename VelocityFieldType::SizeType        SizeType;
@@ -457,7 +457,7 @@ SymmetricLogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField
 template <class TFixedImage, class TMovingImage, class TField, class TSolverPrecision>
 void
 SymmetricLogDomainDemonsRegistrationTensorFilter<TFixedImage,TMovingImage,TField,TSolverPrecision>
-::ApplyUpdate(TimeStepType dt)
+::ApplyUpdate(const TimeStepType &dt)
 {
 	// If we smooth the update buffer before applying it, then the are
 	// approximating a viscuous problem as opposed to an elastic problem

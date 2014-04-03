@@ -62,7 +62,6 @@ namespace itk
     const int   FlipAxis = cl.follow(0,       2,"-a","-A");
     
     typedef double ScalarType;  
-    typedef itk::Image<ScalarType, 3>                      ImageType;
     typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
     typedef IOType::TensorImageType                        TensorImageType;    
     typedef itk::FlipTensorImageFilter<TensorImageType,TensorImageType>

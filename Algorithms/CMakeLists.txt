@@ -14,7 +14,8 @@ itkFiberBundleStatisticsCalculator.cxx
 
 target_link_libraries(ttkAlgorithms
   ITKCommon
-  ${VTK_LIBRARIES}
+  vtkCommon
+  vtkIO
 )
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_LIBRARIES)

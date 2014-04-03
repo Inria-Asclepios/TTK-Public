@@ -63,7 +63,6 @@ namespace itk
     
     typedef double                               ScalarType;
     typedef itk::TensorImageIO<ScalarType, 3, 3> TensorIOType;
-    typedef TensorIOType::TensorType             TensorType;
     typedef TensorIOType::TensorImageType        TensorImageType;
   
     

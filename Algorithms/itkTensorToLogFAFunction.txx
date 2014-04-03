@@ -29,8 +29,6 @@ namespace itk
   TensorToLogFAFunction<TInputPixelType,TOutputPixelType>
   ::ComputeScalar (const InputPixelType & T) const
   {
-
-    typedef OutputPixelType ValueType;
     typedef typename TInputPixelType::ComponentType InputScalarType;
     
     //vnl_matrix<ValueType> M = T.Log().GetVnlMatrix();

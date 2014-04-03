@@ -50,8 +50,6 @@ CentralDifferenceTensorImageFunction<TInputImage,TCoordRep>
   IndexType neighIndex = index;
   InputPixelType pix;
 
-  const InputImageType * inputImage = this->GetInputImage();
-
   const typename InputImageType::SizeType& size =
     this->GetInputImage()->GetBufferedRegion().GetSize();
   const typename InputImageType::IndexType& start =

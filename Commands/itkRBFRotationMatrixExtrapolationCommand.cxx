@@ -130,7 +130,7 @@ namespace itk
     vtkUnstructuredGridReader* matReader = vtkUnstructuredGridReader::New();
     matReader->SetFileName(matrixFile);
     vtkUnstructuredGrid* matrices = matReader->GetOutput();
-    matReader->Update();
+    matrices->Update();
     std::cout << " Done." << std::endl;
     
     
@@ -268,7 +268,7 @@ namespace itk
     
     //vtkStructuredPointsWriter* writer = vtkStructuredPointsWriter::New();
     vtkUnstructuredGridWriter* writer = vtkUnstructuredGridWriter::New();
-    writer->SetInputData (matImage);
+    writer->SetInput (matImage);
     writer->SetFileName (output);
     std::cout << "Writing..." << std::flush;
     writer->Write();  

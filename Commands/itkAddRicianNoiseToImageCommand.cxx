@@ -87,11 +87,7 @@ namespace itk
     if (IsReproducible)
       seed = 5323;
     else
-    {
-      // time_t timer;
-      // time (&timer);
       seed = (int) time (NULL);
-    }
     
     std::cout << " Adding noise of variance "<<variance<<" and seeding to "<<seed<< "."<< std::endl;
     filter->GetNormalGenerator()->Initialize (seed);

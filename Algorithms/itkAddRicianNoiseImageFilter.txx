@@ -41,13 +41,10 @@ namespace itk
     while( !itOut.IsAtEnd() )
     {
       InputPixelType T = itIn.Get();
-      // if (T != 0)
-      // {
-	double real = this->GetNormalGenerator()->GetVariate() * std::sqrt ( this->GetVariance() );
-	double imag = this->GetNormalGenerator()->GetVariate() * std::sqrt ( this->GetVariance() );
-	double realplusT = static_cast<double>(T) + real;
-	T = static_cast<InputPixelType>( std::sqrt (realplusT*realplusT + imag*imag) );
-      // }
+      double real = this->GetNormalGenerator()->GetVariate() * std::sqrt ( this->GetVariance() );
+      double imag = this->GetNormalGenerator()->GetVariate() * std::sqrt ( this->GetVariance() );
+      double realplusT = static_cast<double>(T) + real;
+      T = static_cast<InputPixelType>( std::sqrt (realplusT*realplusT + imag*imag) );
       
       itOut.Set (T);
       

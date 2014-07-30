@@ -35,7 +35,7 @@
 #include <itkMinimumMaximumImageCalculator.h>
 #include <itkMultiResolutionPDEDeformableRegistration2Tensor.h>
 #include <itkTransformFileReader.h>
-#include <itkTransformToDisplacementFieldSource.h>
+#include <itkTransformToDisplacementFieldFilter.h>
 #include <itkVectorCentralDifferenceImageFunction.h>
 #include <itkVectorLinearInterpolateNearestNeighborExtrapolateImageFunction.h>
 #include <itkWarpHarmonicEnergyCalculator.h>
@@ -534,7 +534,7 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
               }
 
             // Set up the TransformToDisplacementFieldFilter
-            typedef itk::TransformToDisplacementFieldSource
+            typedef itk::TransformToDisplacementFieldFilter
             <DisplacementFieldType> FieldGeneratorType;
             typedef typename FieldGeneratorType::TransformType TransformType;
 
@@ -551,9 +551,9 @@ template < unsigned int Dimension, class SolverPrecision, class TensorRealType, 
             fieldGenerator->SetTransform( trsf );
             //fieldGenerator->SetOutputRegion(
             //   fixedImageReader->GetOutput()->GetRequestedRegion());
-            fieldGenerator->SetOutputSize(
+            fieldGenerator->SetSize(
                 fixedImageReader->GetOutput()->GetRequestedRegion().GetSize());
-            fieldGenerator->SetOutputIndex(
+            fieldGenerator->SetOutputStartIndex(
                 fixedImageReader->GetOutput()->GetRequestedRegion().GetIndex());
             fieldGenerator->SetOutputSpacing(
                 fixedImageReader->GetOutput()->GetSpacing());

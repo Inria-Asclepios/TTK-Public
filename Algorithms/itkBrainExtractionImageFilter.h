@@ -18,14 +18,14 @@
 #define _itk_BrainExtractionImageFilter_h_
 
 #include <itkImageToImageFilter.h>
-#include <itkRecursiveGaussianImageFilter.h>
+#include <itkSmoothingRecursiveGaussianImageFilter.h>
 #include <itkAutomaticImageThresholdCalculator.h>
 #include <itkBinaryThresholdImageFilter.h>
 #include <itkBinaryBallStructuringElement.h>
 #include <itkBinaryCrossStructuringElement.h>
 #include <itkBinaryErodeImageFilter.h>
 #include <itkBinaryDilateImageFilter.h>
-#include <itkAndImageFilter.h>
+#include <itkMultiplyImageFilter.h>
 #include <itkVotingBinaryIterativeHoleFillingImageFilter.h>
 
 namespace itk
@@ -53,7 +53,7 @@ namespace itk
 
 
     // specific typedefs
-    typedef RecursiveGaussianImageFilter<InputImageType, InputImageType>
+    typedef SmoothingRecursiveGaussianImageFilter<InputImageType, InputImageType>
       GaussianFilterType;
 
     typedef AutomaticImageThresholdCalculator<InputImageType>
@@ -74,8 +74,8 @@ namespace itk
     typedef BinaryDilateImageFilter <OutputImageType, OutputImageType, CrossType>
       DilateFilterType;
     
-    typedef AndImageFilter<OutputImageType, OutputImageType, OutputImageType>
-      AndFilterType;
+    typedef MultiplyImageFilter<OutputImageType, OutputImageType, OutputImageType>
+      MultiplyImageFilterType;
 
     typedef VotingBinaryIterativeHoleFillingImageFilter <OutputImageType>
       HoleFillingFilterType;

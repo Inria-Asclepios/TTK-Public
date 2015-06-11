@@ -157,7 +157,7 @@ namespace itk
     vtkUnstructuredGridReader* tensReader = vtkUnstructuredGridReader::New();
     tensReader->SetFileName(tensorsFile);
     vtkUnstructuredGrid* tensors = tensReader->GetOutput();
-    tensors->Update();
+    tensReader->Update();
     std::cout << " Done." << std::endl;
     
     std::cout << "Converting...";
@@ -203,7 +203,7 @@ namespace itk
       vtkUnstructuredGridReader* tanReader = vtkUnstructuredGridReader::New();
       tanReader->SetFileName(tangentFile);
       vtkUnstructuredGrid* tangent = tanReader->GetOutput();
-      tangent->Update();
+      tanReader->Update();
       
       int nTan = tangent->GetNumberOfPoints();
       

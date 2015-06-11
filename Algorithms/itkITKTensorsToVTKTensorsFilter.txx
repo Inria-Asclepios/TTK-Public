@@ -191,7 +191,7 @@ namespace itk
 	m_VTKTensors->SetOrigin(origin);
 	m_VTKTensors->GetPointData()->SetTensors(data);
 	data->Delete();
-	m_VTKTensors->Update();
+	this->Update();
     }
 
 

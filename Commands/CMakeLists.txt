@@ -79,6 +79,7 @@
     ITKStatistics
     ${ITK_TRANSFORM_LIBRARIES}
     vtkIOCore
+    vtkIOLegacy
     ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -138,6 +139,7 @@
     ${ITKIO_LIBRARIES}
     ITKSpatialObjects
     vtkIOCore
+    vtkIOLegacy
     ${TTK_LAPACK_LIBRARIES}
   )
   
@@ -194,6 +196,7 @@
     ${ITKIO_LIBRARIES}
     ${ITK_TRANSFORM_LIBRARIES}
     vtkIOCore
+    vtkIOLegacy
     ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -241,6 +244,7 @@
       ITKTensor
       vtkCommon
       vtkIOCore
+      vtkIOLegacy
       )
     target_link_libraries(DemonsRegistrationTensor
       ${TTK_MIPS_LIBRARIES}
@@ -251,6 +255,7 @@
       ITKTensor
       vtkCommon
       vtkIOCore
+      vtkIOLegacy
       )
     target_link_libraries(LogDomainDemonsRegistrationTensor
       ${TTK_MIPS_LIBRARIES}
@@ -261,6 +266,7 @@
       ITKTensor
       vtkCommon
       vtkIOCore
+      vtkIOLegacy
       )
 
   endif (TTK_USE_GMM)

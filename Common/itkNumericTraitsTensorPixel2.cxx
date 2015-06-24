@@ -58,6 +58,8 @@ namespace itk
 
   Tensor< double,3 > NumericTraits<Tensor<double, 3> >::ZeroValue() { return Zero; }
 
+  Tensor< long double,3 > NumericTraits<Tensor<long double, 3> >::ZeroValue() { return Zero; }
+
   Tensor< double,3 > NumericTraits<Tensor<double, 3> >::min() { return vcl_numeric_limits<double>::min(); }
 
   Tensor< double,3 > NumericTraits<Tensor<double, 3> >::max() { return vcl_numeric_limits<double>::max(); }

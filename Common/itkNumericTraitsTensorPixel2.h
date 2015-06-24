@@ -411,6 +411,7 @@ public:
   typedef Tensor<long double, 3> RealType;
   typedef long double ScalarRealType;
   static const Tensor< long double,3 > ITK_EXPORT Zero;
+  static Tensor< long double,3 > ZeroValue();
   const static bool is_integer=false;
 };
 

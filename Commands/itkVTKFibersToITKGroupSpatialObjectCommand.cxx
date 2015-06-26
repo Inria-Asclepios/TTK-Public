@@ -67,31 +67,31 @@ namespace itk
     const char* inrTensorFile = cl.follow ("NoFile",2,"-t","-T");
     const double bvalue       = cl.follow (1.0, 2, "-b","-B");
     const char* itkFiberFile  = cl.follow ("NoFile", 2, "-o","-O");
-  
+
 
     // Read the input:
     typedef double  ScalarType;
     const unsigned int ImageDimension  = 3;
     const unsigned int TensorDimension = 3;
-    
+
     typedef itk::TensorImageIO<ScalarType, TensorDimension, ImageDimension> IOType;
     typedef IOType::TensorImageType     TensorImageType;
     typedef TensorImageType::PixelType  TensorType;
-    
+
     // read the vtk fiber file
     std::cout << "Reading: " << vtkFiberFile << std::endl;
     vtkPolyDataReader* reader = vtkPolyDataReader::New();
     reader->SetFileName( vtkFiberFile );
     reader->Update();
-    
+
     vtkPolyData* vtkFibers = reader->GetOutput();
-    vtkFibers->Update();
-    
+    reader->Update();
+
 
     // read the inrimage tensor file
     IOType::Pointer myReader = IOType::New();
     myReader->SetFileName (inrTensorFile);
-  
+
     std::cout << "Reading: " << inrTensorFile;
     std::cout << std::flush;
     try
@@ -104,7 +104,7 @@ namespace itk
       return -1;
     }
     std::cout << " Done." << std::endl;
-    
+
     // log the input
     typedef itk::LogTensorImageFilter<TensorImageType,TensorImageType>
       LogFilterType;
@@ -131,7 +131,7 @@ namespace itk
     myConverter->SetInput (vtkFibers);
     myConverter->SetTensorImage (myTensors);
     myConverter->SetBVal (bvalue);
-    
+
     std::cout << "Converting...";
     std::cout << std::flush;
     try
@@ -144,20 +144,20 @@ namespace itk
       return -1;
     }
     std::cout << "Done." << std::endl;
-    
+
     GroupSpatialObjectType::Pointer output = myConverter->GetOutput();
-    
-    
+
+
     std::cout << "Wrting...";
     itk::SpatialObjectWriter<3>::Pointer fibWriter  = itk::SpatialObjectWriter<3>::New();
     fibWriter->SetInput(output);
     fibWriter->SetFileName(itkFiberFile);
     fibWriter->Update();
     std::cout << "Done." << std::endl;
-    
+
     reader->Delete();
-    
+
     return 0;
   }
-  
+
 }

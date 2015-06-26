@@ -55,21 +55,21 @@ namespace itk
             ITKTensorsToVTKTensorsFilter< TTensorImage >
             ::~ITKTensorsToVTKTensorsFilter()
     {
-	m_VTKTensors->Delete();
+    m_VTKTensors->Delete();
         m_DirectionMatrix->Delete();
     }
 
 
 
     /**
- * Set a vtkStructuredPoints as input 
+ * Set a vtkStructuredPoints as input
  */
     template < class TTensorImage >
             void
             ITKTensorsToVTKTensorsFilter< TTensorImage >
             ::CopyVTKTensors( vtkStructuredPoints* p )
     {
-	p->DeepCopy(m_VTKTensors);
+    p->DeepCopy(m_VTKTensors);
     }
 
 
@@ -98,33 +98,33 @@ namespace itk
             ::GenerateData()
     {
 
-	TensorImageConstPointer input = this->GetInput(0);
-	if ( ! input )
-	{
+    TensorImageConstPointer input = this->GetInput(0);
+    if ( ! input )
+    {
             throw itk::ExceptionObject (__FILE__,__LINE__,"Error: No input ITK tensor image has been set.");
-	}
+    }
 
-	// VTK only supports 3D image with 3x3 tensors
-	typename TensorImageType::IndexType idx = {{0,0,0}};
-	TensorType t = input->GetPixel(idx);
-	if( input->GetImageDimension() != 3 || t.GetTensorDimension() != 3 )
-	{
+    // VTK only supports 3D image with 3x3 tensors
+    typename TensorImageType::IndexType idx = {{0,0,0}};
+    TensorType t = input->GetPixel(idx);
+    if( input->GetImageDimension() != 3 || t.GetTensorDimension() != 3 )
+    {
             throw itk::ExceptionObject (__FILE__,__LINE__,"Error: VTK only supports 3D images and 3x3 tensors.");
-	}
+    }
 
-	typename TensorImageType::SizeType size = input->GetLargestPossibleRegion().GetSize();
-	int    numVoxels = 1;
-	int    dims[3];
-	double origin[3];
-	double spacing[3];
+    typename TensorImageType::SizeType size = input->GetLargestPossibleRegion().GetSize();
+    int    numVoxels = 1;
+    int    dims[3];
+    double origin[3];
+    double spacing[3];
 
-	for( unsigned int i = 0; i < 3; i++ )
-	{
+    for( unsigned int i = 0; i < 3; i++ )
+    {
             numVoxels *= size[i];
             dims[i]    = size[i];
             origin[i]  = input->GetOrigin()[i];
             spacing[i] = input->GetSpacing()[i];
-	}
+    }
 
         vtkDataArray* data = 0;
         if (typeid(ScalarType)==typeid(double))
@@ -134,19 +134,19 @@ namespace itk
         else
             itkExceptionMacro (<<"data is not float or double, cannot convert");
 
-	data->SetNumberOfComponents(9);
-	data->SetNumberOfTuples(numVoxels);
+    data->SetNumberOfComponents(9);
+    data->SetNumberOfTuples(numVoxels);
 
-	typedef ImageRegionConstIterator<TensorImageType> IteratorType;
-	IteratorType it(input, input->GetLargestPossibleRegion());
+    typedef ImageRegionConstIterator<TensorImageType> IteratorType;
+    IteratorType it(input, input->GetLargestPossibleRegion());
 
-	unsigned long step = numVoxels/100;
-	unsigned int ind   = 0;
+    unsigned long step = numVoxels/100;
+    unsigned int ind   = 0;
 
-	this->UpdateProgress ( 0.0 );
+    this->UpdateProgress ( 0.0 );
 
-	while( !it.IsAtEnd() )
-	{
+    while( !it.IsAtEnd() )
+    {
             TensorType tensor = it.Get();
             double buffer[9];
             buffer[0] = tensor.GetNthComponent(0);
@@ -167,7 +167,7 @@ namespace itk
             {
                 this->UpdateProgress ( double(ind)/double(numVoxels) );
             }
-	}
+    }
 
         typename TTensorImage::DirectionType directions = input->GetDirection();
         typename TTensorImage::PointType i_origin = input->GetOrigin();
@@ -182,16 +182,16 @@ namespace itk
         m_DirectionMatrix->MultiplyPoint (v_origin, v_origin2);
         for (int i=0; i<3; i++)
           m_DirectionMatrix->SetElement (i, 3, v_origin[i]-v_origin2[i]);
-	
-	this->UpdateProgress ( 1.0 );
 
-	m_VTKTensors->Initialize();
-	m_VTKTensors->SetDimensions(dims);
-	m_VTKTensors->SetSpacing(spacing);
-	m_VTKTensors->SetOrigin(origin);
-	m_VTKTensors->GetPointData()->SetTensors(data);
-	data->Delete();
-	m_VTKTensors->Update();
+    this->UpdateProgress ( 1.0 );
+
+    m_VTKTensors->Initialize();
+    m_VTKTensors->SetDimensions(dims);
+    m_VTKTensors->SetSpacing(spacing);
+    m_VTKTensors->SetOrigin(origin);
+    m_VTKTensors->GetPointData()->SetTensors(data);
+    data->Delete();
+//	m_VTKTensors->Update();
     }
 
 

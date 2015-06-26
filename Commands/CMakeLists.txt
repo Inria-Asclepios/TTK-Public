@@ -78,7 +78,7 @@
     ${ITKIO_LIBRARIES}
     ITKStatistics
     ${ITK_TRANSFORM_LIBRARIES}
-    vtkIO
+    ${VTK_LIBRARIES}
     ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -87,7 +87,7 @@
   )
 
   target_link_libraries(ttk
-    ttkCommands	
+    ttkCommands
     ITKProgramFactory
     ${ITKIO_LIBRARIES}
   )
@@ -129,7 +129,7 @@
          endif (${bigobjFile_COMPILE_FLAGS} STREQUAL NOTFOUND)
      endforeach(bigobjFile)
   endif(WIN32)
-  
+
   target_link_libraries(ttkConvertCommands
     ${TTK_MIPS_LIBRARIES}
     ${TTK_VTKINRIA3D_LIBRARIES}
@@ -137,10 +137,10 @@
     ITKTensor
     ${ITKIO_LIBRARIES}
     ITKSpatialObjects
-    vtkIO
+    ${VTK_LIBRARIES}
     ${TTK_LAPACK_LIBRARIES}
   )
-  
+
   add_executable(ttk-convert
     ttk-convert.cxx
   )
@@ -150,8 +150,8 @@
     ITKProgramFactory
     ${ITKIO_LIBRARIES}
   )
- 
- 
+
+
 
 
 
@@ -193,7 +193,7 @@
     ITKTensor
     ${ITKIO_LIBRARIES}
     ${ITK_TRANSFORM_LIBRARIES}
-    vtkIO
+    ${VTK_LIBRARIES}
     ${TTK_LAPACK_LIBRARIES}
   )
 
@@ -213,11 +213,11 @@
   add_executable(itkStanleyToITK itkStanleyVectorFieldToITKVectorField.cxx)
 
   TARGET_LINK_LIBRARIES(itkStanleyToITK
-	ITKCommon
-	${ITKIO_LIBRARIES}
+    ITKCommon
+    ${ITKIO_LIBRARIES}
   )
 
-  
+
   # registration commands
   if (TTK_USE_GMM)
 
@@ -239,8 +239,7 @@
       ${TTK_LAPACK_LIBRARIES}
       ${ITKIO_LIBRARIES}
       ITKTensor
-      vtkCommon
-      vtkIO
+      ${VTK_LIBRARIES}
       )
     target_link_libraries(DemonsRegistrationTensor
       ${TTK_MIPS_LIBRARIES}
@@ -249,8 +248,7 @@
       ${ITKIO_LIBRARIES}
       ${ITK_TRANSFORM_LIBRARIES}
       ITKTensor
-      vtkCommon
-      vtkIO
+      ${VTK_LIBRARIES}
       )
     target_link_libraries(LogDomainDemonsRegistrationTensor
       ${TTK_MIPS_LIBRARIES}
@@ -259,8 +257,7 @@
       ${ITKIO_LIBRARIES}
       ${ITK_TRANSFORM_LIBRARIES}
       ITKTensor
-      vtkCommon
-      vtkIO
+      ${VTK_LIBRARIES}
       )
 
   endif (TTK_USE_GMM)
@@ -316,7 +313,7 @@ if(NOT ${PROJECT_NAME}_INSTALL_NO_RUNTIME)
     )
 endif(NOT ${PROJECT_NAME}_INSTALL_NO_RUNTIME)
 
- 
+
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
   file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")

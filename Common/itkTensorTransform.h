@@ -35,13 +35,13 @@ namespace itk
   template <class TScalarType,
     unsigned int NInputDimensions=3, 
     unsigned int NOutputDimensions=3>
-    class ITK_EXPORT  TensorTransform  : public TransformBase
+    class ITK_EXPORT TensorTransform : public TransformBaseTemplate <TScalarType>
     {
     public:
     
     /** Standard class typedefs. */
     typedef TensorTransform  Self;
-    typedef TransformBase Superclass;
+    typedef TransformBaseTemplate <TScalarType> Superclass;
     typedef SmartPointer< Self >   Pointer;
     typedef SmartPointer< const Self >  ConstPointer;
   
@@ -49,7 +49,7 @@ namespace itk
     itkNewMacro(Self);
 
     /** Run-time type information (and related methods). */
-    itkTypeMacro( TensorTransform, TransformBase );
+    itkTypeMacro( TensorTransform, TransformBaseTemplate );
     
     /** Dimension of the domain space. */
     itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
@@ -198,7 +198,7 @@ namespace itk
     
     
     /** Return the number of parameters that completely define the Transfom  */
-    virtual NumberOfParametersType GetNumberOfParameters(void) const 
+    virtual typename Superclass::NumberOfParametersType GetNumberOfParameters(void) const
     { return m_Parameters.Size(); }
     
     /** Return the inverse of the transform.

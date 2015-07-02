@@ -1,13 +1,9 @@
-cmake_minimum_required(VERSION 2.4)
-IF(COMMAND cmake_policy)
-  cmake_policy(VERSION 2.4)
-  cmake_policy(SET CMP0005 OLD)
-  cmake_policy(SET CMP0003 NEW)
-ENDIF(COMMAND cmake_policy)
+cmake_minimum_required(VERSION 3.0)
+set(CMAKE_MACOSX_RPATH OFF)
+set(TTK_VERSION_NUMBER 1.4.0)
+mark_as_advanced(TTK_VERSION_NUMBER)
 
-
-project(TTK)
-
+project(TTK VERSION ${TTK_VERSION_NUMBER})
 
 # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
 # warnings
@@ -221,7 +217,7 @@ endif(TTK_USE_VTKINRIA3D)
 # Header file used to pass CMake settings to the source code
 # -----------------------------------------------------------------------------
 configure_file(${PROJECT_SOURCE_DIR}/ttkConfigure.h.in
-               ${PROJECT_BINARY_DIR}/ttkConfigure.h CONFIGURE IMMEDIATE)
+               ${PROJECT_BINARY_DIR}/ttkConfigure.h)
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
   install(FILES ${TTK_BINARY_DIR}/ttkConfigure.h
@@ -267,8 +263,8 @@ CONFIGURE_FILE(${TTK_SOURCE_DIR}/UseTTK.cmake.in
 
 # Save the compiler settings so another project can import them.
 SET(TTK_BUILD_SETTINGS_FILE ${TTK_BINARY_DIR}/TTKBuildSettings.cmake)
-INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
-CMAKE_EXPORT_BUILD_SETTINGS(${TTK_BUILD_SETTINGS_FILE})
+#INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
+#CMAKE_EXPORT_BUILD_SETTINGS(${TTK_BUILD_SETTINGS_FILE})
 
 # Create the TTKConfig.cmake file containing the TTK configuration.
 INCLUDE (${TTK_SOURCE_DIR}/ttkGenerateTTKConfig.cmake)

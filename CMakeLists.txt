@@ -116,8 +116,8 @@ find_package(VTK REQUIRED)
 
 set(_ITKVersionString "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}" )
 math(EXPR _ITKVersionNum "${ITK_VERSION_MAJOR}*100*100 + ${ITK_VERSION_MINOR}*100 + ${ITK_VERSION_PATCH}")
-if( _ITKVersionNum LESS 40600 )
-  message(SEND_ERROR "The ITK version you want to use (${_ITKVersionString}) is not supported by this project. Please use a more recent version of ITK. The minimum required version is 4.6.0. The recommended version is 4.6.0.")
+if( _ITKVersionNum LESS 40702 )
+  message(SEND_ERROR "The ITK version you want to use (${_ITKVersionString}) is not supported by this project. Please use a more recent version of ITK. The minimum required version is 4.8.0. The recommended version is 4.8.0.")
 endif()
 
 SET(ITKIO_LIBRARIES

@@ -65,8 +65,10 @@ namespace itk
     typedef  TScalarType     ScalarType;
 
     /** Type of the input parameters. */
-    typedef  typename Superclass::ParametersType         ParametersType;
-    
+    typedef  typename Superclass::ParametersType ParametersType;
+    typedef  typename Superclass::ParametersValueType ParametersValueType;
+    typedef  typename Superclass::FixedParametersValueType FixedParametersValueType;
+
     /** Type of the Jacobian matrix. */
     typedef  Array2D< double >                           JacobianType;
 
@@ -140,6 +142,20 @@ namespace itk
     { itkExceptionMacro( << "Subclasses should override this method" );
       return m_Parameters; };
     
+    /** This function allow copying a range of values into the Parameters
+      * The range of values must conform to std::copy(begin, end, m_Parameters)
+      * requirements.
+      */
+    void CopyInParameters(const ParametersValueType * const begin,
+                          const ParametersValueType * const end);
+
+    /** This function allow copying a range of values into the FixedParameters
+      * The range of values must conform to std::copy(begin, end, m_FixedParameters)
+      * requirements.
+      */
+    void CopyInFixedParameters(const FixedParametersValueType * const begin,
+                               const FixedParametersValueType * const end);
+
     /** Set the fixed parameters and update internal transformation. */
     virtual void SetFixedParameters( const ParametersType & ) 
     { itkExceptionMacro( << "Subclasses should override this method" ) };

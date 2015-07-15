@@ -83,6 +83,41 @@ std::string TensorTransform< TScalarType,NInputDimensions,NOutputDimensions>
   return n.str();
 }
 
+template < class TScalarType,
+           unsigned int NInputDimensions,
+           unsigned int NOutputDimensions >
+void
+TensorTransform< TScalarType,NInputDimensions,NOutputDimensions>
+::CopyInParameters(const ParametersValueType * const begin,
+                   const ParametersValueType * const end)
+{
+   //Ensure that we are not copying onto self
+   if( begin != &(this->m_Parameters[0]) )
+   {
+   //Copy raw values array
+   std::copy(begin,end,this->m_Parameters.data_block() );
+   }
+  //Now call child class set parameter to interpret raw values
+  this->SetParameters(this->m_Parameters);
+}
+
+template < class TScalarType,
+           unsigned int NInputDimensions,
+           unsigned int NOutputDimensions >
+void
+TensorTransform< TScalarType,NInputDimensions,NOutputDimensions>
+::CopyInFixedParameters(const FixedParametersValueType * const begin,
+                        const FixedParametersValueType * const end)
+{
+   //Ensure that we are not copying onto self
+   if( begin != &(this->m_FixedParameters[0]) )
+   {
+   //Copy raw values array
+   std::copy(begin,end,this->m_FixedParameters.data_block() );
+   }
+  //Now call child class set parameter to interpret raw values
+  this->SetFixedParameters(this->m_FixedParameters);
+}
 
 } // end namespace itk
 

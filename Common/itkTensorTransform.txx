@@ -97,8 +97,8 @@ TensorTransform< TScalarType,NInputDimensions,NOutputDimensions>
    //Copy raw values array
    std::copy(begin,end,this->m_Parameters.data_block() );
    }
-  //Now call child class set parameter to interpret raw values
-  this->SetParameters(this->m_Parameters);
+   //Now call child class set parameter to interpret raw values
+   this->SetParameters(this->m_Parameters);
 }
 
 template < class TScalarType,
@@ -115,8 +115,8 @@ TensorTransform< TScalarType,NInputDimensions,NOutputDimensions>
    //Copy raw values array
    std::copy(begin,end,this->m_FixedParameters.data_block() );
    }
-  //Now call child class set parameter to interpret raw values
-  this->SetFixedParameters(this->m_FixedParameters);
+   //Now call child class set parameter to interpret raw values
+   this->SetFixedParameters(this->m_FixedParameters);
 }
 
 } // end namespace itk

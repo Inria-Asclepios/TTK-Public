@@ -2,7 +2,6 @@ project(IPF)
 
 cmake_minimum_required(VERSION 2.6)
 
-
 # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
 # warnings. Copied from ITK CMakeLists.
 IF(WIN32)
@@ -79,14 +78,7 @@ include(${ITK_USE_FILE})
 # set IPF_DIR so it can be used by subprojects
 SET(IPF_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "IPF_DIR variable to be used by subprojects")
 
-set(LIBRARY_STYLE)
-if (ITK_BUILD_SHARED)
-  set (LIBRARY_STYLE "SHARED")
-else (ITK_BUILD_SHARED)
-  set (LIBRARY_STYLE "STATIC")
-endif (ITK_BUILD_SHARED)
-
-add_library(ITKProgramFactory ${LIBRARY_STYLE}
+add_library(ITKProgramFactory
 itkCommandObjectBase.cxx
 itkCommandObjectFactory.cxx
 )
@@ -94,6 +86,13 @@ itkCommandObjectFactory.cxx
 target_link_libraries(ITKProgramFactory
 ${ITK_LIBRARIES}
 )
+
+include(GenerateExportHeader)
+
+generate_export_header(ITKProgramFactory
+  STATIC_DEFINE ITKProgramFactory_BUILT_AS_STATIC
+  EXPORT_FILE_NAME "ITKProgramFactoryExport.h"
+  )
 
 add_executable(programFactoryTest
 itkHelloWorldCommand.cxx

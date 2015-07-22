@@ -19,11 +19,12 @@
 
 #include "itkObject.h"
 #include "itkCommandObjectBase.h"
+#include "ITKProgramFactoryExport.h"
 
 namespace itk
 {
 
-  class CommandObjectFactory : public Object
+  class ITKPROGRAMFACTORY_EXPORT CommandObjectFactory : public Object
   {
   public:  
     /** Standard class typedefs. */

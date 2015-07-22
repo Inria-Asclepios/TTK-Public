@@ -231,6 +231,11 @@ endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 set(TTK_REQUIRED_C_FLAGS)
 set(TTK_REQUIRED_CXX_FLAGS)
 
+include(${TTK_SOURCE_DIR}/ttkIncludeDirectories.cmake)
+include_directories(
+  ${TTK_INCLUDE_DIRS_BUILD_TREE}
+  ${TTK_INCLUDE_DIRS_SYSTEM}
+)
 
 add_subdirectory(IPF)
 find_package(IPF)
@@ -238,12 +243,6 @@ include(${IPF_USE_FILE})
 
 include(${ITK_USE_FILE})
 include(${VTK_USE_FILE})
-
-include(${TTK_SOURCE_DIR}/ttkIncludeDirectories.cmake)
-include_directories(
-  ${TTK_INCLUDE_DIRS_BUILD_TREE}
-  ${TTK_INCLUDE_DIRS_SYSTEM}
-)
 
 set(TTK_BUILD_TYPE
 STATIC

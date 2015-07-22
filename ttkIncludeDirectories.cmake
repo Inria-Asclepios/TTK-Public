@@ -32,7 +32,7 @@ ENDIF(Boost_FOUND)
 
 #-----------------------------------------------------------------------------
 # Include directories from the build tree.
-SET(TTK_INCLUDE_DIRS_BUILD_TREE ${PROJECT_BINARY_DIR})
+SET(TTK_INCLUDE_DIRS_BUILD_TREE ${PROJECT_BINARY_DIR} ${PROJECT_BINARY_DIR}/IPF)
 
 # These directories are always needed.
 SET(TTK_INCLUDE_DIRS_BUILD_TREE 

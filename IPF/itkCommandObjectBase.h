@@ -19,13 +19,15 @@
 
 
 #include "itkProcessObject.h"
+#include "ITKProgramFactoryExport.h"
+
 /**
  */
 
 namespace itk
 {
 
-  class CommandObjectBase : public ProcessObject
+  class ITKPROGRAMFACTORY_EXPORT CommandObjectBase : public ProcessObject
   {
   public:
     typedef CommandObjectBase        Self;

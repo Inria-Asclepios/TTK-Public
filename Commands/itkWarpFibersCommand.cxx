@@ -83,7 +83,7 @@ namespace itk
     reader->SetFileName (file_in);
     
     vtkPolyData* bundle = reader->GetOutput();
-    bundle->Update();
+    reader->Update();
     
     if ( strcmp (file_vector, "")!=0 && strcmp (file_matrix, "")!=0 )
     {
@@ -212,7 +212,7 @@ namespace itk
     //bundle->SetPoints (new_points);
     vtkPolyDataWriter* writer = vtkPolyDataWriter::New();
     writer->SetFileName ( file_out );
-    writer->SetInput ( bundle );
+    writer->SetInputData ( bundle );
     writer->SetFileTypeToBinary();
     writer->Write();
     

@@ -138,7 +138,7 @@ namespace itk
     vtkUnstructuredGridReader* reader = vtkUnstructuredGridReader::New();
     reader->SetFileName(tensorsFile);
     vtkUnstructuredGrid* tensors = reader->GetOutput();
-    tensors->Update();
+    reader->Update();
     std::cout << " Done." << std::endl;
     
   

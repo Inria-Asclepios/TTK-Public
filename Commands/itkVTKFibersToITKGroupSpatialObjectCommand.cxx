@@ -76,7 +76,6 @@ namespace itk
     
     typedef itk::TensorImageIO<ScalarType, TensorDimension, ImageDimension> IOType;
     typedef IOType::TensorImageType     TensorImageType;
-    typedef TensorImageType::PixelType  TensorType;
     
     // read the vtk fiber file
     std::cout << "Reading: " << vtkFiberFile << std::endl;

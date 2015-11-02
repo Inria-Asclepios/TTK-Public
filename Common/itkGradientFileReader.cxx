@@ -20,7 +20,7 @@
 #include "itkGradientFileReader.h"
 
 #include <itksys/SystemTools.hxx>
-#include <itksys/ios/sstream>
+//#include <itksys/ios/sstream>
 #include <sstream>
 #include <fstream>
 
@@ -171,7 +171,7 @@ void GradientFileReader
       break;
     }
 
-    itksys_ios::istringstream parse ( line );
+    std::istringstream parse ( line );
 
     std::vector<ScalarType> values;
 
@@ -230,7 +230,7 @@ void GradientFileReader
       continue;
     }
 
-    itksys_ios::istringstream parse ( line );
+    std::istringstream parse ( line );
 
     VectorType gradient;
     ScalarType value;
@@ -285,7 +285,7 @@ void GradientFileReader
     // Push back
     itkDebugMacro ( "Name: \"" << Name << "\"" );
     itkDebugMacro ( "Value: \"" << Value << "\"" );
-    itksys_ios::istringstream parse ( Value );
+    std::istringstream parse ( Value );
 
     int vector_id = std::atoi (Name.c_str());
     if (vector_id < 0 || vector_id > 512)

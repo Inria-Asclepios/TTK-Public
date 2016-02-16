@@ -48,7 +48,6 @@
 #include <vtkDoubleArray.h>
 
 #include <vtksys/SystemTools.hxx>
-#include <vtksys/stl/string>
 
 namespace itk
 {
@@ -76,7 +75,7 @@ namespace itk
       throw itk::ExceptionObject (__FILE__,__LINE__,"Error: FileName is not set.");
     }
 
-    vtksys_stl::string ext = vtksys::SystemTools::GetFilenameExtension (m_FileName.c_str());
+    std::string ext = vtksys::SystemTools::GetFilenameExtension (m_FileName.c_str());
     if( ext=="" )
     {
       throw itk::ExceptionObject (__FILE__,__LINE__,"Error: Extension is not set.");
@@ -853,7 +852,7 @@ namespace itk
     }
 
 
-    vtksys_stl::string ext = vtksys::SystemTools::GetFilenameExtension (m_FileName.c_str());
+    std::string ext = vtksys::SystemTools::GetFilenameExtension (m_FileName.c_str());
     if( ext=="" )
     {
       throw itk::ExceptionObject (__FILE__,__LINE__,"Error: Extension is not set.");

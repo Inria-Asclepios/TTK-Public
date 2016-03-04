@@ -7,9 +7,6 @@ SET(TTK_CONFIG_INSTALL_ONLY)
 # The "use" file.
 SET(TTK_USE_FILE ${TTK_BINARY_DIR}/UseTTK.cmake)
 
-# The build settings file.
-SET(TTK_BUILD_SETTINGS_FILE ${TTK_BINARY_DIR}/TTKBuildSettings.cmake)
-
 # Library directory.
 SET(TTK_LIBRARY_DIRS_CONFIG ${LIBRARY_OUTPUT_PATH})
 
@@ -37,9 +34,6 @@ CONFIGURE_FILE(${TTK_SOURCE_DIR}/TTKConfig.cmake.in
 
 # The "use" file.
 SET(TTK_USE_FILE ${CMAKE_INSTALL_PREFIX}/lib/UseTTK.cmake)
-
-# The build settings file.
-SET(TTK_BUILD_SETTINGS_FILE ${CMAKE_INSTALL_PREFIX}/lib/TTKBuildSettings.cmake)
 
 # Include directories.
 SET(TTK_INCLUDE_DIRS_CONFIG

@@ -263,17 +263,11 @@ SET(TTK_DIR "${PROJECT_BINARY_DIR}" CACHE INTERNAL "TTK_DIR variable to be used 
 CONFIGURE_FILE(${TTK_SOURCE_DIR}/UseTTK.cmake.in
                ${TTK_BINARY_DIR}/UseTTK.cmake COPYONLY IMMEDIATE)
 
-# Save the compiler settings so another project can import them.
-SET(TTK_BUILD_SETTINGS_FILE ${TTK_BINARY_DIR}/TTKBuildSettings.cmake)
-#INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
-#CMAKE_EXPORT_BUILD_SETTINGS(${TTK_BUILD_SETTINGS_FILE})
-
 # Create the TTKConfig.cmake file containing the TTK configuration.
 INCLUDE (${TTK_SOURCE_DIR}/ttkGenerateTTKConfig.cmake)
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
-  INSTALL(FILES ${TTK_BINARY_DIR}/TTKBuildSettings.cmake 
-      ${TTK_BINARY_DIR}/UseTTK.cmake 
+  INSTALL(FILES ${TTK_BINARY_DIR}/UseTTK.cmake 
       ${TTK_BINARY_DIR}/Utilities/TTKConfig.cmake
    DESTINATION lib
   )

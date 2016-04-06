@@ -30,7 +30,7 @@
 
 namespace itk
 {
-  
+
   ConsolidateFiberBundleCommand::ConsolidateFiberBundleCommand()
   {
     m_ShortDescription = "Consolidate a fiber bundle by retrieving point data from all fibers";
@@ -46,31 +46,31 @@ namespace itk
 
   int ConsolidateFiberBundleCommand::Execute (int narg, const char* arg[])
   {
-    
+
     GetPot   cl(narg, const_cast<char**>(arg)); // argument parser
     if( cl.size() == 1 || cl.search(2, "--help", "-h") )
     {
       std::cout << this->GetLongDescription() << std::endl;
       return -1;
     }
-  
+
 
     const char* bundle      = cl.follow("NoFile",2,"-i","-I");
     const char* all_fibers  = cl.follow("NoFile",2,"-a","-A");
     const char* output      = cl.follow("output.vtk",2,"-o","-O");
-    
+
     const bool IsInputPresent    = cl.search(2,"-a","-A");
-    
+
     vtkPolyDataReader* reader2 = vtkPolyDataReader::New();
     reader2->SetFileName (bundle);
     reader2->Update();
     vtkPolyData* vtkBundle = reader2->GetOutput();
-    
+
     vtkPolyDataReader* reader1 = vtkPolyDataReader::New();
     vtkPolyData* vtkAllFibers = NULL;
     vtkPoints* allPoints = NULL;
     vtkCellArray* lines = NULL;
-    
+
     if (IsInputPresent)
     {
       reader1->SetFileName (all_fibers);
@@ -81,65 +81,65 @@ namespace itk
     {
       vtkAllFibers = reader2->GetOutput();
     }
-    
+
     allPoints = vtkAllFibers->GetPoints();
-    
+
     lines = vtkBundle->GetLines();
     lines->InitTraversal();
-    
+
     vtkPolyData* vtkOutput = vtkPolyData::New();
     vtkOutput->Initialize();
-    vtkOutput->Allocate();  
-    
+    vtkOutput->Allocate();
+
     vtkPoints* bundlePoints = vtkPoints::New();
     bundlePoints->Initialize();
-    
+
     vtkUnsignedCharArray* colors = vtkUnsignedCharArray::New();
     colors->SetNumberOfComponents(3);
-    
+
     vtkIdType npt, *pto;
     vtkIdType cellId = lines->GetNextCell (npt, pto);
-    
+
     while (cellId!=0)
     {
-      
+
       vtkIdType* newLine = new vtkIdType[npt];
-      
+
       for( int i=0; i<npt; i++)
       {
-	double* pt = NULL;
-	pt = allPoints->GetPoint (pto[i]);
-	
-	newLine[i] = bundlePoints->InsertNextPoint (pt);
-	colors->InsertNextTuple( vtkAllFibers->GetPointData()->GetScalars()->GetTuple (pto[i]));
+    double* pt = NULL;
+    pt = allPoints->GetPoint (pto[i]);
+
+    newLine[i] = bundlePoints->InsertNextPoint (pt);
+    colors->InsertNextTuple( vtkAllFibers->GetPointData()->GetScalars()->GetTuple (pto[i]));
       }
-      
+
       vtkOutput->InsertNextCell (VTK_POLY_LINE, npt, newLine);
-      
+
       //     delete [] newLine;
-      
+
       cellId = lines->GetNextCell (npt, pto);
     }
-    
+
     vtkOutput->SetPoints (bundlePoints);
     vtkOutput->GetPointData()->SetScalars (colors);
-    
-    
+
+
     vtkPolyDataWriter* writer = vtkPolyDataWriter::New();
     writer->SetFileName (output);
-    writer->SetInput (vtkOutput);
+    writer->SetInputData(vtkOutput);
     writer->Update();
-    
+
     reader1->Delete();
     reader2->Delete();
     vtkOutput->Delete();
     bundlePoints->Delete();
     writer->Delete();
     colors->Delete();
-    
-    
+
+
     return 0;
-    
+
   }
-  
+
 }

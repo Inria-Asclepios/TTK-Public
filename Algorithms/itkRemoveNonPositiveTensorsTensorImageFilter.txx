@@ -163,13 +163,13 @@ namespace itk
                   InputPixelType Tn = bit.GetNext (i);
                   InputPixelType Tmn = bit.GetPrevious (i);
                   
-                  if( Tn.IsPositive() && Tn.IsFinite() )
+                  if( !Tn.IsZero() && Tn.IsPositive() && Tn.IsFinite() )
                   {
                     Mean += Tn.Log() * input->GetSpacing()[i];
                     sum += input->GetSpacing()[i];
                   }
                   
-                  if( Tmn.IsPositive() && Tmn.IsFinite() )
+                  if( !Tmn.IsZero() &&  Tmn.IsPositive() && Tmn.IsFinite() )
                   {
                     Mean += Tmn.Log() * input->GetSpacing()[i];
                     sum += input->GetSpacing()[i];
@@ -182,7 +182,10 @@ namespace itk
                 else
                 {
                   Mean /= sum;
-                  out = Mean.Exp();
+                  if ( !Mean.IsZero() && Mean.IsPositive() && Mean.IsFinite() )
+                    out = Mean.Exp();
+                  else
+                    out = static_cast<ScalarType>( 0.0 );
                 }
                 break;
 

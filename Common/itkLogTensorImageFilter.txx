@@ -49,8 +49,8 @@ namespace itk
 	  T = T.Log();
 	}
 	catch( itk::ExceptionObject &)
-	{
-	  throw itk::ExceptionObject(__FILE__,__LINE__,"Error in LogTensorImageFilter::ThreadedGenerateData()");
+        {
+          throw itk::ExceptionObject(__FILE__,__LINE__,"Error in LogTensorImageFilter::ThreadedGenerateData()");
 	}
       }      
       itOut.Set (T);

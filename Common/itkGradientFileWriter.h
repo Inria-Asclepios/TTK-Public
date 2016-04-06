@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 #include <itksys/SystemTools.hxx>
-#include <itksys/ios/sstream>
+//#include <itksys/ios/sstream>
 #include <sstream>
 #include <fstream>
 

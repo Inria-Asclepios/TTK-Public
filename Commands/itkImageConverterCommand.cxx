@@ -127,7 +127,7 @@ namespace itk
     informationreader->SetFileName(filename1);
     try
     {
-      informationreader->GenerateOutputInformation();
+      informationreader->Update();
     }
     catch(itk::ExceptionObject &e)
     {

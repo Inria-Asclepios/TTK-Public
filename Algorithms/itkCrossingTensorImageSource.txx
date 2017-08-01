@@ -37,7 +37,7 @@ namespace itk
     typename TensorImageType::IndexType index = {{0}};
     typename TensorImageType::SizeType size = {{0}};
 
-    TensorImageType::SizeType::SizeValueType localSize[NDimensions];
+    typename TensorImageType::SizeType::SizeValueType localSize[NDimensions];
     for (int i=0; i<NDimensions; ++i)
         localSize[i]  = m_Size[i];
 

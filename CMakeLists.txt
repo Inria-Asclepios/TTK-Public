@@ -85,7 +85,7 @@ else(${PROJECT_NAME}_BUILD_SHARED_LIBS)
 endif(${PROJECT_NAME}_BUILD_SHARED_LIBS)
 
 
-mark_as_advanced(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT 
+mark_as_advanced(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT
   ${PROJECT_NAME}_INSTALL_NO_RUNTIME
   ${PROJECT_NAME}_INSTALL_NO_LIBRARIES
   )
@@ -105,19 +105,21 @@ find_package(VTK REQUIRED)
 
 set(_ITKVersionString "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}" )
 math(EXPR _ITKVersionNum "${ITK_VERSION_MAJOR}*100*100 + ${ITK_VERSION_MINOR}*100 + ${ITK_VERSION_PATCH}")
-if( _ITKVersionNum LESS 40800 )
-  message(SEND_ERROR "The ITK version you want to use (${_ITKVersionString}) is not supported by this project. Please use a more recent version of ITK. The minimum required version is 4.8.0. The recommended version is 4.8.0.")
+if( _ITKVersionNum LESS 41300 )
+  message(SEND_ERROR "The ITK version you want to use (${_ITKVersionString}) is not supported by this project. Please use a more recent version of ITK. The minimum required version is 4.13.0. The recommended version is 4.13.0.")
 endif()
 
 SET(ITKIO_LIBRARIES
   ITKIOImageBase
   ITKIOBMP
+  ITKIOBruker
   ITKIOLSM
   ITKIOJPEG
   ITKIOPNG
   ITKIOVTK
   ITKIOGDCM
   ITKIOGE
+  ITKIOMINC
   ITKNrrdIO
   ITKIONRRD
   ITKIOMeta
@@ -154,10 +156,10 @@ if (TTK_USE_GMM)
 endif(TTK_USE_GMM)
 
 
-if  (TTK_USE_MKL 
+if  (TTK_USE_MKL
  AND TTK_USE_ACML)
   message(FATAL_ERROR "Both TTK_USE_MKL and TTK_USE_ACML are set to ON, only one can be used at the same time")
-endif (TTK_USE_MKL 
+endif (TTK_USE_MKL
    AND TTK_USE_ACML)
 
 
@@ -183,12 +185,12 @@ set(TTK_MIPS_LIBRARIES
 if(TTK_USE_MIPS)
   find_package(MIPS REQUIRED)
   include(${MIPS_USE_FILE})
- 
-  set(TTK_MIPS_LIBRARIES 
-  mipsItkImageIO 
-  InrimageNG 
-  LinearAlgebra 
-  Basics 
+
+  set(TTK_MIPS_LIBRARIES
+  mipsItkImageIO
+  InrimageNG
+  LinearAlgebra
+  Basics
   mipsZ)
 endif(TTK_USE_MIPS)
 
@@ -198,8 +200,8 @@ set(TTK_VTKINRIA3D_LIBRARIES
 if(TTK_USE_VTKINRIA3D)
   find_package(vtkINRIA3D REQUIRED)
   include(${vtkINRIA3D_USE_FILE})
- 
-  set(TTK_VTKINRIA3D_LIBRARIES 
+
+  set(TTK_VTKINRIA3D_LIBRARIES
   itkIOAddOn
   vtkImaging
   vtkVisuManagement
@@ -261,7 +263,7 @@ INCLUDE (${TTK_SOURCE_DIR}/ttkGenerateTTKConfig.cmake)
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES
-      ${TTK_BINARY_DIR}/UseTTK.cmake 
+      ${TTK_BINARY_DIR}/UseTTK.cmake
       ${TTK_BINARY_DIR}/Utilities/TTKConfig.cmake
    DESTINATION lib
   )

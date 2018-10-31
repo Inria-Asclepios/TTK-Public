@@ -300,7 +300,7 @@ namespace itk
 # include "Templates/itkMatrixOffsetTensorTransformBase+-.h"
 #endif
 
-#if ITK_TEMPLATE_TXX
+#ifndef ITK_MANUAL_INSTANTIATION
 # include "itkMatrixOffsetTensorTransformBase.txx"
 #endif
 

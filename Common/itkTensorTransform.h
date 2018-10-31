@@ -259,7 +259,7 @@ namespace itk
 # include "Templates/itkTensorTransform+-.h"
 #endif
 
-#if ITK_TEMPLATE_TXX
+#ifndef ITK_MANUAL_INSTANTIATION
 # include "itkTensorTransform.txx"
 #endif
 

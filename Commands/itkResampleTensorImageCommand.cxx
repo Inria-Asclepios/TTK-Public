@@ -129,83 +129,8 @@ namespace itk
     typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;
     typedef itk::AffineTransform< ScalarType, 3>                AffineTransformType;
     
-    /*
-    // read the affine matrix
-    std::ifstream buffer (mat);
-    if( buffer.fail() )
-    {
-    std::cerr << "Error: Cannot read file " << mat << std::endl;
-    return -1;
-    }
     
-    
-    TransformType::MatrixType       matrix;
-    TransformType::OutputVectorType translation;
-    
-    if( bal ) // baladin's style
-    {
-    // skip 2 first characters
-    char junk[512];
-    buffer >> junk;
-    buffer >> junk;
-    
-    for( unsigned int i=0 ;i<3; i++)
-    {
-    buffer >> matrix (i,0);
-    buffer >> matrix (i,1);
-    buffer >> matrix (i,2);
-    buffer >> translation[i];
-    }
-    transform->SetMatrix (matrix);
-    transform->SetTranslation (translation);
-    
-    TransformType::Pointer inv_transform = TransformType::New();
-    transform->GetInverse(inv_transform);
-    
-    transform = inv_transform;
-    }
-    else
-    {  
-    
-    // skip the first 12 floats
-    char junk [512];
-    for( unsigned int i=0; i<12; i++)
-    {
-    buffer >> junk;
-    }
-    
-    for( unsigned int i=0 ;i<3; i++)
-    {
-      buffer >> matrix (i,0);
-      buffer >> matrix (i,1);
-      buffer >> matrix (i,2);
-      }
-      
-    for( unsigned int i=0; i<3; i++)
-    {
-    buffer >> translation[i];
-    }
-    
-    transform->SetMatrix (matrix);
-    transform->SetTranslation (translation);
-    
-    TransformType::Pointer inv_transform = TransformType::New();
-    transform->GetInverse(inv_transform);
-    
-    transform = inv_transform;
-    }
-    buffer.close();
-    
-    std::cout << "Matrix is: " << std::endl;
-    std::cout << matrix << std::endl;
-    std::cout << "Translation is: " << std::endl;
-    std::cout << translation << std::endl;
-    
-    std::cout << transform << std::endl;
-    */
-    
-    
-    TransformType::Pointer transform = 0;
+    TransformType::Pointer transform = nullptr;
     {
       itk::TransformFactory< TransformType >::RegisterTransform ();
       itk::TransformFactory< AffineTransformType >::RegisterTransform ();

@@ -47,7 +47,7 @@ namespace itk
         typedef itk::ImageFileWriter<MaskImageType> MaskImageWriterType;
 
 
-        typename ImageType::Pointer image = 0;
+        typename ImageType::Pointer image = nullptr;
         {
             typename ImageReaderType::Pointer reader = ImageReaderType::New();
             reader->SetFileName( arg.input );
@@ -70,7 +70,7 @@ namespace itk
     
 
     typedef itk::BrainExtractionImageFilter<ImageType, MaskImageType> BrainExtractionFilterType;
-    typename MaskImageType::Pointer maskImage = 0;
+    typename MaskImageType::Pointer maskImage = nullptr;
     {
       typename BrainExtractionFilterType::Pointer extractor = BrainExtractionFilterType::New();
       extractor->SetInput ( image );

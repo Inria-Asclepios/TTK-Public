@@ -270,7 +270,7 @@ namespace itk
   Tensor<T, NDimension>
   ::GetNorm( void ) const
   {
-    return RealValueType( vcl_sqrt( double(this->GetSquaredNorm()) ));
+    return RealValueType( std::sqrt( double(this->GetSquaredNorm()) ));
   }
 
 
@@ -405,7 +405,7 @@ namespace itk
         //std::cerr << (*this) << std::endl;        // not thread safe
         throw itk::ExceptionObject (__FILE__,__LINE__,"Error: negative eigenvalue encountered.");
       }
-      eig.D[i] = vcl_log (eig.D[i]);
+      eig.D[i] = std::log (eig.D[i]);
     }
 
     result.SetVnlMatrix ( eig.recompose() );
@@ -476,7 +476,7 @@ namespace itk
     typedef vnl_symmetric_eigensystem< T >  SymEigenSystemType;
     SymEigenSystemType eig(this->GetVnlMatrix());
     for(unsigned int i=0;i<NDimension;i++)
-      eig.D[i] = vcl_exp (eig.D[i]);
+      eig.D[i] = std::exp (eig.D[i]);
     result.SetVnlMatrix ( eig.recompose() );
 
 #endif
@@ -544,7 +544,7 @@ namespace itk
     typedef vnl_symmetric_eigensystem< T >  SymEigenSystemType;
     SymEigenSystemType eig (this->GetVnlMatrix());
     for(unsigned int i=0;i<NDimension;i++)
-      eig.D[i] = static_cast<T> (vcl_pow (static_cast<double>(eig.D[i]), n));
+      eig.D[i] = static_cast<T> (std::pow (static_cast<double>(eig.D[i]), n));
     result.SetVnlMatrix ( eig.recompose() );
 
 #endif
@@ -894,7 +894,7 @@ namespace itk
       tmp = 1.0;
 
     ValueType fa = static_cast<ValueType>
-      ( vcl_sqrt ( 1.5* ( 1.0  - tmp  )) );
+      ( std::sqrt ( 1.5* ( 1.0  - tmp  )) );
 
     return fa;
   }
@@ -916,7 +916,7 @@ namespace itk
 
     vnl_matrix<ValueType> TOT = lt*lt*EYE + L*L - lt*static_cast<ValueType>(2.0)*L;
 
-    ValueType ga = static_cast<ValueType>( vcl_sqrt ( vnl_trace (TOT) ) );
+    ValueType ga = static_cast<ValueType>( std::sqrt ( vnl_trace (TOT) ) );
 
     return ga;
   }
@@ -934,7 +934,7 @@ namespace itk
     ValueType t  = vnl_trace(M);
     ValueType t2 = vnl_trace(M*M);
 
-    ValueType ra = static_cast<ValueType>( vcl_sqrt ( t2/t - t/3.0 ) );
+    ValueType ra = static_cast<ValueType>( std::sqrt ( t2/t - t/3.0 ) );
 
     return ra;
   }
@@ -1062,7 +1062,7 @@ namespace itk
   ::SetNthComponentAsVector ( int c, const ComponentType& v )
   {
 
-    ValueType factor = 1.0/vcl_sqrt (2.0);
+    ValueType factor = 1.0/std::sqrt (2.0);
     for( unsigned int i=0;i<NDimension;i++)
     {
       if ( c == (int)(i*(i+1)/2 + i) )
@@ -1082,7 +1082,7 @@ namespace itk
   ::GetNthComponentAsVector ( int c ) const
   {
 
-    ValueType factor = vcl_sqrt (2.0);
+    ValueType factor = std::sqrt (2.0);
     for( unsigned int i=0;i<NDimension;i++)
     {
       if ( c == (int)(i*(i+1)/2 + i) )

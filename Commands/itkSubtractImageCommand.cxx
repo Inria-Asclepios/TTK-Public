@@ -63,7 +63,7 @@ namespace itk
     typedef itk::ImageFileWriter<ImageType>     ImageWriterType;
     
 
-    ImageType::Pointer image1 = 0;
+    ImageType::Pointer image1 = nullptr;
     {
       ImageReaderType::Pointer reader = ImageReaderType::New();
       reader->SetFileName( input1 );
@@ -81,7 +81,7 @@ namespace itk
     }
 
     
-    ImageType::Pointer image2 = 0;
+    ImageType::Pointer image2 = nullptr;
     {
       ImageReaderType::Pointer reader = ImageReaderType::New();
       reader->SetFileName( input2 );

@@ -226,7 +226,7 @@ namespace itk
     }
 
 
-    ExpFilterType::Pointer myExpFilter = 0;
+    ExpFilterType::Pointer myExpFilter = nullptr;
     if( !isEucSet )
     {
       myExpFilter = ExpFilterType::New();

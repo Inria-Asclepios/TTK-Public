@@ -128,7 +128,7 @@ namespace itk
       typedef Image<ScalarType, 4>        ImageType;
       typedef ImageFileReader <ImageType> ImageReaderType;
 
-      ImageType::Pointer image = 0;
+      ImageType::Pointer image = nullptr;
       {
         ImageReaderType::Pointer reader = ImageReaderType::New();
         reader->SetFileName (input);

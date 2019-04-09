@@ -84,7 +84,6 @@ namespace itk
 
     TensorArrayType vecT;
     PointArrayType vecP;
-    itk::ContinuousIndex<double, 3> index;
 
     std::cout<<"reading list : "<<inputfile<<std::endl;
 

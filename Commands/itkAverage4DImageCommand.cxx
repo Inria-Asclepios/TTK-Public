@@ -39,7 +39,7 @@ namespace itk
     typedef itk::ImageFileReader<InputImageType>     ImageReaderType;
     typedef itk::ImageFileWriter<OutputImageType>    ImageWriterType;
     
-    typename InputImageType::Pointer image = 0;
+    typename InputImageType::Pointer image = nullptr;
     {
       typename ImageReaderType::Pointer reader = ImageReaderType::New();
       reader->SetFileName( input );
@@ -111,7 +111,7 @@ namespace itk
     }
 
 
-    typename OutputImageType::Pointer outImage = 0;
+    typename OutputImageType::Pointer outImage = nullptr;
     typedef ExtractImageFilter<InputImageType, OutputImageType> ExtractFilterType;
     {
       typename InputImageType::RegionType region = image->GetLargestPossibleRegion();

@@ -101,7 +101,7 @@ namespace itk
     size[2] = sizez; 
     
     
-    TensorImageType::Pointer tensorImage = 0;
+    TensorImageType::Pointer tensorImage = nullptr;
     
     if( strcmp (type, "crossing")==0 )
     {

@@ -63,7 +63,7 @@ namespace itk
     typedef itk::Image <ScalarType, 3>           ImageType;
     
     
-    TensorImageType::Pointer tensors = 0;
+    TensorImageType::Pointer tensors = nullptr;
     {
       TensorIOType::Pointer io = TensorIOType::New();
       io->SetFileName (input);

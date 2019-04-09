@@ -71,7 +71,7 @@ namespace itk
     typedef ExpTensorImageFilter<TensorImageType,TensorImageType> ExpFilterType;
 
 
-    TensorImageType::Pointer Input = 0;
+    TensorImageType::Pointer Input = nullptr;
     
     {
       std::cout << "Reading: " << input << std::flush;
@@ -113,7 +113,7 @@ namespace itk
     
 
 
-    DisplacementFieldType::Pointer Displacement = 0;
+    DisplacementFieldType::Pointer Displacement = nullptr;
     {
       std::cout << "Reading: " << def << std::flush;
       itk::ImageFileReader<DisplacementFieldType>::Pointer reader3 = 

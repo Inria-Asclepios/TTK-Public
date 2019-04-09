@@ -16,8 +16,6 @@
 =========================================================================*/
 #include "itkCommandObjectFactory.h"
 
-#include "itkMutexLock.h"
-#include "itkMutexLockHolder.h"
 
 #include <algorithm>
 #include <string.h>
@@ -53,7 +51,7 @@ CommandObjectFactory::CreateCommandObject(const char* name)
       if( strcmp((*k)->GetCommandName(), name)==0 )
         return *k;
     }
-  return 0;
+  return nullptr;
 }
 
 	

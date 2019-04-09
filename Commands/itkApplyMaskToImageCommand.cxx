@@ -97,7 +97,7 @@ namespace itk
     
         try
         {
-            typename ImageType::Pointer image = 0;
+            typename ImageType::Pointer image = nullptr;
 
             {
                 typename ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -108,7 +108,7 @@ namespace itk
                 image->DisconnectPipeline();
             }
 
-            MaskType::Pointer mask = 0;
+            MaskType::Pointer mask = nullptr;
             {
                 typename MaskReaderType::Pointer maskReader = MaskReaderType::New();
                 maskReader->SetFileName(arg.mask);

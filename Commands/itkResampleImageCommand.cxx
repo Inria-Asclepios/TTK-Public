@@ -107,7 +107,7 @@ namespace itk
     std::cout << " Done." << std::endl;
 
     ImageType::Pointer inputimage = reader->GetOutput();
-    ImageType::Pointer reference = 0;
+    ImageType::Pointer reference = nullptr;
     if (strcmp (ref, "NoFile"))
     {
       
@@ -129,7 +129,7 @@ namespace itk
     }
     
     // read the affine matrix
-    TransformType::Pointer transform = 0;
+    TransformType::Pointer transform = nullptr;
     if (strcmp (mat, "NoFile"))
     {
       std::cout << "Reading: " << mat;

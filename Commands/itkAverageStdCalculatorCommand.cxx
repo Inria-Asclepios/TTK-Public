@@ -73,8 +73,8 @@ namespace itk
     typedef itk::ImageFileReader<ImageType> ReaderType;
     typedef itk::ImageFileWriter<ImageType> WriterType;
     
-    ImageType::Pointer mean = 0;
-    ImageType::Pointer variance = 0;
+    ImageType::Pointer mean = nullptr;
+    ImageType::Pointer variance = nullptr;
     
     {
       AverageFilterType::Pointer myAverage = AverageFilterType::New();

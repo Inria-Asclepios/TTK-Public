@@ -273,9 +273,9 @@ namespace itk
       // and the value is truncated to this precision.
       for (int i=0; i < ImageDimension; ++i)
       {
-        double roundedInputIndex = vcl_floor(inputIndex[i]);
+        double roundedInputIndex = std::floor(inputIndex[i]);
         double inputIndexFrac    = inputIndex[i] - roundedInputIndex;
-        double newInputIndexFrac = vcl_floor(precisionConstant * inputIndexFrac)/precisionConstant;
+        double newInputIndexFrac = std::floor(precisionConstant * inputIndexFrac)/precisionConstant;
         inputIndex[i] = roundedInputIndex + newInputIndexFrac;
       }    
       
@@ -421,9 +421,9 @@ namespace itk
     // and the value is truncated to this precision.
     for (int i=0; i < ImageDimension; ++i)
     {
-      double roundedDelta = vcl_floor(delta[i]);
+      double roundedDelta = std::floor(delta[i]);
       double deltaFrac = delta[i] - roundedDelta;
-      double newDeltaFrac = vcl_floor(precisionConstant * deltaFrac)/precisionConstant;
+      double newDeltaFrac = std::floor(precisionConstant * deltaFrac)/precisionConstant;
       delta[i] = roundedDelta + newDeltaFrac;
     }
     
@@ -455,9 +455,9 @@ namespace itk
       // and the value is truncated to this precision.
       for (int i=0; i < ImageDimension; ++i)
       {
-        double roundedInputIndex = vcl_floor(inputIndex[i]);
+        double roundedInputIndex = std::floor(inputIndex[i]);
         double inputIndexFrac = inputIndex[i] - roundedInputIndex;
-        double newInputIndexFrac = vcl_floor(precisionConstant * inputIndexFrac)/precisionConstant;
+        double newInputIndexFrac = std::floor(precisionConstant * inputIndexFrac)/precisionConstant;
         inputIndex[i] = roundedInputIndex + newInputIndexFrac;
       }    
       

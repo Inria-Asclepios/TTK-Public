@@ -92,7 +92,7 @@ namespace itk
     }
 
 
-    VectorImageType::Pointer vector = 0;
+    VectorImageType::Pointer vector = nullptr;
     if( strcmp (file_vector, "")!=0 )
     {
       ReaderType::Pointer reader_v = ReaderType::New();
@@ -121,7 +121,7 @@ namespace itk
     typedef itk::MatrixOffsetTransformBase<double, 3, 3> LinearTransformType;
     typedef itk::AffineTransform<double, 3>              AffineTransformType;
 
-    LinearTransformType::Pointer transform = 0;
+    LinearTransformType::Pointer transform = nullptr;
     if( strcmp (file_matrix, "")!=0 )
     {
       itk::TransformFactory< LinearTransformType >::RegisterTransform ();

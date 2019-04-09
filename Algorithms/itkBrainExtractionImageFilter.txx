@@ -65,8 +65,8 @@ BrainExtractionImageFilter<TInputImage, TOutputImage>
         threshold = calculator->GetThreshold();
     }
 
-    typename OutputImageType::Pointer outputImage    = 0;
-    typename OutputImageType::Pointer afterThreshold = 0;
+    typename OutputImageType::Pointer outputImage    = nullptr;
+    typename OutputImageType::Pointer afterThreshold = nullptr;
     {
         typename BinaryThresholdFilterType::Pointer thresholder =
                 BinaryThresholdFilterType::New();

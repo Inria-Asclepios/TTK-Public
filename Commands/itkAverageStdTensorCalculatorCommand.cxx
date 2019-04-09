@@ -71,8 +71,8 @@ namespace itk
     
     typedef itk::AverageStdTensorImageFilter<TensorImageType, TensorImageType> AverageFilterType;
     
-    TensorImageType::Pointer mean = 0;
-    CovMatrixImageType::Pointer covMatrix = 0;
+    TensorImageType::Pointer mean = nullptr;
+    CovMatrixImageType::Pointer covMatrix = nullptr;
     
     {
       AverageFilterType::Pointer myAverage = AverageFilterType::New();

@@ -46,6 +46,8 @@ namespace itk {
   private:
     TensorsToDWICommand(const Self&);
     void operator=(const Self&);
+
+    float ReadBvalueFromBvalFile (const char* filename);
     
   };
   

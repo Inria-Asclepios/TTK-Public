@@ -102,9 +102,7 @@ namespace itk
     
     itk::ImageRegionIterator<TensorImageType> itIn(tensors, tensors->GetLargestPossibleRegion());
     itk::ImageRegionIterator<TensorImageType> itOut(output, output->GetLargestPossibleRegion());
-    itk::ContinuousIndex<double, 3> index;
-    
-    TensorImageType::PointType x;
+
     TensorImageType::PixelType pix;
     
     itOut.GoToBegin();

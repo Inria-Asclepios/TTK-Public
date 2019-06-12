@@ -71,6 +71,11 @@ namespace itk
      * calling the method. */
     virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
 
+    SizeType GetRadius() const override
+    {
+        return SizeType::Filled(1);
+    }
+
     /**
        Normalize the interpolation (default: OFF). Normalization is used when the sum of
        weights in less than one. Without normalization, a Log-Eucldiean interpolation

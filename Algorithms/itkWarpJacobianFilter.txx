@@ -88,7 +88,7 @@ WarpJacobianFilter<TInputImage, TOutputImage>
 template <typename TInputImage, typename TOutputImage>
 void 
 WarpJacobianFilter<TInputImage, TOutputImage>
-::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
+::GenerateInputRequestedRegion() noexcept(false)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

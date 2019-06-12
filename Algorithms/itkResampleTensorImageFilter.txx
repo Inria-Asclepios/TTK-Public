@@ -582,7 +582,7 @@ namespace itk
    * Verify if any of the components has been modified.
    */
   template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-  unsigned long 
+  ModifiedTimeType 
   ResampleTensorImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
   ::GetMTime( void ) const
   {

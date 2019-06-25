@@ -38,7 +38,7 @@ WarpJacobianFilter<TInputImage, TOutputImage>
 {
   unsigned int i;
   m_UseImageSpacing = true;
-  m_RequestedNumberOfThreads = this->GetNumberOfThreads();
+  m_RequestedNumberOfThreads = this->GetNumberOfWorkUnits();
   for (i = 0; i < ImageDimension; i++)
     {
     m_NeighborhoodRadius[i] = 1; // radius of neighborhood we will use

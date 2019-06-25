@@ -153,7 +153,7 @@ namespace itk
       warper->SetOutputDirection( Displacement->GetDirection() );
       warper->SetDisplacementField( Displacement );
       warper->SetInterpolator ( interpolator );
-      warper->SetNumberOfThreads (1);
+      warper->SetNumberOfWorkUnits(1);
       
       switch (reostrat)
       {

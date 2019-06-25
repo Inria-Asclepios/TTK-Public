@@ -87,7 +87,7 @@ namespace itk
     FilterType::Pointer myFilter = FilterType::New();
     myFilter->SetInput ( myIO->GetOutput() );
     myFilter->SetVariance (variance);
-    myFilter->SetNumberOfThreads (1);
+    myFilter->SetNumberOfWorkUnits(1);
     
     // now: filter
     std::cout << "Adding noise to tensors ..." << std::flush << std::endl;

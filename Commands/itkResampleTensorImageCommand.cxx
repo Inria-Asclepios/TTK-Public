@@ -107,7 +107,7 @@ namespace itk
       typedef itk::LogTensorImageFilter<TensorImageType, TensorImageType> LogFilterType;
       LogFilterType::Pointer myLog = LogFilterType::New();
       myLog->SetInput(tensors);
-      myLog->SetNumberOfThreads(threads);
+      myLog->SetNumberOfWorkUnits(threads);
       
       try
       {
@@ -166,7 +166,7 @@ namespace itk
     
     filter->SetTensorInterpolator( interpolator );
     filter->SetInput ( tensors );
-    filter->SetNumberOfThreads(threads);
+    filter->SetNumberOfWorkUnits(threads);
     //filter->SetUseReferenceImage (true);
     //filter->SetReferenceImage ( myIO->GetOutput() );
     
@@ -249,7 +249,7 @@ namespace itk
       ExpFilterType::Pointer myExp = ExpFilterType::New();
       
       myExp->SetInput( filter->GetOutput() );
-      myExp->SetNumberOfThreads(threads);
+      myExp->SetNumberOfWorkUnits(threads);
       
       std::cout << "Pipeline started." << std::endl;
       std::cout << std::flush;

@@ -213,7 +213,7 @@ namespace itk
     myFilter->SetTangents(vecTangent);
     myFilter->SetSigma(sigma);
     myFilter->SetGamma(gamma);
-    myFilter->SetNumberOfThreads (t);
+    myFilter->SetNumberOfWorkUnits(t);
 
     try
     {

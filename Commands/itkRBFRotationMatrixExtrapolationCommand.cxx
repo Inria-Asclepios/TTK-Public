@@ -190,7 +190,7 @@ namespace itk
     myFilter->SetPoints(vecP);
     myFilter->SetSigma(sigma);
     myFilter->SetGamma(gamma);
-    myFilter->SetNumberOfThreads (t);
+    myFilter->SetNumberOfWorkUnits(t);
 
 
     std::cout << "Filtering..." << std::flush;

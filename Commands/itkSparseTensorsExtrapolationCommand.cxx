@@ -197,7 +197,7 @@ namespace itk
       LogFilterType;
     LogFilterType::Pointer logFilter = LogFilterType::New();
     logFilter->SetInput(input);
-    logFilter->SetNumberOfThreads (threads);
+    logFilter->SetNumberOfWorkUnits(threads);
 
     // set up the filter
     FilterType::Pointer myFilter = FilterType::New();
@@ -210,7 +210,7 @@ namespace itk
     myFilter->SetTimeStep(deltat);
     myFilter->SetNumberOfIterations(nite);
     myFilter->SetRMSChange(rms);
-    myFilter->SetNumberOfThreads (threads);
+    myFilter->SetNumberOfWorkUnits(threads);
     myFilter->SetInput(logFilter->GetOutput());
 
 
@@ -219,7 +219,7 @@ namespace itk
       ExpFilterType;
     ExpFilterType::Pointer expFilter = ExpFilterType::New();
     expFilter->SetInput(myFilter->GetOutput());
-    expFilter->SetNumberOfThreads (threads);
+    expFilter->SetNumberOfWorkUnits(threads);
 
     std::cout << "Pipeline started."<< std::endl;
     try

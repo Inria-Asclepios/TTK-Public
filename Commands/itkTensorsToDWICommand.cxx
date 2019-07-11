@@ -63,12 +63,12 @@ namespace itk
     const char* file_out= cl.follow ("NoFile", 2, "-o", "-O");
     int b0value = cl.follow (32767, 2, "-m", "-M");
     
-    typedef double                               ScalarType;
-    typedef itk::TensorImageIO<ScalarType, 3, 3> TensorIOType;
-    typedef TensorIOType::TensorType             TensorType;
-    typedef TensorIOType::TensorImageType        TensorImageType;
-    typedef itk::Image<double, 3>                ImageType;
-    typedef itk::Image<unsigned short, 3>        LightImageType;
+    using ScalarType      = double;
+    using TensorIOType    = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorType      = TensorIOType::TensorType;
+    using TensorImageType = TensorIOType::TensorImageType;
+    using ImageType       = itk::Image<double, 3>;
+    using LightImageType  = itk::Image<unsigned short, 3>;
     
     std::cout << "Reading: " << file_in;
     std::cout << std::flush;
@@ -91,11 +91,8 @@ namespace itk
     TensorImageType::Pointer myTensorImage = myIO->GetOutput();
 
     // create a B0 image by taking the norm of the tensor field * scale:
-    typedef itk::TensorToScalarTensorImageFilter<TensorImageType, ImageType>
-      TensorToScalarFilterType;
-    
-    typedef itk::TensorToL2NormFunction<TensorType, ScalarType>
-      TensorFunctionType;
+    using TensorToScalarFilterType = itk::TensorToScalarTensorImageFilter<TensorImageType, ImageType>;    
+    using TensorFunctionType = itk::TensorToL2NormFunction<TensorType, ScalarType>;
 
     TensorToScalarFilterType::Pointer myFilter1 = TensorToScalarFilterType::New();
     TensorFunctionType::Pointer myFunction = TensorFunctionType::New();
@@ -130,10 +127,9 @@ namespace itk
       return -1;
     }
 
-    typedef itk::TensorsToDWITensorImageFilter<TensorImageType, LightImageType>
-      TensorsToDWIFilter;
-    typedef TensorsToDWIFilter::GradientType      GradientType;
-    typedef TensorsToDWIFilter::GradientListType  GradientListType;
+    using TensorsToDWIFilter = itk::TensorsToDWITensorImageFilter<TensorImageType, LightImageType>;
+    using GradientType       = TensorsToDWIFilter::GradientType;
+    using GradientListType   = TensorsToDWIFilter::GradientListType;
   
     GradientListType myGradients;
     

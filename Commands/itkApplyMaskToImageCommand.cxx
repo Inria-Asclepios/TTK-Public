@@ -40,14 +40,11 @@ namespace itk
     template <class TInputImage>
     int ApplyMaskToImageCommandImplementation(const argument &arg)
     {
-        typedef TInputImage ImageType;
-
-        typedef itk::Image<unsigned char, ImageType::ImageDimension > MaskType;
-
-        typedef itk::ImageFileReader<ImageType> ImageReaderType;
-        typedef itk::ImageFileReader<MaskType>  MaskReaderType;
-
-        typedef itk::ImageFileWriter<ImageType> ImageWriterType;
+        using ImageType       = TInputImage;
+        using MaskType        = itk::Image<unsigned char, ImageType::ImageDimension >;
+        using ImageReaderType = itk::ImageFileReader<ImageType>;
+        using MaskReaderType  = itk::ImageFileReader<MaskType>;
+        using ImageWriterType = itk::ImageFileWriter<ImageType>;
     
         try
         {
@@ -57,8 +54,7 @@ namespace itk
             typename MaskReaderType::Pointer maskReader = MaskReaderType::New();
             maskReader->SetFileName(arg.mask);
 
-            typedef itk::MaskImageFilter<ImageType, MaskType, ImageType>
-                MaskFilterType;
+            using MaskFilterType = itk::MaskImageFilter<ImageType, MaskType, ImageType>;
 
             typename MaskFilterType::Pointer masker = MaskFilterType::New();
             masker->SetInput1 (reader->GetOutput());
@@ -85,15 +81,12 @@ namespace itk
      template <class TInputImage>
     int ApplyMaskTo4DImageCommandImplementation(const argument &arg)
     {
-        typedef TInputImage ImageType;
-
-        typedef itk::Image<unsigned char, 3 > MaskType;
-        typedef itk::Image<typename ImageType::PixelType, 3> InternalImageType;
-
-        typedef itk::ImageFileReader<ImageType> ImageReaderType;
-        typedef itk::ImageFileReader<MaskType>  MaskReaderType;
-
-        typedef itk::ImageFileWriter<ImageType> ImageWriterType;
+        using ImageType         = TInputImage;
+        using MaskType          = itk::Image<unsigned char, 3 >;
+        using InternalImageType = itk::Image<typename ImageType::PixelType, 3>;
+        using ImageReaderType   = itk::ImageFileReader<ImageType>;
+        using MaskReaderType    = itk::ImageFileReader<MaskType>;
+        using ImageWriterType   = itk::ImageFileWriter<ImageType>;
     
         try
         {
@@ -118,12 +111,9 @@ namespace itk
                 mask->DisconnectPipeline();
             }
 
-            typedef itk::MaskImageFilter<InternalImageType, MaskType, InternalImageType>
-                MaskFilterType;
-
-            typedef itk::ExtractImageFilter<ImageType, InternalImageType> ExtractFilterType;
-
-            typedef itk::JoinSeriesImageFilter<InternalImageType, ImageType> JoinFilterType;
+            using MaskFilterType    = itk::MaskImageFilter<InternalImageType, MaskType, InternalImageType>;
+            using ExtractFilterType = itk::ExtractImageFilter<ImageType, InternalImageType>;
+            using JoinFilterType    = itk::JoinSeriesImageFilter<InternalImageType, ImageType>;
             typename JoinFilterType::Pointer joiner = JoinFilterType::New();
 
             unsigned int volumeCount = image->GetLargestPossibleRegion().GetSize()[3];
@@ -333,17 +323,6 @@ namespace itk
         std::cerr << "Tensors are not supported yet";
         return EXIT_FAILURE;
     }
-    
-    /*
-    typedef TensorImageIO<ScalarType,3,3> TensorIOType;
-    typedef TensorIOType::TensorImageType TensorImageType;
-    typedef TensorIOType::TensorType      TensorType;
-    
-    TensorIOType::Pointer tensorreader = TensorIOType::New();
-    tensorreader->SetFileName( input );
-    
-    return EXIT_FAILURE;
-  */
 
     return EXIT_FAILURE;
 

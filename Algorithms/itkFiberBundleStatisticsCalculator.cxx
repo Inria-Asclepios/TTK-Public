@@ -10,11 +10,10 @@ namespace itk
 
     FiberBundleStatisticsCalculator::FiberBundleStatisticsCalculator()
     {
-        m_Input = 0;
+        m_Input = nullptr;
     }
 
-    FiberBundleStatisticsCalculator::~FiberBundleStatisticsCalculator()
-    {}
+    FiberBundleStatisticsCalculator::~FiberBundleStatisticsCalculator() = default;
 
     void FiberBundleStatisticsCalculator::SetInput(FiberBundleType *bundle)
     {
@@ -25,7 +24,7 @@ namespace itk
     }
 
     FiberBundleStatisticsCalculator::FiberBundleType*
-        FiberBundleStatisticsCalculator::GetInput (void) const
+        FiberBundleStatisticsCalculator::GetInput () const
     {
         return m_Input;
     }
@@ -39,7 +38,7 @@ namespace itk
             itkExceptionMacro(<< "bundle has no Tensors attribute, cannot compute scalars");
 
         vtkCellArray* lines = m_Input->GetLines();
-        if( lines==0 )
+        if( lines == nullptr )
         {
             return;
         }
@@ -50,7 +49,7 @@ namespace itk
         lines->InitTraversal();
   
         vtkIdType  npts  = 0;
-        vtkIdType* ptids = 0;
+        vtkIdType* ptids = nullptr;
         vtkIdType test = lines->GetNextCell (npts, ptids);
 
         while ( test )
@@ -87,18 +86,18 @@ namespace itk
     }
 
 
-    FiberBundleStatisticsCalculator::ScalarArrayType FiberBundleStatisticsCalculator::GetFAValues (void) const
+    FiberBundleStatisticsCalculator::ScalarArrayType FiberBundleStatisticsCalculator::GetFAValues () const
     {
         return m_FAValues;
     }
 
 
-    FiberBundleStatisticsCalculator::ScalarArrayType FiberBundleStatisticsCalculator::GetADCValues (void) const
+    FiberBundleStatisticsCalculator::ScalarArrayType FiberBundleStatisticsCalculator::GetADCValues () const
     {
         return m_ADCValues;
     }
         
-    FiberBundleStatisticsCalculator::ScalarArrayType FiberBundleStatisticsCalculator::GetFiberLengthValues (void) const
+    FiberBundleStatisticsCalculator::ScalarArrayType FiberBundleStatisticsCalculator::GetFiberLengthValues () const
     {
         return m_FiberLengthValues;
     }

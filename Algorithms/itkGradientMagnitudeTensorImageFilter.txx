@@ -52,7 +52,7 @@ namespace itk
   template<class TInputImage, class TOutputImage>
   void
   GradientMagnitudeTensorImageFilter<TInputImage,TOutputImage>
-  ::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
+  ::GenerateInputRequestedRegion() noexcept(false)
   {
     
     // call the superclass' implementation of this method

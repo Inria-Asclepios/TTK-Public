@@ -95,16 +95,15 @@ namespace itk
     std::cout << std::flush;
 
     // typedefs
-    typedef double ScalarType;
-    typedef itk::Matrix<ScalarType, 3, 3>        MatrixType;
-    typedef itk::Image<MatrixType, 3>            MatrixImageType;
-    typedef itk::Image<ScalarType, 3>            ImageType;
-    typedef itk::RBFInterpolationRotationMatrixImageFilter<ImageType, MatrixImageType>
-      FilterType;
-    typedef FilterType::VectorOfPixelType        VectorOfMatrixType;
-    typedef FilterType::PointType                PointType;
-    typedef FilterType::VectorOfPointsType       VectorOfPointsType;
-    typedef itk::ImageFileReader<ImageType>      ImageFileReaderType;
+    using ScalarType          = double;
+    using MatrixType          = itk::Matrix<ScalarType, 3, 3>;
+    using MatrixImageType     = itk::Image<MatrixType, 3>;
+    using ImageType           = itk::Image<ScalarType, 3>;
+    using FilterType          = itk::RBFInterpolationRotationMatrixImageFilter<ImageType, MatrixImageType>;
+    using VectorOfMatrixType  = FilterType::VectorOfPixelType;
+    using PointType           = FilterType::PointType;
+    using VectorOfPointsType  = FilterType::VectorOfPointsType;
+    using ImageFileReaderType = itk::ImageFileReader<ImageType>;
 
 
     // read the input image
@@ -237,7 +236,7 @@ namespace itk
 
     vtkPoints* myPoints = vtkPoints::New();
 
-    typedef itk::ImageRegionConstIteratorWithIndex<MatrixImageType> IteratorType;
+    using IteratorType = itk::ImageRegionConstIteratorWithIndex<MatrixImageType>;
     IteratorType it (itkMatImage, itkMatImage->GetLargestPossibleRegion() );
     while( !it.IsAtEnd() )
     {

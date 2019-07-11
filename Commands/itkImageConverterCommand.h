@@ -30,28 +30,27 @@ namespace itk {
     
   public:
 		
-    typedef ImageConverterCommand Self;
-    typedef CommandObjectBase Superclass;
-    typedef SmartPointer <Self> Pointer;
-    typedef SmartPointer <const Self> ConstPointer;
-
-    typedef GradientFileWriter GradientWriterType;
-    typedef GradientWriterType::VectorListType VectorListType;
-    typedef GradientWriterType::VectorType VectorType;
+    using Self               = ImageConverterCommand;
+    using Superclass         = CommandObjectBase;
+    using Pointer            = SmartPointer <Self>;
+    using ConstPointer       = SmartPointer <const Self>;
+    using GradientWriterType = GradientFileWriter;
+    using VectorListType     = GradientWriterType::VectorListType;
+    using VectorType         = GradientWriterType::VectorType;
     
     itkTypeMacro(ImageConverterCommand, CommandObjectBase);
     itkNewMacro(Self);
     
-    const char *GetCommandName(void)
+    const char *GetCommandName() override
     { return "image"; }
     
-    int Execute(int nargs, const char *args[]);
+    int Execute(int nargs, const char *args[]) override;
 
-    typedef Image<float,3> FloatImageType;
+    using FloatImageType = Image<float,3>;
     
   protected:
     ImageConverterCommand();
-    ~ImageConverterCommand();
+    ~ImageConverterCommand() override;
 
     FloatImageType::DirectionType ExtractPARRECImageOrientation (const char* filename);
     FloatImageType::PointType ExtractPARRECImageOrigin (const char* filename, FloatImageType::DirectionType direction);

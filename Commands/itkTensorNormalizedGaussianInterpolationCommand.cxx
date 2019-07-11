@@ -101,17 +101,16 @@ namespace itk
 
 
     // typedefs
-    typedef double                                          ScalarType;
-    typedef itk::TensorImageIO<ScalarType, 3, 3>            IOType;
-    typedef IOType::TensorImageType                         TensorImageType;
-    typedef itk::Image<double,3>                             ImageType;
-    typedef TensorImageType::PixelType                      TensorType;
-    typedef itk::NormalizedGaussianInterpolationTensorImageFilter<ImageType, TensorImageType>
-      FilterType;
-    typedef FilterType::VectorOfPixelsType                  VectorOfTensorsType;
-    typedef FilterType::PointType                           PointType;
-    typedef FilterType::VectorOfPointsType                  VectorOfPointsType;
-    typedef itk::ImageFileReader<ImageType>                 ImageFileReaderType;
+    using ScalarType          = double;
+    using IOType              = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType     = IOType::TensorImageType;
+    using ImageType           = itk::Image<double,3>;
+    using TensorType          = TensorImageType::PixelType;
+    using FilterType          = itk::NormalizedGaussianInterpolationTensorImageFilter<ImageType, TensorImageType>;
+    using VectorOfTensorsType = FilterType::VectorOfPixelsType;
+    using PointType           = FilterType::PointType;
+    using VectorOfPointsType  = FilterType::VectorOfPointsType;
+    using ImageFileReaderType = itk::ImageFileReader<ImageType>;
 
 
 

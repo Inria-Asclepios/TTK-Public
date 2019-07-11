@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  TensorNormalizedGaussianInterpolationCommandFactory::GetITKSourceVersion(void) const
+  TensorNormalizedGaussianInterpolationCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  TensorNormalizedGaussianInterpolationCommandFactory::GetDescription(void) const
+  TensorNormalizedGaussianInterpolationCommandFactory::GetDescription() const
   {
     return "Extrapolate sparse tensors on a regular grid using a normalized Gaussian";
   }

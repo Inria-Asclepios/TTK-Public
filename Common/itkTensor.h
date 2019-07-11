@@ -38,33 +38,33 @@ namespace itk
 
     public:
     /** Standard typedefs */
-    typedef Tensor Self;
+    using Self = Tensor;
 
     itkStaticConstMacro (NDegreesOfFreedom, unsigned int, NDimension*(NDimension+1)/2);
     //static const unsigned int NDegreesOfFreedom = NDimension*(NDimension+1)/2;
 
-    typedef FixedArray<T,NDegreesOfFreedom> Superclass;
+    using Superclass = FixedArray<T,NDegreesOfFreedom>;
 
     /** ValueType can be used to declare a variable that is the same type
      * as a data element held in an Vector.   */
-    typedef T ValueType;
-    typedef typename NumericTraits< ValueType >::RealType   RealType;
-    typedef typename NumericTraits< ValueType >::RealType   RealValueType;
-    typedef Vector<T, NDimension>                           VectorType;
-    typedef Matrix<T, NDimension, NDimension>               MatrixType;
+    using ValueType     = T;
+    using RealType      = typename NumericTraits< ValueType >::RealType;
+    using RealValueType = typename NumericTraits< ValueType >::RealType;
+    using VectorType    = Vector<T, NDimension>;
+    using MatrixType    = Matrix<T, NDimension, NDimension>;
 
     /** Dimension of the tensor space. */
     itkStaticConstMacro(Dimension, unsigned int, NDimension);
     /** Number of DOFs */
     itkStaticConstMacro(DegreesOfFreedom, unsigned int, NDegreesOfFreedom);
 
-    typedef Self TensorType;
+    using TensorType = Self;
 
     /** Component value type */
-    typedef T ComponentType;
+    using ComponentType = T;
 
     /** The Array type from which this vector is derived. */
-    typedef FixedArray<T, NDegreesOfFreedom>  BaseArray;
+    using  BaseArray = FixedArray<T, NDegreesOfFreedom>;
 
     /** itk Vectors are used to store eigenvectors */
     //    typedef Vector<T, NDimension>             VectorType;
@@ -77,7 +77,7 @@ namespace itk
     inline void SetVnlMatrix( const vnl_matrix<T> & );
 
     /** Get a vnl_matrix with a copy of the internal memory  block. */
-    inline vnl_matrix<T> GetVnlMatrix (void) const;
+    inline vnl_matrix<T> GetVnlMatrix () const;
 
     /** Defaut constructor and copy constructors. */
     inline Tensor(): BaseArray(){};
@@ -152,10 +152,10 @@ namespace itk
    { return !operator==(t); }
 
   /** Returns the Froebenius Norm of the tensor  */
-  inline RealValueType GetNorm( void ) const;
+  inline RealValueType GetNorm(  ) const;
 
   /** Returns tensor's Squared Euclidean Norm  */
-  inline RealValueType GetSquaredNorm( void ) const;
+  inline RealValueType GetSquaredNorm(  ) const;
 
   /** Returns the number of independent components in this tensor type */
   inline static int GetNumberOfComponents() { return NDegreesOfFreedom;}
@@ -186,22 +186,22 @@ namespace itk
   // OTHERS OPERATORS HERE: (i,j)
 
   /** Return the matrix logarithm */
-  inline Self Log(void) const;
+  inline Self Log() const;
 
   /** Return the matrix exponential */
-  inline Self Exp (void) const;
+  inline Self Exp () const;
 
   /** Power of the tensor */
   inline Self Pow (double n) const;
 
   /** Inverse of the tensor */
-  inline Self Inv (void) const;
+  inline Self Inv () const;
 
   /** Square root of the tensor */
-  inline Self Sqrt (void) const;
+  inline Self Sqrt () const;
 
   /** Inverse square root of the tensor */
-  inline Self InvSqrt (void) const;
+  inline Self InvSqrt () const;
 
   /** Get a specific eigenvalue in ascending order */
   inline T GetEigenvalue (unsigned int n) const;
@@ -210,22 +210,22 @@ namespace itk
   inline VectorType GetEigenvector (unsigned int n) const;
 
   /** Get determinant of the tensor */
-  inline T GetDeterminant (void) const;
+  inline T GetDeterminant () const;
 
   /** Test wether the tensor is null or not */
-  inline bool IsZero (void) const;
+  inline bool IsZero () const;
 
   /** Test wether the tensor is positive or not. */
-  inline bool IsPositive (void) const;
+  inline bool IsPositive () const;
 
   /** Test wether the tensor is negative or not. */
-  inline bool IsNegative (void) const;
+  inline bool IsNegative () const;
 
   /** Test wether the tensor is finite or not. */
-  inline bool IsFinite (void) const;
+  inline bool IsFinite () const;
 
   /** Test wether the tensor has nans or not. */
-  inline bool HasNans (void) const;
+  inline bool HasNans () const;
   
   /** Compute the scalar product with another tensor: < T1 | T2 >  = trace (T1*T2) */
   inline ValueType ScalarProductWith (const Self&) const;
@@ -237,28 +237,28 @@ namespace itk
   inline Self DifferentialExp (const Self&) const;
 
   /** Compute the trace */
-  inline ValueType GetTrace (void) const;
+  inline ValueType GetTrace () const;
 
   /** Compute the FA */
-  inline ValueType GetFA (void) const;
+  inline ValueType GetFA () const;
 
   /** Compute the GA */
-  inline ValueType GetGA (void) const;
+  inline ValueType GetGA () const;
 
   /** Compute the RA */
-  inline ValueType GetRA (void) const;
+  inline ValueType GetRA () const;
 
   /** Compute the VR */
-  inline ValueType GetVR (void) const;
+  inline ValueType GetVR () const;
 
   /** Compute the Cl coeff */
-  inline ValueType GetCl( void ) const;
+  inline ValueType GetCl() const;
 
   /** Compute the Cp coeff */
-  inline ValueType GetCp( void ) const;
+  inline ValueType GetCp() const;
 
   /** Compute the Cs coeff */
-  inline ValueType GetCs( void ) const;
+  inline ValueType GetCs() const;
 
   /** Transform the tensor with a matrix */
   inline Self ApplyMatrix (const MatrixType&) const;

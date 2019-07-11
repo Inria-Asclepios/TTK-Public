@@ -66,14 +66,14 @@ namespace itk
     std::cout << std::flush;
 
     // typedefs
-    typedef double                                    ScalarType;
-    typedef itk::TensorImageIO<ScalarType, 3, 3>      TensorIOType;
-    typedef TensorIOType::TensorImageType             TensorImageType;
-    typedef TensorImageType::PixelType                TensorType;
-    typedef itk::ImageRegionIterator<TensorImageType> TensorIteratorType;
-    typedef TensorImageType::PointType                PointType;
-    typedef std::vector<TensorType>                   TensorArrayType;
-    typedef std::vector<PointType>                    PointArrayType;
+    using ScalarType         = double;
+    using TensorIOType       = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType    = TensorIOType::TensorImageType;
+    using TensorType         = TensorImageType::PixelType;
+    using TensorIteratorType = itk::ImageRegionIterator<TensorImageType>;
+    using PointType          = TensorImageType::PointType;
+    using TensorArrayType    = std::vector<TensorType>;
+    using PointArrayType     = std::vector<PointType>;
 
     // instantiation
 

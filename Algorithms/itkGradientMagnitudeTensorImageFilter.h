@@ -64,7 +64,7 @@ namespace itk
     typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
 
 
-    virtual void GenerateInputRequestedRegion() throw (InvalidRequestedRegionError);
+    virtual void GenerateInputRequestedRegion() noexcept(false);
 
     void SetUseImageSpacingOn()
     { this->SetUseImageSpacing (true); }

@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  AddGaussianNoiseToImageCommandFactory::GetITKSourceVersion(void) const
+  AddGaussianNoiseToImageCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  AddGaussianNoiseToImageCommandFactory::GetDescription(void) const
+  AddGaussianNoiseToImageCommandFactory::GetDescription() const
   {
     return "Add Gaussian noise on an input scalar image";
   }

@@ -56,11 +56,10 @@ namespace itk
     const char* output = cl.follow("output.nii.gz","-o");
     
 
-    typedef double                        ScalarType;
-    typedef Image<ScalarType, 3>          ImageType;
-    
-    typedef itk::ImageFileReader<ImageType>     ImageReaderType;
-    typedef itk::ImageFileWriter<ImageType>     ImageWriterType;
+    using ScalarType      = double;
+    using ImageType       = Image<ScalarType, 3>;    
+    using ImageReaderType = itk::ImageFileReader<ImageType>;
+    using ImageWriterType = itk::ImageFileWriter<ImageType>;
     
 
     ImageType::Pointer image1 = nullptr;
@@ -98,7 +97,7 @@ namespace itk
       image2 = reader->GetOutput();
     }
 
-    typedef SubtractImageFilter<ImageType, ImageType> FilterType;
+    using FilterType = SubtractImageFilter<ImageType, ImageType>;
     FilterType::Pointer filter = FilterType::New();
     filter->SetInput1 (image1);
     filter->SetInput2 (image2);

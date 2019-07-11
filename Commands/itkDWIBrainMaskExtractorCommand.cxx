@@ -39,12 +39,11 @@ namespace itk
     template<class TImage>
     int DWIBrainMaskExtractorCommandImplementation(const argument &arg)
     {
-        typedef TImage ImageType;
-        typedef Image<unsigned char, 3>  MaskImageType;
-
-        typedef itk::ImageFileReader<ImageType>     ImageReaderType;
-        typedef itk::ImageFileWriter<ImageType>     ImageWriterType;
-        typedef itk::ImageFileWriter<MaskImageType> MaskImageWriterType;
+        using ImageType           = TImage;
+        using MaskImageType       = Image<unsigned char, 3>;
+        using ImageReaderType     = itk::ImageFileReader<ImageType>;
+        using ImageWriterType     = itk::ImageFileWriter<ImageType>;
+        using MaskImageWriterType = itk::ImageFileWriter<MaskImageType>;
 
 
         typename ImageType::Pointer image = nullptr;
@@ -69,7 +68,7 @@ namespace itk
     }
     
 
-    typedef itk::BrainExtractionImageFilter<ImageType, MaskImageType> BrainExtractionFilterType;
+    using BrainExtractionFilterType = itk::BrainExtractionImageFilter<ImageType, MaskImageType>;
     typename MaskImageType::Pointer maskImage = nullptr;
     {
       typename BrainExtractionFilterType::Pointer extractor = BrainExtractionFilterType::New();
@@ -89,7 +88,7 @@ namespace itk
     }
 
     
-    typedef itk::MaskImageFilter<ImageType, MaskImageType, ImageType> MaskFilterType;
+    using MaskFilterType = itk::MaskImageFilter<ImageType, MaskImageType, ImageType>;
     {
       typename MaskFilterType::Pointer masker = MaskFilterType::New();
       masker->SetInput1 ( image );

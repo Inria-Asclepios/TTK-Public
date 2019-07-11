@@ -62,14 +62,14 @@ namespace itk
     const char* fileOut = cl.follow("NoFile",2,"-o","-O");
   
   
-    typedef double ScalarType;
+    using ScalarType = double ;
     
-    typedef itk::TensorImageIO<ScalarType, 3, 3> TensorIOType;
-    typedef TensorIOType::TensorImageType        TensorImageType;
-    typedef itk::TensorImageIO<ScalarType, 6, 3> CovMatrixIOType;
-    typedef CovMatrixIOType::TensorImageType     CovMatrixImageType;
+    using TensorIOType       = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType    = TensorIOType::TensorImageType;
+    using CovMatrixIOType    = itk::TensorImageIO<ScalarType, 6, 3>;
+    using CovMatrixImageType = CovMatrixIOType::TensorImageType;
     
-    typedef itk::AverageStdTensorImageFilter<TensorImageType, TensorImageType> AverageFilterType;
+    using AverageFilterType  = itk::AverageStdTensorImageFilter<TensorImageType, TensorImageType>;
     
     TensorImageType::Pointer mean = nullptr;
     CovMatrixImageType::Pointer covMatrix = nullptr;

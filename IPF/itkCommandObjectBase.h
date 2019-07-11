@@ -30,22 +30,22 @@ namespace itk
   class ITKPROGRAMFACTORY_EXPORT CommandObjectBase : public ProcessObject
   {
   public:
-    typedef CommandObjectBase        Self;
-    typedef ProcessObject            Superclass;
-    typedef SmartPointer<Self>       Pointer;
-    typedef SmartPointer<const Self> ConstPointer;
+    using  Self         = CommandObjectBase;
+    using  Superclass   = ProcessObject;
+    using  Pointer      = SmartPointer<Self>;
+    using  ConstPointer = SmartPointer<const Self>;
 
     itkTypeMacro (CommandObjectBase, ProcessObject);
 
-    virtual const char *GetCommandName (void) = 0;
-	virtual const char *GetShortDescription (void) const;
-    virtual const char *GetLongDescription (void) const;
+    virtual const char *GetCommandName () = 0;
+	virtual const char *GetShortDescription () const;
+    virtual const char *GetLongDescription () const;
 
     virtual int Execute (int nargs, const char *args[]) = 0;
 
   protected:
     CommandObjectBase();
-    ~CommandObjectBase();
+    ~CommandObjectBase() override;
 	  
 	std::string m_ShortDescription;
 	std::string m_LongDescription;

@@ -67,9 +67,9 @@ namespace itk
     vtkPolyData* vtkBundle = reader2->GetOutput();
 
     vtkPolyDataReader* reader1 = vtkPolyDataReader::New();
-    vtkPolyData* vtkAllFibers = NULL;
-    vtkPoints* allPoints = NULL;
-    vtkCellArray* lines = NULL;
+    vtkPolyData* vtkAllFibers = nullptr;
+    vtkPoints* allPoints = nullptr;
+    vtkCellArray* lines = nullptr;
 
     if (IsInputPresent)
     {
@@ -107,7 +107,7 @@ namespace itk
 
       for( int i=0; i<npt; i++)
       {
-    double* pt = NULL;
+    double* pt = nullptr;
     pt = allPoints->GetPoint (pto[i]);
 
     newLine[i] = bundlePoints->InsertNextPoint (pt);

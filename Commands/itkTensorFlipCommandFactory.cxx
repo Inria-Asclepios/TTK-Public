@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  TensorFlipCommandFactory::GetITKSourceVersion(void) const
+  TensorFlipCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  TensorFlipCommandFactory::GetDescription(void) const
+  TensorFlipCommandFactory::GetDescription() const
   {
     return "Flip tensors w.r.t. a given axis";
   }

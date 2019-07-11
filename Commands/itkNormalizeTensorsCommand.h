@@ -26,22 +26,22 @@ namespace itk {
     
   public:
 		
-    typedef NormalizeTensorsCommand Self;
-    typedef CommandObjectBase Superclass;
-    typedef SmartPointer <Self> Pointer;
-    typedef SmartPointer <const Self> ConstPointer;
+    using Self         = NormalizeTensorsCommand;
+    using Superclass   = CommandObjectBase;
+    using Pointer      = SmartPointer <Self>;
+    using ConstPointer = SmartPointer <const Self>;
     
     itkTypeMacro(NormalizeTensorsCommand, CommandObjectBase);
     itkNewMacro(Self);
     
-    const char *GetCommandName(void)
+    const char *GetCommandName() override
     { return "normalize"; }
     
-    int Execute(int nargs, const char *args[]);
+    int Execute(int nargs, const char *args[]) override;
     
   protected:
     NormalizeTensorsCommand();
-    ~NormalizeTensorsCommand();
+    ~NormalizeTensorsCommand() override;
     
   private:
     NormalizeTensorsCommand(const Self&);

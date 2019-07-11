@@ -79,10 +79,10 @@ namespace itk
     
 
     
-    typedef double                                ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
-    typedef IOType::TensorImageType               TensorImageType;
-    typedef itk::ResampleTensorImageFilter<TensorImageType,TensorImageType> FilterType;
+    using ScalarType      = double;  
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;
+    using FilterType      = itk::ResampleTensorImageFilter<TensorImageType,TensorImageType>;
   
     IOType::Pointer myIO = IOType::New();
     myIO->SetFileName(tensorFile);
@@ -104,7 +104,7 @@ namespace itk
     // log:
     if( le )
     {
-      typedef itk::LogTensorImageFilter<TensorImageType, TensorImageType> LogFilterType;
+      using LogFilterType = itk::LogTensorImageFilter<TensorImageType, TensorImageType>;
       LogFilterType::Pointer myLog = LogFilterType::New();
       myLog->SetInput(tensors);
       myLog->SetNumberOfWorkUnits(threads);
@@ -125,9 +125,9 @@ namespace itk
     
     // read the affine matrix
     std::cout << "Reading: " << mat;
-    typedef itk::AffineTensorTransform< ScalarType, 3 >         TensorTransformType;
-    typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;
-    typedef itk::AffineTransform< ScalarType, 3>                AffineTransformType;
+    using TensorTransformType = itk::AffineTensorTransform< ScalarType, 3 >;
+    using TransformType       = itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >;
+    using AffineTransformType = itk::AffineTransform< ScalarType, 3>;
     
     
     TransformType::Pointer transform = nullptr;
@@ -135,17 +135,17 @@ namespace itk
       itk::TransformFactory< TransformType >::RegisterTransform ();
       itk::TransformFactory< AffineTransformType >::RegisterTransform ();
       
-      typedef itk::TransformFileReader TransformReaderType;
+      using TransformReaderType = itk::TransformFileReader;
       TransformReaderType::Pointer reader = TransformReaderType::New();
       reader->SetFileName ( mat );
       try
       {
-	reader->Update();
+	     reader->Update();
       }
       catch (itk::ExceptionObject &e)
       {
-	std::cerr << e;
-	return -1;
+	     std::cerr << e;
+	     return -1;
       }
       transform = dynamic_cast<TransformType*>( reader->GetTransformList()->front().GetPointer() );
     }
@@ -160,7 +160,7 @@ namespace itk
     
     FilterType::Pointer filter = FilterType::New();
     
-    typedef itk::TensorLinearInterpolateImageFunction<TensorImageType, double>  InterpolatorType;
+    using InterpolatorType = itk::TensorLinearInterpolateImageFunction<TensorImageType, double>;
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
 
     
@@ -174,7 +174,7 @@ namespace itk
     itk::InrimageImageIOFactory::RegisterOneFactory();
 #endif
     
-    typedef itk::Image<double, 3> ImageType;
+    using ImageType = itk::Image<double, 3>;
     itk::ImageFileReader< ImageType >::Pointer io2 = itk::ImageFileReader< ImageType >::New();
     io2->SetFileName( ref );
     try
@@ -245,7 +245,7 @@ namespace itk
     if (le )
     {
       // exp:
-      typedef itk::ExpTensorImageFilter<TensorImageType, TensorImageType> ExpFilterType;
+      using ExpFilterType = itk::ExpTensorImageFilter<TensorImageType, TensorImageType>;
       ExpFilterType::Pointer myExp = ExpFilterType::New();
       
       myExp->SetInput( filter->GetOutput() );

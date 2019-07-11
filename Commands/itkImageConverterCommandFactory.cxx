@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  ImageConverterCommandFactory::GetITKSourceVersion(void) const
+  ImageConverterCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  ImageConverterCommandFactory::GetDescription(void) const
+  ImageConverterCommandFactory::GetDescription() const
   {
     return "Convert an image file into another format";
   }

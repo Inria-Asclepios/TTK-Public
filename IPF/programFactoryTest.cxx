@@ -48,7 +48,7 @@ int main (int narg, char *args[])
 		std::cout << "Done." << std::endl;
 	}
 	else {
-		std::cout << "Prog is null" << std::endl;
+		std::cout << "Prog is nullptr" << std::endl;
 	}
 
 	return returnValue;

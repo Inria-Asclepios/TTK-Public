@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  ScaleTensorCommandFactory::GetITKSourceVersion(void) const
+  ScaleTensorCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  ScaleTensorCommandFactory::GetDescription(void) const
+  ScaleTensorCommandFactory::GetDescription() const
   {
     return "Scale tensors by a given factor";
   }

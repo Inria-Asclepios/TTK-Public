@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  TensorToScalarCommandFactory::GetITKSourceVersion(void) const
+  TensorToScalarCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  TensorToScalarCommandFactory::GetDescription(void) const
+  TensorToScalarCommandFactory::GetDescription() const
   {
     return "Extract scalars (such as FA) from tensors";
   }

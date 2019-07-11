@@ -27,12 +27,12 @@ namespace itk
   {}
 
 
-  const char *CommandObjectBase::GetShortDescription (void) const
+  const char *CommandObjectBase::GetShortDescription () const
   {
     return m_ShortDescription.c_str();
   }
 
-  const char *CommandObjectBase::GetLongDescription (void) const
+  const char *CommandObjectBase::GetLongDescription () const
   {
     return m_LongDescription.c_str();
   }

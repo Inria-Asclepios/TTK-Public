@@ -88,9 +88,9 @@ namespace itk
     std::cout << "Output: " << file_out << std::endl;
     
     // Read in a tensor field:
-    typedef double                               ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
-    typedef IOType::TensorImageType              TensorImageType;
+    using ScalarType      = double;  
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;
     
     IOType::Pointer io = IOType::New();
     io->SetFileName(file_in);
@@ -110,7 +110,7 @@ namespace itk
     
     
     // log
-    typedef itk::LogTensorImageFilter<TensorImageType,TensorImageType> LogFilterType;
+    using LogFilterType = itk::LogTensorImageFilter<TensorImageType,TensorImageType>;
     LogFilterType::Pointer myLog = LogFilterType::New();
     
     //TensorImageType::Pointer tens = io->GetOutput();  
@@ -118,8 +118,7 @@ namespace itk
     
     
     // Anisotropic filtering:
-    typedef itk::AnisotropicDiffusionTensorImageFilter<TensorImageType,TensorImageType>
-      FilterType;
+    using FilterType = itk::AnisotropicDiffusionTensorImageFilter<TensorImageType,TensorImageType>;
     FilterType::Pointer myFilter = FilterType::New();
     
     
@@ -134,7 +133,7 @@ namespace itk
     
   
     // exp
-    typedef itk::ExpTensorImageFilter<TensorImageType,TensorImageType> ExpFilterType;
+    using ExpFilterType = itk::ExpTensorImageFilter<TensorImageType,TensorImageType>;
     ExpFilterType::Pointer myExp = ExpFilterType::New();
     
     myExp->SetInput(myFilter->GetOutput());

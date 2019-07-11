@@ -36,13 +36,13 @@ namespace itk
 	}
 	
 	const char* 
-	HelloWorldCommandFactory::GetITKSourceVersion(void) const
+	HelloWorldCommandFactory::GetITKSourceVersion() const
 	{
 		return ITK_SOURCE_VERSION;
 	}
 	
 	const char* 
-	HelloWorldCommandFactory::GetDescription(void) const
+	HelloWorldCommandFactory::GetDescription() const
 	{
 		return "Pouet pouet pouet";
 	}

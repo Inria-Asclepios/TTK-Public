@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  ApplyMaskToImageCommandFactory::GetITKSourceVersion(void) const
+  ApplyMaskToImageCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  ApplyMaskToImageCommandFactory::GetDescription(void) const
+  ApplyMaskToImageCommandFactory::GetDescription() const
   {
     return "Apply a mask to a (tensor) image";
   }

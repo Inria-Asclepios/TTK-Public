@@ -31,18 +31,16 @@ namespace itk
 			   CreateObjectFunction<NormalizeTensorsCommand>::New());
   }
   
-  NormalizeTensorsCommandFactory::~NormalizeTensorsCommandFactory()
-  {
-  }
+  NormalizeTensorsCommandFactory::~NormalizeTensorsCommandFactory() = default;
   
   const char* 
-  NormalizeTensorsCommandFactory::GetITKSourceVersion(void) const
+  NormalizeTensorsCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  NormalizeTensorsCommandFactory::GetDescription(void) const
+  NormalizeTensorsCommandFactory::GetDescription() const
   {
     return "Divide tensors by the largest eigenvalue of the field";
   }

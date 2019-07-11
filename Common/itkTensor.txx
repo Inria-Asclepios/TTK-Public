@@ -24,7 +24,7 @@
 #include "vnl/algo/vnl_determinant.h"
 #include "itkObject.h"
 
-#include <math.h>
+#include <cmath>
 
 #include "ttkConfigure.h"
 
@@ -238,7 +238,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::RealValueType
   Tensor<T, NDimension>
-  ::GetSquaredNorm( void ) const
+  ::GetSquaredNorm() const
   {
     typename NumericTraits<RealValueType>::AccumulateType sum = NumericTraits<T>::Zero;
 
@@ -268,7 +268,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::RealValueType
   Tensor<T, NDimension>
-  ::GetNorm( void ) const
+  ::GetNorm() const
   {
     return RealValueType( std::sqrt( double(this->GetSquaredNorm()) ));
   }
@@ -315,7 +315,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   vnl_matrix<T>
   Tensor<T, NDimension>
-  ::GetVnlMatrix(void) const
+  ::GetVnlMatrix() const
   {
 
     T* block = new T[NDimension*NDimension];
@@ -335,7 +335,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   Tensor<T,NDimension>
   Tensor<T,NDimension>
-  ::Log (void) const
+  ::Log () const
   {
     if (!this->IsFinite())
     {
@@ -420,7 +420,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   Tensor<T,NDimension>
   Tensor<T,NDimension>
-  ::Exp (void) const
+  ::Exp () const
   {
     if (!this->IsFinite())
     {
@@ -555,7 +555,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   Tensor<T,NDimension>
   Tensor<T,NDimension>
-  ::Inv (void) const
+  ::Inv () const
   {
     return this->Pow (-1.0);
   }
@@ -564,7 +564,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   Tensor<T,NDimension>
   Tensor<T,NDimension>
-  ::Sqrt (void) const
+  ::Sqrt () const
   {
     return this->Pow (0.5);
   }
@@ -573,7 +573,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   Tensor<T,NDimension>
   Tensor<T,NDimension>
-  ::InvSqrt (void) const
+  ::InvSqrt () const
   {
     return this->Pow (-0.5);
   }
@@ -756,7 +756,7 @@ namespace itk
     delete [] buffer;
 
 #else
-    typedef vnl_symmetric_eigensystem< T >  SymEigenSystemType;
+    using SymEigenSystemType = vnl_symmetric_eigensystem< T >;
     SymEigenSystemType eig (this->GetVnlMatrix());
     if( eig.D[0] <= NumericTraits<double>::Zero )
       result = false;
@@ -809,7 +809,7 @@ namespace itk
     delete [] buffer;
 
 #else
-    typedef vnl_symmetric_eigensystem< T >  SymEigenSystemType;
+    using SymEigenSystemType = vnl_symmetric_eigensystem< T >;
     SymEigenSystemType eig (this->GetVnlMatrix());
     if( eig.D[0] <= NumericTraits<double>::Zero )
       result = false;
@@ -869,7 +869,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::ValueType
   Tensor<T,NDimension>
-  ::GetTrace (void) const
+  ::GetTrace () const
   {
     ValueType res = static_cast<ValueType>(0.0);
     for ( unsigned int i=0;i<NDimension; i++)
@@ -881,7 +881,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::ValueType
   Tensor<T,NDimension>
-  ::GetFA (void) const
+  ::GetFA () const
   {
     vnl_matrix<ValueType> M = this->GetVnlMatrix();
 
@@ -904,7 +904,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::ValueType
   Tensor<T,NDimension>
-  ::GetGA (void) const
+  ::GetGA () const
   {
 
     vnl_matrix<ValueType> L = this->GetVnlMatrix();
@@ -926,7 +926,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::ValueType
   Tensor<T,NDimension>
-  ::GetRA (void) const
+  ::GetRA () const
   {
 
     vnl_matrix<ValueType> M = this->GetVnlMatrix();
@@ -944,7 +944,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::ValueType
   Tensor<T,NDimension>
-  ::GetVR (void) const
+  ::GetVR () const
   {
 
     ValueType n = 1.0;
@@ -1121,7 +1121,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::ValueType
   Tensor<T,NDimension>
-  ::GetCl (void) const
+  ::GetCl () const
   {
 
     ValueType l1 = this->GetEigenvalue( Dimension - 1 );
@@ -1135,7 +1135,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::ValueType
   Tensor<T,NDimension>
-  ::GetCp (void) const
+  ::GetCp () const
   {
     ValueType l2 = this->GetEigenvalue( Dimension - 2 );
     ValueType l3 = this->GetEigenvalue( Dimension - 3 );
@@ -1147,7 +1147,7 @@ namespace itk
   template<class T, unsigned int NDimension>
   typename Tensor<T, NDimension>::ValueType
   Tensor<T,NDimension>
-  ::GetCs (void) const
+  ::GetCs () const
   {
     ValueType l3 = this->GetEigenvalue( Dimension - 3 );
 

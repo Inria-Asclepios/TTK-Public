@@ -63,7 +63,7 @@ namespace itk
 
     void GenerateData(void);
     void GenerateOutputInformation();
-    void GenerateInputRequestedRegion() throw (InvalidRequestedRegionError);
+    void GenerateInputRequestedRegion() noexcept(false);
     
   private:
     AddGaussianNoiseImageFilter (const Self&);

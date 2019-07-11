@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  VTKFibersToITKGroupSpatialObjectCommandFactory::GetITKSourceVersion(void) const
+  VTKFibersToITKGroupSpatialObjectCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  VTKFibersToITKGroupSpatialObjectCommandFactory::GetDescription(void) const
+  VTKFibersToITKGroupSpatialObjectCommandFactory::GetDescription() const
   {
     return "Convert a vtkPolyData fiber representation to an ITK GroupSpatialObject file";
   }

@@ -100,18 +100,17 @@ namespace itk
     std::cout << std::flush;
 
     // typedefs
-    typedef double ScalarType;
-    typedef itk::TensorImageIO<ScalarType, 3, 3> IOType;
-    typedef IOType::TensorImageType              TensorImageType;
-    typedef itk::Image<ScalarType, 3>            ImageType;
-    typedef TensorImageType::PixelType           TensorType;
-    typedef itk::ExpTensorImageFilter<TensorImageType, TensorImageType> ExpFilterType;
-    typedef itk::RBFInterpolationTensorImageFilter<ImageType, TensorImageType>
-      FilterType;
-    typedef FilterType::VectorOfPixelType        VectorOfTensorsType;
-    typedef FilterType::PointType                PointType;
-    typedef FilterType::VectorOfPointsType       VectorOfPointsType;
-    typedef itk::ImageFileReader<ImageType>      ImageFileReaderType;
+    using ScalarType          = double;
+    using IOType              = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType     = IOType::TensorImageType;
+    using ImageType           = itk::Image<ScalarType, 3>;
+    using TensorType          = TensorImageType::PixelType;
+    using ExpFilterType       = itk::ExpTensorImageFilter<TensorImageType, TensorImageType>;
+    using FilterType          = itk::RBFInterpolationTensorImageFilter<ImageType, TensorImageType>;
+    using VectorOfTensorsType = FilterType::VectorOfPixelType;
+    using PointType           = FilterType::PointType;
+    using VectorOfPointsType  = FilterType::VectorOfPointsType;
+    using ImageFileReaderType = itk::ImageFileReader<ImageType>;
 
 
 

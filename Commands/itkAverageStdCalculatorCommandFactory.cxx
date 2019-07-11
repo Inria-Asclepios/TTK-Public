@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  AverageStdCalculatorCommandFactory::GetITKSourceVersion(void) const
+  AverageStdCalculatorCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  AverageStdCalculatorCommandFactory::GetDescription(void) const
+  AverageStdCalculatorCommandFactory::GetDescription() const
   {
     return "Calculate the average and covariance matrix of a set of images";
   }

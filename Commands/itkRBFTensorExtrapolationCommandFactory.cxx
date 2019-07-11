@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  RBFTensorExtrapolationCommandFactory::GetITKSourceVersion(void) const
+  RBFTensorExtrapolationCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  RBFTensorExtrapolationCommandFactory::GetDescription(void) const
+  RBFTensorExtrapolationCommandFactory::GetDescription() const
   {
     return "Extrapolate a set of tensors using radial basis functions (RBF)";
   }

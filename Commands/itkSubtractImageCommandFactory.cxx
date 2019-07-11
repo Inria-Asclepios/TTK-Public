@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  SubtractImageCommandFactory::GetITKSourceVersion(void) const
+  SubtractImageCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  SubtractImageCommandFactory::GetDescription(void) const
+  SubtractImageCommandFactory::GetDescription() const
   {
     return "Subtract two images";
   }

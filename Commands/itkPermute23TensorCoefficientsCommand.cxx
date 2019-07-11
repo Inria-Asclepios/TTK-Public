@@ -53,9 +53,9 @@ namespace itk
     const char* output  = cl.follow ("output.nii.gz", 2, "-o", "-O");
     
     
-    typedef double                               ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3> TensorIOType;
-    typedef TensorIOType::TensorImageType        TensorImageType;
+    using ScalarType      = double;  
+    using TensorIOType    = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = TensorIOType::TensorImageType;
     
     TensorImageType::Pointer tensors = nullptr;
     {
@@ -75,7 +75,7 @@ namespace itk
     }
     
     
-    typedef itk::Permute23CoefficientsTensorImageFilter<TensorImageType, TensorImageType> PermuteType;
+    using PermuteType = itk::Permute23CoefficientsTensorImageFilter<TensorImageType, TensorImageType>;
     {
       PermuteType::Pointer permute = PermuteType::New();
       permute->SetInput (tensors);

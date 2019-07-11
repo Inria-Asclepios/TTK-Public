@@ -32,7 +32,7 @@ namespace itk
   {
     m_ShortDescription = "Remove any non-positive tensors";
     m_LongDescription = "Usage: npt_remover\n";
-    m_LongDescription += "<-i input> <-r 0/1: NPT removing type (0: null tensor / 1: mean of neighbors)> <-o output>\n\n";
+    m_LongDescription += "<-i input> <-r 0/1: NPT removing type (0: nullptr tensor / 1: mean of neighbors)> <-o output>\n\n";
     m_LongDescription += m_ShortDescription;
   }
 
@@ -65,11 +65,10 @@ namespace itk
     const char* fileOut = cl.follow("NoFile",2,"-o","-O");
     const int RemovingType = cl.follow (0,2,"-r","-R");
     
-    typedef double ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
-    typedef IOType::TensorImageType                        TensorImageType;    
-    typedef itk::RemoveNonPositiveTensorsTensorImageFilter<TensorImageType,TensorImageType>
-      RemoveNPTFilterType;
+    using ScalarType          = double;  
+    using IOType              = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType     = IOType::TensorImageType;    
+    using RemoveNPTFilterType = itk::RemoveNonPositiveTensorsTensorImageFilter<TensorImageType,TensorImageType>;
     
     
     IOType::Pointer myIO = IOType::New();

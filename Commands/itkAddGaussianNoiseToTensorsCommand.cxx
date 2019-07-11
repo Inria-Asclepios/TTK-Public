@@ -64,11 +64,10 @@ namespace itk
     const char* fileOut  = cl.follow("NoFile",2,"-o","-O");
     const double variance = cl.follow(1.0, 2,"-v","-V");
     
-    typedef double ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
-    typedef IOType::TensorImageType                        TensorImageType;    
-    typedef itk::AddGaussianNoiseTensorImageFilter<TensorImageType,TensorImageType>
-      FilterType;
+    using ScalarType      = double;  
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;    
+    using FilterType      = itk::AddGaussianNoiseTensorImageFilter<TensorImageType,TensorImageType>;
     
     
     IOType::Pointer myIO = IOType::New();

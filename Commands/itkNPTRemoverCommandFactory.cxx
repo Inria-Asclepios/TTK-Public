@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  NPTRemoverCommandFactory::GetITKSourceVersion(void) const
+  NPTRemoverCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  NPTRemoverCommandFactory::GetDescription(void) const
+  NPTRemoverCommandFactory::GetDescription() const
   {
     return "Removes any non-postive tensors";
   }

@@ -124,9 +124,9 @@ namespace itk
         return -1;
       }
 
-      typedef float ScalarType;
-      typedef Image<ScalarType, 4>        ImageType;
-      typedef ImageFileReader <ImageType> ImageReaderType;
+      using ScalarType      = float;
+      using ImageType       = Image<ScalarType, 4>;
+      using ImageReaderType = ImageFileReader <ImageType>;
 
       ImageType::Pointer image = nullptr;
       {
@@ -151,8 +151,8 @@ namespace itk
       }
 
       // create a tensor image
-      typedef Tensor<ScalarType, 3> TensorType;
-      typedef Image<TensorType, 3>  TensorImageType;
+      using TensorType      = Tensor<ScalarType, 3>;
+      using TensorImageType = Image<TensorType, 3>;
 
       TensorImageType::Pointer tensorImage = TensorImageType::New();
       TensorImageType::PointType origin;
@@ -182,8 +182,8 @@ namespace itk
         return -1;
       }
 
-      typedef ImageRegionIteratorWithIndex <TensorImageType> TensorImageIteratorType;
-      typedef ImageType::IndexType ImageIndexType;
+      using TensorImageIteratorType = ImageRegionIteratorWithIndex <TensorImageType>;
+      using ImageIndexType          = ImageType::IndexType;
 
       TensorImageIteratorType it (tensorImage, tensorImage->GetLargestPossibleRegion());
 
@@ -213,7 +213,7 @@ namespace itk
           ++it;
       }
 
-      typedef TensorImageIO<ScalarType, 3, 3> TensorIOType;
+      using TensorIOType = TensorImageIO<ScalarType, 3, 3>;
 
       {
         TensorIOType::Pointer writer = TensorIOType::New();

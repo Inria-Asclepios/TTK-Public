@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  TensorsToVTKUnstructuredGridCommandFactory::GetITKSourceVersion(void) const
+  TensorsToVTKUnstructuredGridCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  TensorsToVTKUnstructuredGridCommandFactory::GetDescription(void) const
+  TensorsToVTKUnstructuredGridCommandFactory::GetDescription() const
   {
     return "Convert tensor images into a vtk unstructured grid";
   }

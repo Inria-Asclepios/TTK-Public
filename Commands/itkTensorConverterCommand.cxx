@@ -49,7 +49,7 @@ namespace itk
 
   
     // write the output
-    typedef itk::TensorImageIO<double, 3, 3> IOType;
+    using IOType = itk::TensorImageIO<double, 3, 3> ;
     
     
     IOType::Pointer myReader = IOType::New();

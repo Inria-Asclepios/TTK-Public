@@ -52,11 +52,10 @@ namespace itk
     const char* fileOut  = cl.follow("",2,"-o","-O");
 
 
-    typedef double ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
-    typedef IOType::TensorImageType                        TensorImageType;    
-    typedef itk::NormalizeTensorImageFilter<TensorImageType,TensorImageType>
-      FilterType;
+    using ScalarType      = double;  
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;    
+    using FilterType      = itk::NormalizeTensorImageFilter<TensorImageType,TensorImageType>;
     
     IOType::Pointer myIO = IOType::New();
     myIO->SetFileName (fileIn);

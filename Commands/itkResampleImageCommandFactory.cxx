@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  ResampleImageCommandFactory::GetITKSourceVersion(void) const
+  ResampleImageCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  ResampleImageCommandFactory::GetDescription(void) const
+  ResampleImageCommandFactory::GetDescription() const
   {
     return "Resample an image given a linear transform and a reference image";
   }

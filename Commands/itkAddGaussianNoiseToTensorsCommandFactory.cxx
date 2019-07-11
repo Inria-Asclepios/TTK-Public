@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  AddGaussianNoiseToTensorsCommandFactory::GetITKSourceVersion(void) const
+  AddGaussianNoiseToTensorsCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  AddGaussianNoiseToTensorsCommandFactory::GetDescription(void) const
+  AddGaussianNoiseToTensorsCommandFactory::GetDescription() const
   {
     return "Add Gaussian noise on the tensor logarithm and exponentiate the result";
   }

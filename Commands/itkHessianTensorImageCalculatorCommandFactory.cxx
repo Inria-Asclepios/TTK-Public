@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  HessianTensorImageCalculatorCommandFactory::GetITKSourceVersion(void) const
+  HessianTensorImageCalculatorCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  HessianTensorImageCalculatorCommandFactory::GetDescription(void) const
+  HessianTensorImageCalculatorCommandFactory::GetDescription() const
   {
     return "Extract the largest eigenvalue of the Hessian of a tensor field";
   }

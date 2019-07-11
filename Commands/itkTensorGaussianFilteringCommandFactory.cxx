@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  TensorGaussianFilteringCommandFactory::GetITKSourceVersion(void) const
+  TensorGaussianFilteringCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  TensorGaussianFilteringCommandFactory::GetDescription(void) const
+  TensorGaussianFilteringCommandFactory::GetDescription() const
   {
     return "Log-Eculidean Gaussian filtering of tensors";
   }

@@ -450,7 +450,7 @@ namespace itk
 
     // exponential of the eigenvalues:
     for(unsigned int i=0;i<NDimension;i++)
-      ev[i] = vcl_exp (ev[i]);
+      ev[i] = std::exp (ev[i]);
 
     // reconstitute the tensor
     for(unsigned int j=0;j<NDimension;j++)
@@ -1047,9 +1047,9 @@ namespace itk
     double diff = static_cast<double>( s1-s2 );
     double EPS = 0.00001;
     if( fabs ( diff ) < EPS )
-      s =  vcl_exp (s1)*(1 + diff/2.0 + diff*diff/6.0  );
+      s =  std::exp (s1)*(1 + diff/2.0 + diff*diff/6.0  );
     else
-      s = ( vcl_exp (s1) - vcl_exp (s2) )/(s1 - s2);
+      s = ( std::exp (s1) - std::exp (s2) )/(s1 - s2);
 
     return s;
 

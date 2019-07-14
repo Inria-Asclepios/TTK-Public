@@ -60,6 +60,8 @@ namespace itk
     
     /** ContinuousIndex typedef support. */
     typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+
+    using SizeType = typename Superclass::SizeType;
     
     /** Evaluate the function at a ContinuousIndex position
      *

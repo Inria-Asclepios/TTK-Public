@@ -80,7 +80,7 @@ namespace itk
     RemoveNonPositiveTensorsTensorImageFilter();
     ~RemoveNonPositiveTensorsTensorImageFilter(){};
 
-    void ThreadedGenerateData (const OutputImageRegionType&, ThreadIdType);
+    void DynamicThreadedGenerateData (const OutputImageRegionType&);
     void PrintSelf (std::ostream& os, Indent indent) const
     {
       Superclass::PrintSelf (os, indent);      

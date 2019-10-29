@@ -50,7 +50,7 @@ namespace itk
   template <class TInputImage, class TOutputImage>
   void
   TensorsToDWITensorImageFilter<TInputImage, TOutputImage>
-  ::ThreadedGenerateData ( const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId )
+  ::DynamicThreadedGenerateData ( const OutputImageRegionType &outputRegionForThread)
   {
 
     
@@ -59,7 +59,6 @@ namespace itk
     
     unsigned long numPixels = outputRegionForThread.GetNumberOfPixels();
     unsigned long step = numPixels/100;
-    unsigned long progress = 0;
     
     unsigned int NOutput = this->GetNumberOfRequiredOutputs();
         
@@ -71,12 +70,6 @@ namespace itk
     }
     IteratorInputType  itIn (this->GetInput(), outputRegionForThread);
     IteratorOutputType itB0 (this->GetBaselineImage(), outputRegionForThread);
-    
-    if( threadId==0 )
-    {
-      this->UpdateProgress (0.0);
-    }
-
     
     while(!itIn.IsAtEnd())
     {
@@ -104,25 +97,10 @@ namespace itk
         ++(IteratorOutputList[i]);
       }
       
-      
-      if( threadId==0 && step>0)
-      {        
-        if( (progress%step)==0 )
-        {
-          this->UpdateProgress ( double(progress)/double(numPixels) );
-        }
-      }
-        
-      ++progress;
       ++itB0;
       ++itIn;
         
     }
-    
-    if( threadId==0 )
-    { 
-      this->UpdateProgress (1.0);
-    }  
   }
   
   

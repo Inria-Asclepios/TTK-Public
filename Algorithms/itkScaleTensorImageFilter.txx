@@ -29,7 +29,7 @@ namespace itk
   template <class TTensorInput, class TTensorOutput>
   void
   ScaleTensorImageFilter<TTensorInput, TTensorOutput>
-  ::ThreadedGenerateData (const OutputRegionType& outputRegion, ThreadIdType threadId)
+  ::DynamicThreadedGenerateData (const OutputRegionType& outputRegion)
   {
     
     typedef ImageRegionIterator<OutputImageType>       OutputIteratorType;

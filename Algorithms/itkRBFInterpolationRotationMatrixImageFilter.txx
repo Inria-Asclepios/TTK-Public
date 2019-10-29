@@ -212,7 +212,7 @@ namespace itk
   template< class TInputImage, class TOutputImage>
   void
   RBFInterpolationRotationMatrixImageFilter<TInputImage, TOutputImage>
-  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId)
+  ::DynamicThreadedGenerateData(const OutputImageRegionType &outputRegionForThread)
   {
   
     typedef ImageRegionIterator<OutputImageType>               OutputImageIteratorType;

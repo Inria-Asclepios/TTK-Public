@@ -250,16 +250,15 @@ TransformToVelocityFieldSource<TOutputImage,TTransformPrecisionType>
 template <class TOutputImage, class TTransformPrecisionType>
 void 
 TransformToVelocityFieldSource<TOutputImage,TTransformPrecisionType>
-::ThreadedGenerateData(
-  const OutputImageRegionType & outputRegionForThread,
-  ThreadIdType threadId )
+::DynamicThreadedGenerateData(
+  const OutputImageRegionType & outputRegionForThread)
 {
   // Check whether we can use a fast path for resampling. Fast path
   // can be used if the transformation is linear. Transform respond
   // to the IsLinear() call.
   if ( this->m_IncrementalTransform->IsLinear() )
     {
-    this->LinearThreadedGenerateData( outputRegionForThread, threadId );
+    this->LinearThreadedGenerateData( outputRegionForThread );
     return;
     }
 
@@ -270,9 +269,7 @@ TransformToVelocityFieldSource<TOutputImage,TTransformPrecisionType>
 template <class TOutputImage, class TTransformPrecisionType>
 void 
 TransformToVelocityFieldSource<TOutputImage,TTransformPrecisionType>
-::LinearThreadedGenerateData(
-  const OutputImageRegionType & outputRegionForThread,
-  ThreadIdType threadId )
+::LinearThreadedGenerateData(const OutputImageRegionType & outputRegionForThread)
 {
   // Get the output pointer
   OutputImagePointer      outputPtr = this->GetOutput();

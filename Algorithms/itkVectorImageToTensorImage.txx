@@ -52,7 +52,7 @@ BeforeThreadedGenerateData()
 template <class TInputImage, class TOutputImage>
 void
 VectorImageToTensorImage<TInputImage,TOutputImage>::
-ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId)
+DynamicThreadedGenerateData(const OutputImageRegionType &outputRegionForThread)
 {
 
     // Define iterators

@@ -157,8 +157,7 @@ namespace itk
   template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
   void 
   ResampleTensorImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
-  ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                         ThreadIdType threadId)
+  ::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
   {
     // Check whether the input or the output is a
     // SpecialCoordinatesImage.  If either are, then we cannot use the
@@ -177,7 +176,7 @@ namespace itk
     if (dynamic_cast<const InputSpecialCoordinatesImageType *>(this->GetInput())
         || dynamic_cast<const OutputSpecialCoordinatesImageType *>(this->GetOutput()))
     {
-      this->NonlinearThreadedGenerateData(outputRegionForThread, threadId);
+      this->NonlinearThreadedGenerateData(outputRegionForThread);
       return;
     }
     
@@ -186,13 +185,13 @@ namespace itk
     // to the IsLinear() call.
     if( m_TensorTransform->IsLinear() )
     {
-      this->LinearThreadedGenerateData(outputRegionForThread, threadId);
+      this->LinearThreadedGenerateData(outputRegionForThread);
       return;
     }
     
     // Otherwise, we use the normal method where the transform is called
     // for computing the transformation of every point.
-    this->NonlinearThreadedGenerateData(outputRegionForThread, threadId);
+    this->NonlinearThreadedGenerateData(outputRegionForThread);
     
   }
   
@@ -201,8 +200,7 @@ namespace itk
   template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
   void 
   ResampleTensorImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
-  ::NonlinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                  ThreadIdType threadId)
+  ::NonlinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
   {
 
     // Get the output pointers
@@ -223,9 +221,6 @@ namespace itk
 
     typedef ContinuousIndex<TInterpolatorPrecisionType, ImageDimension> ContinuousIndexType;
     ContinuousIndexType inputIndex;
-    
-    // Support for progress methods/callbacks
-    ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
     
     typedef typename InterpolatorType::OutputType OutputType;
 
@@ -299,8 +294,7 @@ namespace itk
       {
         outIt.Set(m_DefaultPixelValue); // default background value
       }
-      
-      progress.CompletedPixel();
+
       ++outIt;
     }
     
@@ -314,8 +308,7 @@ namespace itk
   template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
   void 
   ResampleTensorImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
-  ::LinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                               ThreadIdType threadId)
+  ::LinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
   {
     
     // Get the output pointers
@@ -344,9 +337,6 @@ namespace itk
     typedef typename PointType::VectorType VectorType;
     VectorType delta;          // delta in input continuous index coordinate frame
     IndexType index;
-    
-    // Support for progress methods/callbacks
-    ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
     
     typedef typename InterpolatorType::OutputType OutputType;
     
@@ -483,8 +473,7 @@ namespace itk
         {
           outIt.Set(defaultValue); // default background value
         }
-        
-        progress.CompletedPixel();
+
         ++outIt;
         inputIndex += delta;
       }

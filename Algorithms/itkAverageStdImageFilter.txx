@@ -52,7 +52,7 @@ namespace itk
   template<class TInputImage, class TOutputImage>
   void
   AverageStdImageFilter<TInputImage,TOutputImage>
-  ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId)
+  ::DynamicThreadedGenerateData(const OutputImageRegionType &outputRegionForThread)
   {
   
     typedef ImageRegionIterator<OutputImageType>      IteratorOutputType;
@@ -71,11 +71,7 @@ namespace itk
 	   IteratorInputType it(this->GetInput(i),outputRegionForThread);
 	   ListOfInputIterators.push_back(it);
     }
-	
-	
-	if( threadId==0 )
-      this->UpdateProgress (0.0);
-    
+	    
     while(!itOut.IsAtEnd())
     {
 

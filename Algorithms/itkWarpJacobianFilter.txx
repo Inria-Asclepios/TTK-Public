@@ -161,8 +161,7 @@ WarpJacobianFilter<TInputImage, TOutputImage>
 template<typename TInputImage, typename TOutputImage>
 void
 WarpJacobianFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       ThreadIdType threadId)
+::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
 
   ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -178,9 +177,6 @@ WarpJacobianFilter<TInputImage, TOutputImage>
   typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::
     FaceListType::iterator fit;
   fit = faceList.begin();
-
-  // Support progress methods/callbacks
-  ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Process each of the data set faces.  The iterator is reinitialized on each
   // face so that it can determine whether or not to check for boundary
@@ -199,7 +195,6 @@ WarpJacobianFilter<TInputImage, TOutputImage>
       it.Set( this->EvaluateAtNeighborhood(bit) );
       ++bit;
       ++it;
-      progress.CompletedPixel();
       }
     }
 }

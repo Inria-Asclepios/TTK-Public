@@ -57,7 +57,7 @@ namespace itk
     LogTensorImageFilter(){};
     ~LogTensorImageFilter(){};
     
-    void ThreadedGenerateData(const OutputRegionType &, ThreadIdType);
+    void DynamicThreadedGenerateData(const OutputRegionType &);
     void PrintSelf(std::ostream &os, Indent indent) const
     {
       Superclass::PrintSelf(os,indent);

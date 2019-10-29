@@ -182,9 +182,8 @@ WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField
 template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
 WarpTensorImageWOReorientationFilter<TInputImage,TOutputImage,TDisplacementField>
-::ThreadedGenerateData(
-  const OutputImageRegionType& outputRegionForThread,
-  ThreadIdType threadId )
+::DynamicThreadedGenerateData(
+  const OutputImageRegionType& outputRegionForThread )
 {
 
   InputImageConstPointer inputPtr = this->GetInput();

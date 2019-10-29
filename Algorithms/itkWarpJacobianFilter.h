@@ -187,8 +187,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            ThreadIdType threadId );
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
 
   void PrintSelf(std::ostream& os, Indent indent) const;
 

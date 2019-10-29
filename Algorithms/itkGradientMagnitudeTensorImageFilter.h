@@ -82,7 +82,7 @@ namespace itk
     virtual ~GradientMagnitudeTensorImageFilter(){}
 
     
-    void ThreadedGenerateData (const OutputImageRegionType&, ThreadIdType);
+    void DynamicThreadedGenerateData (const OutputImageRegionType&);
     void PrintSelf (std::ostream&, Indent) const;
         
 

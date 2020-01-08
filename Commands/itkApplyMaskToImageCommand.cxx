@@ -199,7 +199,7 @@ namespace itk
     if (type==0)
     {
     
-        itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(arg.input, itk::ImageIOFactory::ReadMode);
+        itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(arg.input, itk::ImageIOFactory::FileModeEnum::ReadMode);
         if (io.IsNull())
         {
             return EXIT_FAILURE;

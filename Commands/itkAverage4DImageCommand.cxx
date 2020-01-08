@@ -185,7 +185,7 @@ namespace itk
     const char* output = cl.follow("output.nii.gz","-o");
     int offset = cl.follow (0, "-n");
     
-    itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(input, itk::ImageIOFactory::ReadMode);
+    itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(input, itk::ImageIOFactory::FileModeEnum::ReadMode);
     if (io.IsNull())
     {
         return EXIT_FAILURE;

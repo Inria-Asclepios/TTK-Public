@@ -223,11 +223,11 @@ namespace itk
      **/
     virtual bool IsLinear() const { return false; }
         
-    typedef typename Superclass::TransformCategoryType TransformCategoryType;
+    typedef typename Superclass::TransformCategoryEnum TransformCategoryEnum;
     
-    virtual TransformCategoryType GetTransformCategory() const
+    virtual TransformCategoryEnum GetTransformCategory() const
     {
-      return Self::UnknownTransformCategory;
+      return Self::TransformCategoryEnum::UnknownTransformCategory;
     }
     
     protected:

@@ -21,13 +21,10 @@
 
 #include "itkMatrix.h"
 #include "itkTensorTransform.h"
-#include "itkExceptionObject.h"
 #include "itkMacro.h"
 
 namespace itk
-{
-
-  
+{  
   template <class TScalarType=double, unsigned int NInputDimensions=3, unsigned int NOutputDimensions=3>
     class MatrixOffsetTensorTransformBase 
     : public TensorTransform< TScalarType, NInputDimensions, NOutputDimensions >
@@ -117,11 +114,11 @@ namespace itk
     typedef OutputVectorType                          OffsetType;
     
     typedef OutputVectorType                          TranslationType;
-    typedef typename Superclass::TransformCategoryType TransformCategoryType;
+    typedef typename Superclass::TransformCategoryEnum TransformCategoryEnum;
     
-    virtual TransformCategoryType GetTransformCategory() const
+    virtual TransformCategoryEnum GetTransformCategory() const
     {
-      return Self::Linear;
+      return Self::TransformCategoryEnum::Linear;
     }
 
     virtual void SetIdentity( void );

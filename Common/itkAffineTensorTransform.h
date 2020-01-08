@@ -21,13 +21,10 @@
 
 #include "itkMatrix.h"
 #include "itkMatrixOffsetTensorTransformBase.h"
-#include "itkExceptionObject.h"
 #include "itkMacro.h"
 
 namespace itk
-{
-
-  
+{  
   template <class TScalarType=double, unsigned int NDimensions=3>
     class AffineTensorTransform 
     : public MatrixOffsetTensorTransformBase< TScalarType, NDimensions, NDimensions >
@@ -75,7 +72,7 @@ namespace itk
     typedef typename Superclass::CenterType                CenterType;
     typedef typename Superclass::OffsetType                OffsetType;
     typedef typename Superclass::TranslationType           TranslationType;
-        typedef typename Superclass::TransformCategoryType TransformCategoryType;
+    typedef typename Superclass::TransformCategoryEnum     TransformCategoryEnum;
     
 
     void Translate(const OutputVectorType &offset, bool pre=0);
@@ -120,9 +117,9 @@ namespace itk
     /** Print contents of an AffineTensorTransform */
     void PrintSelf(std::ostream &s, Indent indent) const;
         
-        virtual TransformCategoryType GetTransformCategory() const
+        virtual TransformCategoryEnum GetTransformCategory() const
         {
-            return Self::Linear;
+            return Self::TransformCategoryEnum::Linear;
         }
     
     

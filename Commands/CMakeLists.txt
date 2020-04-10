@@ -7,6 +7,22 @@
     itkTensorFlipCommandFactory.cxx
     itkAddGaussianNoiseToTensorsCommand.cxx
     itkAddGaussianNoiseToTensorsCommandFactory.cxx
+    itkDTIEstimatorCommand.cxx
+    itkDTIEstimatorCommandFactory.cxx
+    itkDTIMultiEstimatorCommand.cxx
+    itkDTIMultiEstimatorCommandFactory.cxx
+    itkAddGaussianNoiseToDWICommand.cxx
+    itkAddGaussianNoiseToDWICommandFactory.cxx
+    itkFiberTrackingCommand.cxx
+    itkFiberTrackingCommandFactory.cxx
+    itkSheetTrackingCommand.cxx
+    itkSheetTrackingCommandFactory.cxx
+    itkDTIEstimatorWithBFGSCommand.cxx
+    itkDTIEstimatorWithBFGSCommandFactory.cxx
+    itkLogEuclideanDTIEstimatorCommand.cxx
+    itkLogEuclideanDTIEstimatorCommandFactory.cxx
+    itkTensorZScoreCalculatorCommand.cxx
+    itkTensorZScoreCalculatorCommandFactory.cxx
     itkTensorAnisotropicFilteringCommand.cxx
     itkTensorAnisotropicFilteringCommandFactory.cxx
     itkNormalizeTensorsCommand.cxx

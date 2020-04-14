@@ -3,7 +3,6 @@
 #include "itkVelocityFieldLieBracketFilter.h"
 
 #include <itkImageRegionIterator.h>
-#include <itkProgressReporter.h>
 
 namespace itk
 {
@@ -139,9 +138,6 @@ VelocityFieldLieBracketFilter<TInputImage,TOutputImage>
   InputFieldConstPointer leftField = this->GetInput(0);
   InputFieldConstPointer rightField = this->GetInput(1);
   OutputFieldPointer outputPtr = this->GetOutput();
-  
-  // Progress tracking
-  ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Input and output iterators/
   typedef ImageRegionConstIterator<InputFieldType>  InputFieldIteratorType;
@@ -175,7 +171,6 @@ VelocityFieldLieBracketFilter<TInputImage,TOutputImage>
     ++leftIter;
     ++rightIter;
     ++outputIter;
-    progress.CompletedPixel(); // potential exception thrown here
     }
 }
   

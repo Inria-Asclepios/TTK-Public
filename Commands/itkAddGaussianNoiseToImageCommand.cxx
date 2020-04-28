@@ -58,11 +58,11 @@ namespace itk
     const double variance = cl.follow( 0.005, 2, "-V", "-v");
     const bool IsReproducible = cl.follow( false, 2, "-C", "-c");
     
-    typedef double                          ScalarType;    
-    typedef Image<ScalarType, 3>            ImageType;
-    typedef itk::ImageFileReader<ImageType> ImageReaderType;
-    typedef itk::ImageFileWriter<ImageType> ImageWriterType;
-    typedef itk::AddGaussianNoiseImageFilter<ImageType,ImageType> FilterType;
+    using ScalarType      = double;    
+    using ImageType       = Image<ScalarType, 3>;
+    using ImageReaderType = itk::ImageFileReader<ImageType>;
+    using ImageWriterType = itk::ImageFileWriter<ImageType>;
+    using FilterType      = itk::AddGaussianNoiseImageFilter<ImageType,ImageType>;
     
     ImageReaderType::Pointer reader = ImageReaderType::New();
     reader->SetFileName( input );
@@ -88,7 +88,7 @@ namespace itk
     if (IsReproducible)
       seed = 5323;
     else
-      seed = (int) time(NULL);
+      seed = (int) time(nullptr);
 
     filter->GetNormalGenerator()->Initialize (seed);
     

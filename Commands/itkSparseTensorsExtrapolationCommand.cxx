@@ -105,15 +105,14 @@ namespace itk
 
 
     // typedefs
-    typedef double                                ScalarType;
-    typedef itk::TensorImageIO<ScalarType, 3 ,3>  IOType;
-    typedef IOType::TensorImageType               TensorImageType;
-    typedef TensorImageType::PixelType            TensorType;
-    typedef itk::SparseTensorsDiffusionTensorImageFilter<TensorImageType, TensorImageType>
-      FilterType;
-    typedef FilterType::VectorOfTensorsType VectorOfTensorsType;
-    typedef FilterType::PointType           PointType;
-    typedef FilterType::VectorOfPointsType  VectorOfPointsType;
+    using ScalarType          = double;
+    using IOType              = itk::TensorImageIO<ScalarType, 3 ,3>;
+    using TensorImageType     = IOType::TensorImageType;
+    using TensorType          = TensorImageType::PixelType;
+    using FilterType          = itk::SparseTensorsDiffusionTensorImageFilter<TensorImageType, TensorImageType>;
+    using VectorOfTensorsType = FilterType::VectorOfTensorsType;
+    using PointType           = FilterType::PointType;
+    using VectorOfPointsType  = FilterType::VectorOfPointsType;
 
 
     // read the tensor field
@@ -193,11 +192,10 @@ namespace itk
 
 
     // set up the pipeline
-    typedef itk::LogTensorImageFilter<TensorImageType,TensorImageType>
-      LogFilterType;
+    using LogFilterType = itk::LogTensorImageFilter<TensorImageType,TensorImageType>;
     LogFilterType::Pointer logFilter = LogFilterType::New();
     logFilter->SetInput(input);
-    logFilter->SetNumberOfThreads (threads);
+    logFilter->SetNumberOfWorkUnits(threads);
 
     // set up the filter
     FilterType::Pointer myFilter = FilterType::New();
@@ -210,16 +208,15 @@ namespace itk
     myFilter->SetTimeStep(deltat);
     myFilter->SetNumberOfIterations(nite);
     myFilter->SetRMSChange(rms);
-    myFilter->SetNumberOfThreads (threads);
+    myFilter->SetNumberOfWorkUnits(threads);
     myFilter->SetInput(logFilter->GetOutput());
 
 
 
-    typedef itk::ExpTensorImageFilter<TensorImageType,TensorImageType>
-      ExpFilterType;
+    using ExpFilterType = itk::ExpTensorImageFilter<TensorImageType,TensorImageType>;
     ExpFilterType::Pointer expFilter = ExpFilterType::New();
     expFilter->SetInput(myFilter->GetOutput());
-    expFilter->SetNumberOfThreads (threads);
+    expFilter->SetNumberOfWorkUnits(threads);
 
     std::cout << "Pipeline started."<< std::endl;
     try

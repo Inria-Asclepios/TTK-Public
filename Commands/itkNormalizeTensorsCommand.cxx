@@ -57,13 +57,13 @@ namespace itk
     const char* output  = cl.follow ("output.nii.gz", 2, "-o", "-O");
     
     
-    typedef double                               ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3> TensorIOType;
-    typedef TensorIOType::TensorImageType        TensorImageType;
-    typedef itk::Image <ScalarType, 3>           ImageType;
+    using ScalarType      = double;  
+    using TensorIOType    = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = TensorIOType::TensorImageType;
+    using ImageType       = itk::Image <ScalarType, 3>;
     
     
-    TensorImageType::Pointer tensors = 0;
+    TensorImageType::Pointer tensors = nullptr;
     {
       TensorIOType::Pointer io = TensorIOType::New();
       io->SetFileName (input);
@@ -88,7 +88,7 @@ namespace itk
       itk::TensorToLambdaFunction <TensorImageType::PixelType, ScalarType>::Pointer function = itk::TensorToLambdaFunction <TensorImageType::PixelType, ScalarType>::New();
       function->SetLambdaIndex( 2 );
       
-      typedef itk::TensorToScalarTensorImageFilter<TensorImageType, ImageType>  FilterType;
+      using FilterType = itk::TensorToScalarTensorImageFilter<TensorImageType, ImageType>;
       
       FilterType::Pointer myFilter = FilterType::New();
       myFilter->SetTensorToScalarFunction ( function );

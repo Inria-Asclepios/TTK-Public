@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  Normalize2TensorsCommandFactory::GetITKSourceVersion(void) const
+  Normalize2TensorsCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  Normalize2TensorsCommandFactory::GetDescription(void) const
+  Normalize2TensorsCommandFactory::GetDescription() const
   {
     return "Divide each tensor by its largest eigenvalue";
   }

@@ -85,14 +85,13 @@ namespace itk
     const bool le = cl.follow (1, 2, "-l", "-L");
     
     
-    typedef double ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
-    typedef IOType::TensorImageType               TensorImageType;
-    typedef itk::ResampleTensorImageFilter<TensorImageType,TensorImageType>
-      FilterType;
-    typedef TensorImageType::SizeType    SizeType;
-    typedef TensorImageType::SpacingType SpacingType;
-    typedef TensorImageType::PointType   PointType;
+    using ScalarType      = double;  
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;
+    using FilterType      = itk::ResampleTensorImageFilter<TensorImageType,TensorImageType>;
+    using SizeType        = TensorImageType::SizeType;
+    using SpacingType     = TensorImageType::SpacingType;
+    using PointType       = TensorImageType::PointType;
     
     
     SizeType size = {{x,y,z}};
@@ -125,7 +124,7 @@ namespace itk
        
     
     
-    typedef itk::AffineTensorTransform< ScalarType, 3 >  TransformType;
+    using TransformType = itk::AffineTensorTransform< ScalarType, 3 >;
     TransformType::Pointer transform = TransformType::New();
     
     
@@ -181,8 +180,7 @@ namespace itk
     if( le )
     {
       // log:
-      typedef itk::LogTensorImageFilter<TensorImageType, TensorImageType>
-	LogFilterType;
+      using LogFilterType = itk::LogTensorImageFilter<TensorImageType, TensorImageType>;
       LogFilterType::Pointer myLog = LogFilterType::New();
       myLog->SetInput(tensors);
       
@@ -193,7 +191,7 @@ namespace itk
     
     
     
-    typedef itk::TensorLinearInterpolateImageFunction<TensorImageType, double>  InterpolatorType;
+    using InterpolatorType = itk::TensorLinearInterpolateImageFunction<TensorImageType, double>;
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     
     FilterType::Pointer myFilter = FilterType::New();
@@ -217,7 +215,7 @@ namespace itk
     if( le )
     {
       // exp:
-      typedef itk::ExpTensorImageFilter<TensorImageType, TensorImageType> ExpFilterType;
+      using ExpFilterType = itk::ExpTensorImageFilter<TensorImageType, TensorImageType>;
       ExpFilterType::Pointer myExp = ExpFilterType::New();
       
       myExp->SetInput(tensors);

@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  SparseTensorsExtrapolationCommandFactory::GetITKSourceVersion(void) const
+  SparseTensorsExtrapolationCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  SparseTensorsExtrapolationCommandFactory::GetDescription(void) const
+  SparseTensorsExtrapolationCommandFactory::GetDescription() const
   {
     return "Extrapolate a set of tensors on a regular grid using a diffusion equation";
   }

@@ -55,13 +55,13 @@ namespace itk
     const char* file_out = cl.follow("NoFile", 2, "-o","-O");
     const double sigma = cl.follow (1.0, 2, "-s", "-S");
 
-    typedef double                               ScalarType;
-    typedef itk::TensorImageIO<ScalarType, 3, 3> TensorIOType;
-    typedef TensorIOType::TensorType             TensorType;
-    typedef TensorIOType::TensorImageType        TensorImageType;
+    using ScalarType      = double;
+    using TensorIOType    = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorType      = TensorIOType::TensorType;
+    using TensorImageType = TensorIOType::TensorImageType;
     
     
-    typedef itk::Image<ScalarType, 3>            ImageType;
+    using ImageType       = itk::Image<ScalarType, 3>;
     
     
     
@@ -90,7 +90,7 @@ namespace itk
     std::cout << std::flush;
     
     // log the tensor field
-    typedef itk::LogTensorImageFilter<TensorImageType, TensorImageType> LogFilterType;
+    using LogFilterType = itk::LogTensorImageFilter<TensorImageType, TensorImageType>;
     LogFilterType::Pointer myLoger = LogFilterType::New();
     myLoger->SetInput (myTensorImage);
     try
@@ -151,10 +151,9 @@ namespace itk
     std::cout << "Hessianing...";
     std::cout << std::flush;
     // now filters by computing the Hessian of each image
-    typedef itk::HessianRecursiveGaussianImageFilter<ImageType>
-      HessianFilterType;
-    typedef HessianFilterType::OutputImageType HessianImageType;
-    typedef HessianImageType::PixelType        HessianPixelType;
+    using HessianFilterType = itk::HessianRecursiveGaussianImageFilter<ImageType>;
+    using HessianImageType  = HessianFilterType::OutputImageType;
+    using HessianPixelType  = HessianImageType::PixelType;
     
     std::vector<HessianImageType::Pointer> HessianImageVector;
     
@@ -195,21 +194,8 @@ namespace itk
     myFinalImage->SetOrigin (myTensorImage->GetOrigin());
     myFinalImage->SetDirection (myTensorImage->GetDirection());
     myFinalImage->Allocate();
-    /*
-      myFinalImage2->SetRegions (region);
-      myFinalImage2->SetSpacing (myTensorImage->GetSpacing());
-      myFinalImage2->SetOrigin (myTensorImage->GetOrigin());
-      myFinalImage2->SetDirection (myTensorImage->GetDirection());
-      myFinalImage2->Allocate();
-      
-      myFinalImage3->SetRegions (region);
-      myFinalImage3->SetSpacing (myTensorImage->GetSpacing());
-      myFinalImage3->SetOrigin (myTensorImage->GetOrigin());
-      myFinalImage3->SetDirection (myTensorImage->GetDirection());
-      myFinalImage3->Allocate();
-    */
     
-    typedef itk::ImageRegionConstIteratorWithIndex<HessianImageType> HessianImageIteratorType;
+    using HessianImageIteratorType = itk::ImageRegionConstIteratorWithIndex<HessianImageType>;
     
     std::vector<HessianImageIteratorType> HessianIteratorList;
     
@@ -220,8 +206,6 @@ namespace itk
     }
     
     itk::ImageRegionIteratorWithIndex<ImageType> itOut (myFinalImage, myFinalImage->GetLargestPossibleRegion());
-    //itk::ImageRegionIteratorWithIndex<ImageType> itOut2 (myFinalImage2, myFinalImage2->GetLargestPossibleRegion());
-    //itk::ImageRegionIteratorWithIndex<ImageType> itOut3 (myFinalImage3, myFinalImage3->GetLargestPossibleRegion());
     
     while( !itOut.IsAtEnd() )
     {
@@ -300,10 +284,9 @@ namespace itk
     std::string::size_type pos = sfile_out.rfind (".gipl");
     if( pos != std::string::npos )
     {
-      typedef itk::Image<unsigned short, 3> LightImageType;
+      using LightImageType = itk::Image<unsigned short, 3>;
       
-      itk::RescaleIntensityImageFilter<ImageType, LightImageType>::Pointer rescaler=
-	itk::RescaleIntensityImageFilter<ImageType, LightImageType>::New();
+      itk::RescaleIntensityImageFilter<ImageType, LightImageType>::Pointer rescaler = itk::RescaleIntensityImageFilter<ImageType, LightImageType>::New();
       
       rescaler->SetOutputMinimum ( 0 );
       rescaler->SetOutputMaximum ( 32767 );

@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  WarpFibersCommandFactory::GetITKSourceVersion(void) const
+  WarpFibersCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  WarpFibersCommandFactory::GetDescription(void) const
+  WarpFibersCommandFactory::GetDescription() const
   {
     return "Warp fibers w.r.t. a linear matrix or a deformation field";
   }

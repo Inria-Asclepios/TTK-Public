@@ -142,7 +142,7 @@ typedef Vector<double, InputImageType::ImageDimension> VectorType;
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion() throw(InvalidRequestedRegionError);
+  virtual void GenerateInputRequestedRegion() noexcept(false);
 
   /** Set the derivative weights according to the spacing of the input image
       (1/spacing). Use this option if you want to calculate the Jacobian
@@ -187,8 +187,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            ThreadIdType threadId );
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
 
   void PrintSelf(std::ostream& os, Indent indent) const;
 

@@ -26,14 +26,14 @@ namespace itk
   {
     
   public:
-    typedef RBFRotationMatrixExtrapolationCommandFactory Self;
-    typedef ObjectFactoryBase        Superclass;
-    typedef SmartPointer<Self>       Pointer;
-    typedef SmartPointer<const Self> ConstPointer;
+    using Self         = RBFRotationMatrixExtrapolationCommandFactory;
+    using Superclass   = ObjectFactoryBase;
+    using Pointer      = SmartPointer<Self>;
+    using ConstPointer = SmartPointer<const Self>;
     
     /** Class methods used to interface with the registered factories. */
-    virtual const char* GetITKSourceVersion(void) const;
-    virtual const char* GetDescription(void) const;
+    const char* GetITKSourceVersion() const override;
+    const char* GetDescription() const override;
     
     /** Method for class instantiation. */
     itkFactorylessNewMacro(Self);
@@ -43,7 +43,7 @@ namespace itk
     itkTypeMacro(RBFRotationMatrixExtrapolationCommandFactory, ObjectFactoryBase);
     
     /** Register one factory of this type  */
-    static void RegisterOneFactory(void)
+    static void RegisterOneFactory()
     {
       RBFRotationMatrixExtrapolationCommandFactory::Pointer CSFFactory = RBFRotationMatrixExtrapolationCommandFactory::New();
       ObjectFactoryBase::RegisterFactory( CSFFactory );
@@ -52,7 +52,7 @@ namespace itk
 		
   protected:
     RBFRotationMatrixExtrapolationCommandFactory();
-    ~RBFRotationMatrixExtrapolationCommandFactory();
+    ~RBFRotationMatrixExtrapolationCommandFactory() override;
     
   private:
     RBFRotationMatrixExtrapolationCommandFactory(const Self&);

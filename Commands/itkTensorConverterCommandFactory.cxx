@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  TensorConverterCommandFactory::GetITKSourceVersion(void) const
+  TensorConverterCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  TensorConverterCommandFactory::GetDescription(void) const
+  TensorConverterCommandFactory::GetDescription() const
   {
     return "Convert a tensor image into another format";
   }

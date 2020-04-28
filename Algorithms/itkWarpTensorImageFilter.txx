@@ -199,9 +199,8 @@ WarpTensorImageFilter<TInputImage,TOutputImage,TDisplacementField>
 template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
 WarpTensorImageFilter<TInputImage,TOutputImage,TDisplacementField>
-::ThreadedGenerateData(
-  const OutputImageRegionType& outputRegionForThread,
-  ThreadIdType threadId )
+::DynamicThreadedGenerateData(
+  const OutputImageRegionType& outputRegionForThread)
 {
 
   InputImageConstPointer inputPtr = this->GetInput();
@@ -209,9 +208,6 @@ WarpTensorImageFilter<TInputImage,TOutputImage,TDisplacementField>
   DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
   JacobianPointer jacobianPtr = this->GetJacobian();
 
-  // support progress methods/callbacks
-  ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
   // iterator for the output image
   ImageRegionIteratorWithIndex<OutputImageType> outputIt(
     outputPtr, outputRegionForThread );
@@ -276,7 +272,6 @@ WarpTensorImageFilter<TInputImage,TOutputImage,TDisplacementField>
     ++outputIt;
     ++fieldIt; 
     ++jacobianIt;
-    progress.CompletedPixel();
     }
 
 }

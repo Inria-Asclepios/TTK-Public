@@ -26,14 +26,14 @@ namespace itk
   {
     
   public:
-    typedef AddRicianNoiseToImageCommandFactory Self;
-    typedef ObjectFactoryBase        Superclass;
-    typedef SmartPointer<Self>       Pointer;
-    typedef SmartPointer<const Self> ConstPointer;
+    using Self         = AddRicianNoiseToImageCommandFactory;
+    using Superclass   = ObjectFactoryBase;
+    using Pointer      = SmartPointer<Self>;
+    using ConstPointer = SmartPointer<const Self>;
     
     /** Class methods used to interface with the registered factories. */
-    virtual const char* GetITKSourceVersion(void) const;
-    virtual const char* GetDescription(void) const;
+    const char* GetITKSourceVersion() const override;
+    const char* GetDescription() const override;
     
     /** Method for class instantiation. */
     itkFactorylessNewMacro(Self);
@@ -43,7 +43,7 @@ namespace itk
     itkTypeMacro(AddRicianNoiseToImageCommandFactory, ObjectFactoryBase);
     
     /** Register one factory of this type  */
-    static void RegisterOneFactory(void)
+    static void RegisterOneFactory()
     {
       AddRicianNoiseToImageCommandFactory::Pointer CSFFactory = AddRicianNoiseToImageCommandFactory::New();
       ObjectFactoryBase::RegisterFactory( CSFFactory );
@@ -52,7 +52,7 @@ namespace itk
 		
   protected:
     AddRicianNoiseToImageCommandFactory();
-    ~AddRicianNoiseToImageCommandFactory();
+    ~AddRicianNoiseToImageCommandFactory() override;
     
   private:
     AddRicianNoiseToImageCommandFactory(const Self&);

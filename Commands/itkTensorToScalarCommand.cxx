@@ -110,12 +110,12 @@ namespace itk
     
     
     // Read in a tensor field:
-    typedef double                               ScalarType;
-    typedef itk::RGBAPixel<unsigned char>        ColorType;
-    typedef itk::TensorImageIO<ScalarType, 3, 3> IOType;
-    typedef IOType::TensorImageType              TensorImageType;
-    typedef itk::Image<ScalarType, 3>            ScalarImageType;
-    typedef itk::Image<ColorType, 3>             ColorImageType;
+    using ScalarType      = double;
+    using ColorType       = itk::RGBAPixel<unsigned char>;
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;
+    using ScalarImageType = itk::Image<ScalarType, 3>;
+    using ColorImageType  = itk::Image<ColorType, 3>;
     
     IOType::Pointer io = IOType::New();
     io->SetFileName(file_in);
@@ -135,10 +135,8 @@ namespace itk
 
 
     // choose the function
-    typedef  itk::TensorToScalarFunction<TensorImageType::PixelType, ScalarImageType::PixelType>
-      FunctionType;
-    typedef  itk::TensorToScalarFunction<TensorImageType::PixelType, ColorImageType::PixelType>
-      ColorFunctionType;
+    using FunctionType      =  itk::TensorToScalarFunction<TensorImageType::PixelType, ScalarImageType::PixelType>;
+    using ColorFunctionType =  itk::TensorToScalarFunction<TensorImageType::PixelType, ColorImageType::PixelType>;
     FunctionType::Pointer myFunction;
     ColorFunctionType::Pointer myColorFunction;
     bool foundFunction = false;
@@ -247,8 +245,7 @@ namespace itk
     {
       
       // compute the function
-      typedef itk::TensorToScalarTensorImageFilter<TensorImageType, ScalarImageType>
-	FilterType;
+      using FilterType = itk::TensorToScalarTensorImageFilter<TensorImageType, ScalarImageType>;
       
       FilterType::Pointer myFilter = FilterType::New();
       myFilter->SetTensorToScalarFunction (myFunction);
@@ -279,7 +276,7 @@ namespace itk
       itk::InrimageImageIOFactory::RegisterOneFactory();
 #endif
       
-      typedef itk::ImageFileWriter<ScalarImageType> WriterType;
+      using WriterType = itk::ImageFileWriter<ScalarImageType>;
       
       WriterType::Pointer myWriter = WriterType::New();
       myWriter->SetFileName(file_out);
@@ -289,23 +286,21 @@ namespace itk
       std::cout << std::flush;
       try
       {
-	myWriter->Update();
+          myWriter->Update();
       }
       catch(itk::ExceptionObject &e)
       {
-	std::cerr << e;
-	return -1;
+          std::cerr << e;
+          return -1;
       }
-      std::cout << " Done." << std::endl;  
-      
+      std::cout << " Done." << std::endl;
     }
     
     
     if( foundColorFunction )
     {
       
-      typedef itk::TensorToScalarTensorImageFilter<TensorImageType, ColorImageType>
-	FilterType;
+      using FilterType = itk::TensorToScalarTensorImageFilter<TensorImageType, ColorImageType>;
       FilterType::Pointer myFilter = FilterType::New();
       myFilter->SetTensorToScalarFunction (myColorFunction);
       myFilter->SetInput (io->GetOutput());
@@ -323,7 +318,7 @@ namespace itk
       std::cout << "Done." << std::endl;
       
       // write the output
-      typedef itk::ImageFileWriter<ColorImageType> WriterType;
+      using WriterType = itk::ImageFileWriter<ColorImageType>;
       
       WriterType::Pointer myWriter = WriterType::New();
       myWriter->SetFileName(file_out);

@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  TensorsToDWICommandFactory::GetITKSourceVersion(void) const
+  TensorsToDWICommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  TensorsToDWICommandFactory::GetDescription(void) const
+  TensorsToDWICommandFactory::GetDescription() const
   {
     return "Create DWI from tensors using the Stejskal & Tanner diffusion equation (and a list of gradients)";
   }

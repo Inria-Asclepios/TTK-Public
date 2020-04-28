@@ -44,7 +44,7 @@
 
 // macro for templated ITK read and write
 #define ReadWriteImageMacro(dimension, type)				\
-  typedef itk::Image<type, dimension> CorrectImageType;			\
+  using CorrectImageType = itk::Image<type, dimension> ;			\
   itk::ImageFileReader< CorrectImageType >::Pointer Reader = itk::ImageFileReader< itk::Image<type, dimension> >::New(); \
   Reader->SetFileName ( filename1 );					\
   try									\
@@ -57,8 +57,8 @@
   }									\
   if (isparrec)								\
   {									\
-    typedef CorrectImageType::DirectionType CorrectDirectionType;	\
-    typedef CorrectImageType::PointType CorrectPointType;		\
+    using CorrectDirectionType = CorrectImageType::DirectionType ;	\
+    using CorrectPointType     = CorrectImageType::PointType ;		\
     CorrectDirectionType direction;					\
     direction.SetIdentity();						\
     for (unsigned int i=0; i<3; i++)					\
@@ -94,8 +94,7 @@ namespace itk
     m_LongDescription += m_ShortDescription;
   }
 
-  ImageConverterCommand::~ImageConverterCommand()
-  {}
+  ImageConverterCommand::~ImageConverterCommand() = default;
 
   int ImageConverterCommand::Execute(int narg, const char* arg[])
   {
@@ -121,8 +120,8 @@ namespace itk
 #endif
   
     // dummy reading information to get type and dimension
-    typedef FloatImageType ImageType;
-    typedef itk::ImageFileReader<ImageType> ReaderType;
+    using ImageType  = FloatImageType;
+    using ReaderType = itk::ImageFileReader<ImageType>;
     ReaderType::Pointer informationreader = ReaderType::New();
     informationreader->SetFileName(filename1);
     try
@@ -265,13 +264,13 @@ namespace itk
   ImageConverterCommand::FloatImageType::PointType ImageConverterCommand::ExtractPARRECImageOrigin (const char* filename, FloatImageType::DirectionType direction)
   {
     
-    typedef FloatImageType::PointType PointType;
-    PointType nullorigin;
-    nullorigin[0] = nullorigin[1] = nullorigin[2] = 0.0;
+    using PointType = FloatImageType::PointType;
+    PointType nullptrorigin;
+    nullptrorigin[0] = nullptrorigin[1] = nullptrorigin[2] = 0.0;
     
 #ifndef Module_ITKIOPhilipsREC
     std::cerr<<"cannot correct for PAR-REC angulation without Module_ITKIOPhilipsREC to ON"<<std::endl;
-    return nullorigin;
+    return nullptrorigin;
 #else
     
     
@@ -289,7 +288,7 @@ namespace itk
     
     itk::MetaDataDictionary PARheader = philipsIO->GetMetaDataDictionary();
     
-    typedef itk::PhilipsRECImageIO::OffCentreMidSliceType OffCentreType;
+    using OffCentreType = itk::PhilipsRECImageIO::OffCentreMidSliceType ;
     
     OffCentreType offcenter;
     
@@ -297,7 +296,7 @@ namespace itk
     if (!valid)
     {
       std::cerr<<"cannot find off-center information in PAR header, no correction"<<std::endl;
-      return nullorigin;
+      return nullptrorigin;
     }
     
     double dimensions[3];
@@ -334,7 +333,7 @@ namespace itk
   ImageConverterCommand::FloatImageType::DirectionType ImageConverterCommand::ExtractPARRECImageOrientation (const char* filename)
   {
     
-    typedef FloatImageType::DirectionType DirectionType;
+    using DirectionType = FloatImageType::DirectionType ;
     
     DirectionType eyedir;
     eyedir.SetIdentity();
@@ -358,7 +357,7 @@ namespace itk
     
     itk::MetaDataDictionary PARheader = philipsIO->GetMetaDataDictionary();
     
-    typedef itk::PhilipsRECImageIO::AngulationMidSliceType AngulationType;
+    using AngulationType = itk::PhilipsRECImageIO::AngulationMidSliceType ;
     
     AngulationType angulation;
     int sliceorientation = 0;
@@ -499,8 +498,8 @@ namespace itk
     
     itk::MetaDataDictionary PARheader = philipsIO->GetMetaDataDictionary();
     
-    typedef itk::PhilipsRECImageIO::GradientDirectionType GradientDirectionType;
-    typedef itk::PhilipsRECImageIO::GradientDirectionContainerType GradientDirectionContainerType;
+    using GradientDirectionType = itk::PhilipsRECImageIO::GradientDirectionType ;
+    using GradientDirectionContainerType = itk::PhilipsRECImageIO::GradientDirectionContainerType ;
     
     GradientDirectionContainerType::Pointer parrecgradients = GradientDirectionContainerType::New();
     

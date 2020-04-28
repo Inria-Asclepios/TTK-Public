@@ -82,7 +82,7 @@ namespace itk
   template<class TInputImage, class TOutputValue>
   void
   GradientTensorImageFilter<TInputImage,TOutputValue>
-  ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, ThreadIdType threadId)
+  ::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
   {
     
     ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;

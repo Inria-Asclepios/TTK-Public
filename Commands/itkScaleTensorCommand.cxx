@@ -56,11 +56,10 @@ namespace itk
     bool useLogScale     = cl.search (2,"-l","-L");
 
 
-    typedef double ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
-    typedef IOType::TensorImageType                        TensorImageType;    
-    typedef itk::ScaleTensorImageFilter<TensorImageType, TensorImageType>
-      FilterType;
+    using ScalarType      = double;  
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;    
+    using FilterType      = itk::ScaleTensorImageFilter<TensorImageType, TensorImageType>;
     
     IOType::Pointer myIO = IOType::New();
     myIO->SetFileName (fileIn);

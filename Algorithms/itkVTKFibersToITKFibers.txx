@@ -119,7 +119,7 @@ namespace itk
           DTIPointType pt;
 
 	  
-          pt.SetPosition(coordinates[0],coordinates[1],coordinates[2]);
+          pt.SetPositionInObjectSpace(coordinates[0],coordinates[1],coordinates[2]);
           pt.AddField("fa",T.GetFA());
           pt.AddField("ga",T.GetGA());
           pt.AddField("i",0);
@@ -172,7 +172,7 @@ namespace itk
 
       
       dtiTube->SetPoints(pointsToAdd);      
-      m_Output->AddSpatialObject( dtiTube );
+      m_Output->AddChild( dtiTube );
 
 
     }

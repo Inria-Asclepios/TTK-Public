@@ -64,15 +64,15 @@ namespace itk
     const char* output   = cl.follow("NoFile",2,"-O","-o");
     const char* deffield = cl.follow( "NoFile", 2, "-d", "-D");
 
-    typedef double ScalarType;
-    typedef Image<ScalarType, 3>         ImageType;
+    using ScalarType = double;
+    using ImageType  = Image<ScalarType, 3>;
     
 #ifdef TTK_USE_MIPS
     itk::InrimageImageIOFactory::RegisterOneFactory();
 #endif
     
-    typedef itk::ImageFileReader<ImageType> ImageReaderType;
-    typedef itk::ImageFileWriter<ImageType> WriterType;
+    using ImageReaderType = itk::ImageFileReader<ImageType>;
+    using WriterType      = itk::ImageFileWriter<ImageType>;
     
     
     ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -93,10 +93,9 @@ namespace itk
     
     // read the deformation field
     std::cout << "Reading: " << deffield;
-    typedef Vector<ScalarType, 3> VectorType;
-    typedef Image<VectorType, 3> VectorImageType;
-    ImageFileReader<VectorImageType>::Pointer readerDefField = 
-      ImageFileReader<VectorImageType>::New();
+    using VectorType      = Vector<ScalarType, 3>;
+    using VectorImageType = Image<VectorType, 3>;
+    ImageFileReader<VectorImageType>::Pointer readerDefField = ImageFileReader<VectorImageType>::New();
     readerDefField->SetFileName( deffield );
     try
     {
@@ -110,7 +109,7 @@ namespace itk
     std::cout << " Done." << std::endl;
     
     
-    typedef itk::WarpImageFilter < ImageType, ImageType, VectorImageType >  WarperType;
+    using WarperType = itk::WarpImageFilter < ImageType, ImageType, VectorImageType >;
     WarperType::Pointer warper = WarperType::New();
     warper->SetInput( reader->GetOutput() );
     warper->SetOutputSpacing( readerDefField->GetOutput()->GetSpacing() );

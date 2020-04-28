@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  SyntheticTensorFieldGeneratorCommandFactory::GetITKSourceVersion(void) const
+  SyntheticTensorFieldGeneratorCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  SyntheticTensorFieldGeneratorCommandFactory::GetDescription(void) const
+  SyntheticTensorFieldGeneratorCommandFactory::GetDescription() const
   {
     return "Generate a synthetic crossing or circle tensor field";
   }

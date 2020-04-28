@@ -209,7 +209,7 @@ namespace itk
     virtual void AfterThreadedGenerateData();
     
     /** Method Compute the Modified Time based on changed to the components. */
-    unsigned long GetMTime( void ) const;
+    ModifiedTimeType GetMTime( void ) const;
     
     
     protected:
@@ -225,18 +225,15 @@ namespace itk
      * specified by the parameter "outputRegionForThread"
      * \sa ImageToImageFilter::ThreadedGenerateData(),
      *     ImageToImageFilter::GenerateData() */
-    void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                              ThreadIdType threadId );
+    void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
     
     /** Default implementation for resampling that works for any
      * transformation type. */
-    void NonlinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                       ThreadIdType threadId );
+    void NonlinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
     
     /** Implementation for resampling that works for with linear 
      * transformation types. */
-    void LinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    ThreadIdType threadId );
+    void LinearThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
     
     
     private:

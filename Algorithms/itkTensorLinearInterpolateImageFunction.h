@@ -60,6 +60,8 @@ namespace itk
     
     /** ContinuousIndex typedef support. */
     typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+
+    using SizeType = typename Superclass::SizeType;
     
     /** Evaluate the function at a ContinuousIndex position
      *
@@ -70,6 +72,11 @@ namespace itk
      * ImageFunction::IsInsideBuffer() can be used to check bounds before
      * calling the method. */
     virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
+
+    SizeType GetRadius() const override
+    {
+        return SizeType::Filled(1);
+    }
 
     /**
        Normalize the interpolation (default: OFF). Normalization is used when the sum of

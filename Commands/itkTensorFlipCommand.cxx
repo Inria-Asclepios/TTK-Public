@@ -61,11 +61,10 @@ namespace itk
     const char* fileOut  = cl.follow("NoFile",2,"-o","-O");
     const int   FlipAxis = cl.follow(0,       2,"-a","-A");
     
-    typedef double ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
-    typedef IOType::TensorImageType                        TensorImageType;    
-    typedef itk::FlipTensorImageFilter<TensorImageType,TensorImageType>
-      FlipFilterType;
+    using ScalarType      = double;  
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;    
+    using FlipFilterType  = itk::FlipTensorImageFilter<TensorImageType,TensorImageType>;
   
     
     IOType::Pointer myIO = IOType::New();

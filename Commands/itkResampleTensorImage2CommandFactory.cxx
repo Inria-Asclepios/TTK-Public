@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  ResampleTensorImage2CommandFactory::GetITKSourceVersion(void) const
+  ResampleTensorImage2CommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  ResampleTensorImage2CommandFactory::GetDescription(void) const
+  ResampleTensorImage2CommandFactory::GetDescription() const
   {
     return "Resample tensors w.r.t. a linear matrix and a domain extent";
   }

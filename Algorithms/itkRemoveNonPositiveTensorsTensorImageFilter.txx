@@ -40,7 +40,7 @@ namespace itk
   template<class TInputImage, class TOutputImage>
   void
   RemoveNonPositiveTensorsTensorImageFilter<TInputImage,TOutputImage>
-  ::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
+  ::GenerateInputRequestedRegion() noexcept(false)
   {
     
     // call the superclass' implementation of this method
@@ -93,7 +93,7 @@ namespace itk
   template<class TInputImage, class TOutputImage>
   void
   RemoveNonPositiveTensorsTensorImageFilter<TInputImage,TOutputImage>
-  ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, ThreadIdType threadId)
+  ::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
   {
     
     ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
@@ -116,9 +116,6 @@ namespace itk
   
     typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType::iterator fit;
     fit = faceList.begin();
-
-    if( threadId==0 )
-      this->UpdateProgress (0.0);
     
     // Process each of the boundary faces.  These are N-d regions which border
     // the edge of the buffer.
@@ -197,13 +194,6 @@ namespace itk
           
         }
 
-        if( threadId==0 )
-        {
-          if(step>0)
-            if( (progress%step)==0 )
-              this->UpdateProgress ( double(progress)/double(numPixels) );        
-        }
-
         it.Set ( out );
         ++bit;
         ++it;
@@ -211,9 +201,6 @@ namespace itk
       }
       
     }
-    
-    if( threadId==0 )
-      this->UpdateProgress (1.0);
     
   }
   

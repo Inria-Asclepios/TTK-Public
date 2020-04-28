@@ -60,8 +60,8 @@ AverageStdImageFilter()
 }
 ~AverageStdImageFilter(){};
 
-void BeforeThreadedGenerateData(void);
-void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId);
+void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
+void DynamicThreadedGenerateData(const OutputImageRegionType &outputRegionForThread) ITK_OVERRIDE;
 void PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

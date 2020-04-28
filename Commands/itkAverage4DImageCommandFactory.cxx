@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  Average4DImageCommandFactory::GetITKSourceVersion(void) const
+  Average4DImageCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  Average4DImageCommandFactory::GetDescription(void) const
+  Average4DImageCommandFactory::GetDescription() const
   {
     return "Subtract two images";
   }

@@ -31,18 +31,16 @@ namespace itk
 			   CreateObjectFunction<DWIBrainMaskExtractorCommand>::New());
   }
   
-  DWIBrainMaskExtractorCommandFactory::~DWIBrainMaskExtractorCommandFactory()
-  {
-  }
+  DWIBrainMaskExtractorCommandFactory::~DWIBrainMaskExtractorCommandFactory() = default;
   
   const char* 
-  DWIBrainMaskExtractorCommandFactory::GetITKSourceVersion(void) const
+  DWIBrainMaskExtractorCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  DWIBrainMaskExtractorCommandFactory::GetDescription(void) const
+  DWIBrainMaskExtractorCommandFactory::GetDescription() const
   {
     return "Extract a brain mask from a DWI";
   }

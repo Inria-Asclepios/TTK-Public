@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  TensorGradientMagnitudeCalculatorCommandFactory::GetITKSourceVersion(void) const
+  TensorGradientMagnitudeCalculatorCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  TensorGradientMagnitudeCalculatorCommandFactory::GetDescription(void) const
+  TensorGradientMagnitudeCalculatorCommandFactory::GetDescription() const
   {
     return "Calculate the gradient magnitude of a tensor image";
   }

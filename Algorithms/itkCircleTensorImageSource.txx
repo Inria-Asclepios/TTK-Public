@@ -62,7 +62,7 @@ namespace itk
   template <class TTensorImage>
   void
   CircleTensorImageSource<TTensorImage>
-  ::ThreadedGenerateData( const RegionType &region, ThreadIdType threadId)
+  ::DynamicThreadedGenerateData( const RegionType &region)
   {
 
     typedef ImageRegionIteratorWithIndex<TTensorImage> IteratorType;

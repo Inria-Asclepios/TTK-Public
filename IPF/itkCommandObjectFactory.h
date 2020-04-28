@@ -28,10 +28,10 @@ namespace itk
   {
   public:  
     /** Standard class typedefs. */
-    typedef CommandObjectFactory           Self;
-    typedef Object                   Superclass;
-    typedef SmartPointer<Self>       Pointer;
-    typedef SmartPointer<const Self> ConstPointer;
+    using  Self         = CommandObjectFactory;
+    using  Superclass   = Object;
+    using  Pointer      = SmartPointer<Self>;
+    using  ConstPointer = SmartPointer<const Self>;
   
     /** Class Methods used to interface with the registered factories */
   
@@ -39,7 +39,7 @@ namespace itk
     itkTypeMacro(CommandObjectFactory, Object);
 
     /** Convenient typedefs. */
-    typedef ::itk::CommandObjectBase::Pointer CommandObjectBasePointer;
+    using CommandObjectBasePointer = ::itk::CommandObjectBase::Pointer;
 
     /** Create the appropriate CommandObject. */
     static CommandObjectBasePointer CreateCommandObject(const char* name);
@@ -49,7 +49,7 @@ namespace itk
 	  
   protected:
     CommandObjectFactory();
-    ~CommandObjectFactory();
+    ~CommandObjectFactory() override;
     
 private:
     CommandObjectFactory(const Self&); //purposely not implemented

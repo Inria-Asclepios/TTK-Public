@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  ComputeBundleStatisticsCommandFactory::GetITKSourceVersion(void) const
+  ComputeBundleStatisticsCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  ComputeBundleStatisticsCommandFactory::GetDescription(void) const
+  ComputeBundleStatisticsCommandFactory::GetDescription() const
   {
     return "Compute mean FA/ADC of a fiber bundle";
   }

@@ -51,7 +51,7 @@ namespace itk
   template<class TInputImage, class TOutputImage>
   void
   FlipTensorImageFilter<TInputImage,TOutputImage>
-  ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, ThreadIdType threadId)
+  ::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
   {
     
     typedef ImageRegionConstIterator<InputImageType>   InputIteratorType;
@@ -62,18 +62,6 @@ namespace itk
     
     unsigned long numPixels = outputRegionForThread.GetNumberOfPixels();
     unsigned long step = numPixels/1000;
-    unsigned long progress = 0;
-
-    if( threadId==0 )
-    {
-      for (unsigned int i=0;i<ImageDimension;i++)
-        if (m_FlipAxes[i])
-          std::cout<<"flipping tensors, axis: "<<i<<std::endl;
-    }
-    
-    
-    if( threadId==0 )
-      this->UpdateProgress (0.0);
 
     while ( ! itOut.IsAtEnd() )
     {
@@ -101,30 +89,10 @@ namespace itk
         }
       }
       
-      if( threadId==0 )
-      {
-        if(step>0)
-          if( (progress%step)==0 )
-            this->UpdateProgress ( double(progress)/double(numPixels) );        
-      }
-      
       itOut.Set ( out );
       ++itOut;
       ++itIn;
-      ++progress;
-    } 
-    
-    if( threadId==0 )
-    {
-      if(step>0)
-        if( (progress%step)==0 )
-          this->UpdateProgress ( double(progress)/double(numPixels) );        
-    }
-    
-    
-    if( threadId==0 )
-      this->UpdateProgress (1.0);
-    
+    }     
   }
   
   

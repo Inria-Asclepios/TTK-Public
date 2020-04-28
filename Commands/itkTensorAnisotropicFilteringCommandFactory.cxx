@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  TensorAnisotropicFilteringCommandFactory::GetITKSourceVersion(void) const
+  TensorAnisotropicFilteringCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  TensorAnisotropicFilteringCommandFactory::GetDescription(void) const
+  TensorAnisotropicFilteringCommandFactory::GetDescription() const
   {
     return "Perform tensor Perona & Malik anistropic filtering using Log-Euclidean metric";
   }

@@ -60,18 +60,16 @@ namespace itk
     const char* def = cl.follow("NoFile",2,"-d","-D");
     int reostrat = cl.follow(0,2,"-t","-T");
   
-    typedef double                                ScalarType;
-    //typedef float                                 ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
-    typedef IOType::TensorImageType               TensorImageType;
-    typedef Vector<ScalarType, 3>                 VectorType;
-    typedef Image<VectorType, 3>                  DisplacementFieldType;
-    
-    typedef LogTensorImageFilter<TensorImageType,TensorImageType> LogFilterType;
-    typedef ExpTensorImageFilter<TensorImageType,TensorImageType> ExpFilterType;
+    using ScalarType            = double; 
+    using IOType                = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType       = IOType::TensorImageType;
+    using VectorType            = Vector<ScalarType, 3>;
+    using DisplacementFieldType = Image<VectorType, 3>;
+    using LogFilterType         = LogTensorImageFilter<TensorImageType,TensorImageType>;
+    using ExpFilterType         = ExpTensorImageFilter<TensorImageType,TensorImageType>;
 
 
-    TensorImageType::Pointer Input = 0;
+    TensorImageType::Pointer Input = nullptr;
     
     {
       std::cout << "Reading: " << input << std::flush;
@@ -113,7 +111,7 @@ namespace itk
     
 
 
-    DisplacementFieldType::Pointer Displacement = 0;
+    DisplacementFieldType::Pointer Displacement = nullptr;
     {
       std::cout << "Reading: " << def << std::flush;
       itk::ImageFileReader<DisplacementFieldType>::Pointer reader3 = 
@@ -138,14 +136,13 @@ namespace itk
 
     {
       
-      typedef itk::TensorLinearInterpolateImageFunction<TensorImageType, double> InterpolatorType;
+      using InterpolatorType = itk::TensorLinearInterpolateImageFunction<TensorImageType, double>;
       InterpolatorType::Pointer interpolator = InterpolatorType::New();
       interpolator->NormalizeOn();
     
     
       // warp the result
-      typedef itk::WarpTensorImageFilter
-	< TensorImageType, TensorImageType, DisplacementFieldType >  WarperType;
+      using WarperType = itk::WarpTensorImageFilter < TensorImageType, TensorImageType, DisplacementFieldType >  ;
       WarperType::Pointer warper = WarperType::New();
       warper->SetInput( Input );
       warper->SetOutputSpacing( Displacement->GetSpacing() );
@@ -153,7 +150,7 @@ namespace itk
       warper->SetOutputDirection( Displacement->GetDirection() );
       warper->SetDisplacementField( Displacement );
       warper->SetInterpolator ( interpolator );
-      warper->SetNumberOfThreads (1);
+      warper->SetNumberOfWorkUnits(1);
       
       switch (reostrat)
       {

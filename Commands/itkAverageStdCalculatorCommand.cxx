@@ -64,17 +64,14 @@ namespace itk
     const char* fileIn = cl.follow("NoFile",2,"-i","-I");
     const char* fileOut = cl.follow("NoFile",2,"-o","-O");
   
-    typedef double ScalarType;
+    using ScalarType        = double;    
+    using ImageType         = itk::Image<ScalarType, 3>;    
+    using AverageFilterType = itk::AverageStdImageFilter<ImageType, ImageType>;    
+    using ReaderType        = itk::ImageFileReader<ImageType>;
+    using WriterType        = itk::ImageFileWriter<ImageType>;
     
-    typedef itk::Image<ScalarType, 3>   ImageType;
-    
-    typedef itk::AverageStdImageFilter<ImageType, ImageType> AverageFilterType;
-    
-    typedef itk::ImageFileReader<ImageType> ReaderType;
-    typedef itk::ImageFileWriter<ImageType> WriterType;
-    
-    ImageType::Pointer mean = 0;
-    ImageType::Pointer variance = 0;
+    ImageType::Pointer mean = nullptr;
+    ImageType::Pointer variance = nullptr;
     
     {
       AverageFilterType::Pointer myAverage = AverageFilterType::New();

@@ -61,7 +61,7 @@ namespace itk
     }
     ~ScaleTensorImageFilter(){};
 
-    void ThreadedGenerateData(const OutputRegionType &, ThreadIdType);
+    void DynamicThreadedGenerateData(const OutputRegionType &);
 
   private:
     ScaleTensorImageFilter (const Self&);

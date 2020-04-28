@@ -16,31 +16,29 @@ namespace itk
     class FiberBundleStatisticsCalculator : public Object
     {
     public:
-        typedef FiberBundleStatisticsCalculator Self;
-        typedef Object Superclass;
-
-        typedef SmartPointer<Self>       Pointer;
-        typedef SmartPointer<const Self> ConstPointer;
+        using Self         = FiberBundleStatisticsCalculator;
+        using Superclass   = Object;
+        using Pointer      = SmartPointer<Self>;
+        using ConstPointer = SmartPointer<const Self>;
 
         itkNewMacro (Self);
         itkTypeMacro(FiberBundleStatisticsCalculator, Object);
 
         // specific typedef
-        typedef double                           ScalarType;
-        typedef std::vector<ScalarType>          ScalarArrayType;
-        typedef Tensor<ScalarType, 3>            TensorType;
-        typedef Fiber<ScalarType, 3, ScalarType> FiberType;
-
-        typedef vtkPolyData FiberBundleType;
+        using ScalarType      = double;
+        using ScalarArrayType = std::vector<ScalarType>;
+        using TensorType      = Tensor<ScalarType, 3>;
+        using FiberType       = Fiber<ScalarType, 3, ScalarType>;
+        using FiberBundleType = vtkPolyData;
 
         void SetInput(FiberBundleType *bundle);
-        FiberBundleType *GetInput(void) const;
+        FiberBundleType *GetInput() const;
 
-        virtual void Compute (void);
+        virtual void Compute ();
 
-        ScalarArrayType GetFAValues (void) const;
-        ScalarArrayType GetADCValues (void) const;
-        ScalarArrayType GetFiberLengthValues (void) const;
+        ScalarArrayType GetFAValues () const;
+        ScalarArrayType GetADCValues () const;
+        ScalarArrayType GetFiberLengthValues () const;
 
         void GetFAStatistics     (ScalarType &mean, ScalarType &min, ScalarType &max, ScalarType &var);
         void GetADCStatistics    (ScalarType &mean, ScalarType &min, ScalarType &max, ScalarType &var);
@@ -48,9 +46,9 @@ namespace itk
 
     protected:
         FiberBundleStatisticsCalculator();
-        ~FiberBundleStatisticsCalculator();
+        ~FiberBundleStatisticsCalculator() override;
 
-        virtual void PrintSelf(std::ostream &os, Indent indent) const
+        void PrintSelf(std::ostream &os, Indent indent) const override
         {
             Superclass::PrintSelf(os, indent);
         }

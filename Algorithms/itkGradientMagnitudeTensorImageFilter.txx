@@ -52,7 +52,7 @@ namespace itk
   template<class TInputImage, class TOutputImage>
   void
   GradientMagnitudeTensorImageFilter<TInputImage,TOutputImage>
-  ::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
+  ::GenerateInputRequestedRegion() noexcept(false)
   {
     
     // call the superclass' implementation of this method
@@ -105,7 +105,7 @@ namespace itk
   template<class TInputImage, class TOutputImage>
   void
   GradientMagnitudeTensorImageFilter<TInputImage,TOutputImage>
-  ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, ThreadIdType threadId)
+  ::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
   {
     
     ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
@@ -125,11 +125,7 @@ namespace itk
   
     typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::
       FaceListType::iterator fit;
-    fit = faceList.begin();
-  
-    // support progress methods/callbacks
-    ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+    fit = faceList.begin();  
 
     // Process each of the boundary faces.  These are N-d regions which border
     // the edge of the buffer.
@@ -146,7 +142,6 @@ namespace itk
         it.Set (this->FiniteDifferenceCalculation (bit));
         ++bit;
         ++it;
-        progress.CompletedPixel();
       }
     }    
   }

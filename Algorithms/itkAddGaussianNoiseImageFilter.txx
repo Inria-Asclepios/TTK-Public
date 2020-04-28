@@ -62,7 +62,7 @@ namespace itk
   template <class TInputImage, class TOutputImage>
   void
   AddGaussianNoiseImageFilter<TInputImage, TOutputImage>
-  ::GenerateInputRequestedRegion() throw (InvalidRequestedRegionError)
+  ::GenerateInputRequestedRegion() noexcept(false)
   {
     Superclass::GenerateInputRequestedRegion();
     if ( this->GetInput() )

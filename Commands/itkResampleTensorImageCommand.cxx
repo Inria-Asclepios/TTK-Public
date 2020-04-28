@@ -79,10 +79,10 @@ namespace itk
     
 
     
-    typedef double                                ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>  IOType;
-    typedef IOType::TensorImageType               TensorImageType;
-    typedef itk::ResampleTensorImageFilter<TensorImageType,TensorImageType> FilterType;
+    using ScalarType      = double;  
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;
+    using FilterType      = itk::ResampleTensorImageFilter<TensorImageType,TensorImageType>;
   
     IOType::Pointer myIO = IOType::New();
     myIO->SetFileName(tensorFile);
@@ -104,10 +104,10 @@ namespace itk
     // log:
     if( le )
     {
-      typedef itk::LogTensorImageFilter<TensorImageType, TensorImageType> LogFilterType;
+      using LogFilterType = itk::LogTensorImageFilter<TensorImageType, TensorImageType>;
       LogFilterType::Pointer myLog = LogFilterType::New();
       myLog->SetInput(tensors);
-      myLog->SetNumberOfThreads(threads);
+      myLog->SetNumberOfWorkUnits(threads);
       
       try
       {
@@ -125,102 +125,27 @@ namespace itk
     
     // read the affine matrix
     std::cout << "Reading: " << mat;
-    typedef itk::AffineTensorTransform< ScalarType, 3 >         TensorTransformType;
-    typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;
-    typedef itk::AffineTransform< ScalarType, 3>                AffineTransformType;
-    
-    /*
-    // read the affine matrix
-    std::ifstream buffer (mat);
-    if( buffer.fail() )
-    {
-    std::cerr << "Error: Cannot read file " << mat << std::endl;
-    return -1;
-    }
+    using TensorTransformType = itk::AffineTensorTransform< ScalarType, 3 >;
+    using TransformType       = itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >;
+    using AffineTransformType = itk::AffineTransform< ScalarType, 3>;
     
     
-    TransformType::MatrixType       matrix;
-    TransformType::OutputVectorType translation;
-    
-    if( bal ) // baladin's style
-    {
-    // skip 2 first characters
-    char junk[512];
-    buffer >> junk;
-    buffer >> junk;
-    
-    for( unsigned int i=0 ;i<3; i++)
-    {
-    buffer >> matrix (i,0);
-    buffer >> matrix (i,1);
-    buffer >> matrix (i,2);
-    buffer >> translation[i];
-    }
-    transform->SetMatrix (matrix);
-    transform->SetTranslation (translation);
-    
-    TransformType::Pointer inv_transform = TransformType::New();
-    transform->GetInverse(inv_transform);
-    
-    transform = inv_transform;
-    }
-    else
-    {  
-    
-    // skip the first 12 floats
-    char junk [512];
-    for( unsigned int i=0; i<12; i++)
-    {
-    buffer >> junk;
-    }
-    
-    for( unsigned int i=0 ;i<3; i++)
-    {
-      buffer >> matrix (i,0);
-      buffer >> matrix (i,1);
-      buffer >> matrix (i,2);
-      }
-      
-    for( unsigned int i=0; i<3; i++)
-    {
-    buffer >> translation[i];
-    }
-    
-    transform->SetMatrix (matrix);
-    transform->SetTranslation (translation);
-    
-    TransformType::Pointer inv_transform = TransformType::New();
-    transform->GetInverse(inv_transform);
-    
-    transform = inv_transform;
-    }
-    buffer.close();
-    
-    std::cout << "Matrix is: " << std::endl;
-    std::cout << matrix << std::endl;
-    std::cout << "Translation is: " << std::endl;
-    std::cout << translation << std::endl;
-    
-    std::cout << transform << std::endl;
-    */
-    
-    
-    TransformType::Pointer transform = 0;
+    TransformType::Pointer transform = nullptr;
     {
       itk::TransformFactory< TransformType >::RegisterTransform ();
       itk::TransformFactory< AffineTransformType >::RegisterTransform ();
       
-      typedef itk::TransformFileReader TransformReaderType;
+      using TransformReaderType = itk::TransformFileReader;
       TransformReaderType::Pointer reader = TransformReaderType::New();
       reader->SetFileName ( mat );
       try
       {
-	reader->Update();
+	     reader->Update();
       }
       catch (itk::ExceptionObject &e)
       {
-	std::cerr << e;
-	return -1;
+	     std::cerr << e;
+	     return -1;
       }
       transform = dynamic_cast<TransformType*>( reader->GetTransformList()->front().GetPointer() );
     }
@@ -235,13 +160,13 @@ namespace itk
     
     FilterType::Pointer filter = FilterType::New();
     
-    typedef itk::TensorLinearInterpolateImageFunction<TensorImageType, double>  InterpolatorType;
+    using InterpolatorType = itk::TensorLinearInterpolateImageFunction<TensorImageType, double>;
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
 
     
     filter->SetTensorInterpolator( interpolator );
     filter->SetInput ( tensors );
-    filter->SetNumberOfThreads(threads);
+    filter->SetNumberOfWorkUnits(threads);
     //filter->SetUseReferenceImage (true);
     //filter->SetReferenceImage ( myIO->GetOutput() );
     
@@ -249,7 +174,7 @@ namespace itk
     itk::InrimageImageIOFactory::RegisterOneFactory();
 #endif
     
-    typedef itk::Image<double, 3> ImageType;
+    using ImageType = itk::Image<double, 3>;
     itk::ImageFileReader< ImageType >::Pointer io2 = itk::ImageFileReader< ImageType >::New();
     io2->SetFileName( ref );
     try
@@ -320,11 +245,11 @@ namespace itk
     if (le )
     {
       // exp:
-      typedef itk::ExpTensorImageFilter<TensorImageType, TensorImageType> ExpFilterType;
+      using ExpFilterType = itk::ExpTensorImageFilter<TensorImageType, TensorImageType>;
       ExpFilterType::Pointer myExp = ExpFilterType::New();
       
       myExp->SetInput( filter->GetOutput() );
-      myExp->SetNumberOfThreads(threads);
+      myExp->SetNumberOfWorkUnits(threads);
       
       std::cout << "Pipeline started." << std::endl;
       std::cout << std::flush;

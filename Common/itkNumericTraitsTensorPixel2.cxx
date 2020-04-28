@@ -39,9 +39,9 @@ namespace itk
 
   Tensor< float,3 > NumericTraits<Tensor<float, 3> >::ZeroValue() { return Zero; }
 
-  Tensor< double,3 > NumericTraits<Tensor<float, 3> >::min() { return vcl_numeric_limits<double>::min(); }
+  Tensor< double,3 > NumericTraits<Tensor<float, 3> >::min() { return std::numeric_limits<double>::min(); }
 
-  Tensor< double,3 > NumericTraits<Tensor<float, 3> >::max() { return vcl_numeric_limits<double>::max(); }
+  Tensor< double,3 > NumericTraits<Tensor<float, 3> >::max() { return std::numeric_limits<double>::max(); }
     
     unsigned int NumericTraits<Tensor<float, 3> >::GetLength(Tensor<float, 3> &t) { return 6; }
 
@@ -60,9 +60,9 @@ namespace itk
 
   Tensor< long double,3 > NumericTraits<Tensor<long double, 3> >::ZeroValue() { return Zero; }
 
-  Tensor< double,3 > NumericTraits<Tensor<double, 3> >::min() { return vcl_numeric_limits<double>::min(); }
+  Tensor< double,3 > NumericTraits<Tensor<double, 3> >::min() { return std::numeric_limits<double>::min(); }
 
-  Tensor< double,3 > NumericTraits<Tensor<double, 3> >::max() { return vcl_numeric_limits<double>::max(); }
+  Tensor< double,3 > NumericTraits<Tensor<double, 3> >::max() { return std::numeric_limits<double>::max(); }
 
     unsigned int NumericTraits<Tensor<double, 3> >::GetLength(Tensor<double, 3> &t) { return 6; }
 

@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  WarpTensorImageCommandFactory::GetITKSourceVersion(void) const
+  WarpTensorImageCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  WarpTensorImageCommandFactory::GetDescription(void) const
+  WarpTensorImageCommandFactory::GetDescription() const
   {
     return "Warp a tensor image given a deformation field";
   }

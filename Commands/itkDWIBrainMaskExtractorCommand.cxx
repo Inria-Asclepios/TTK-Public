@@ -39,15 +39,14 @@ namespace itk
     template<class TImage>
     int DWIBrainMaskExtractorCommandImplementation(const argument &arg)
     {
-        typedef TImage ImageType;
-        typedef Image<unsigned char, 3>  MaskImageType;
+        using ImageType           = TImage;
+        using MaskImageType       = Image<unsigned char, 3>;
+        using ImageReaderType     = itk::ImageFileReader<ImageType>;
+        using ImageWriterType     = itk::ImageFileWriter<ImageType>;
+        using MaskImageWriterType = itk::ImageFileWriter<MaskImageType>;
 
-        typedef itk::ImageFileReader<ImageType>     ImageReaderType;
-        typedef itk::ImageFileWriter<ImageType>     ImageWriterType;
-        typedef itk::ImageFileWriter<MaskImageType> MaskImageWriterType;
 
-
-        typename ImageType::Pointer image = 0;
+        typename ImageType::Pointer image = nullptr;
         {
             typename ImageReaderType::Pointer reader = ImageReaderType::New();
             reader->SetFileName( arg.input );
@@ -69,8 +68,8 @@ namespace itk
     }
     
 
-    typedef itk::BrainExtractionImageFilter<ImageType, MaskImageType> BrainExtractionFilterType;
-    typename MaskImageType::Pointer maskImage = 0;
+    using BrainExtractionFilterType = itk::BrainExtractionImageFilter<ImageType, MaskImageType>;
+    typename MaskImageType::Pointer maskImage = nullptr;
     {
       typename BrainExtractionFilterType::Pointer extractor = BrainExtractionFilterType::New();
       extractor->SetInput ( image );
@@ -89,7 +88,7 @@ namespace itk
     }
 
     
-    typedef itk::MaskImageFilter<ImageType, MaskImageType, ImageType> MaskFilterType;
+    using MaskFilterType = itk::MaskImageFilter<ImageType, MaskImageType, ImageType>;
     {
       typename MaskFilterType::Pointer masker = MaskFilterType::New();
       masker->SetInput1 ( image );

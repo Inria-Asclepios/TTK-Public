@@ -117,8 +117,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputFieldRegionType& outputRegionForThread,
-                            ThreadIdType threadId );
+  void DynamicThreadedGenerateData(const OutputFieldRegionType& outputRegionForThread);
 
   void BeforeThreadedGenerateData();
   

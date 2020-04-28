@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  NDImageToTensorImageCommandFactory::GetITKSourceVersion(void) const
+  NDImageToTensorImageCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  NDImageToTensorImageCommandFactory::GetDescription(void) const
+  NDImageToTensorImageCommandFactory::GetDescription() const
   {
     return "Convert a 4D image to a ttk compatible tensor file";
   }

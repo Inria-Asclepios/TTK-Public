@@ -26,22 +26,22 @@ namespace itk {
     
   public:
 		
-    typedef DWIBrainMaskExtractorCommand Self;
-    typedef CommandObjectBase Superclass;
-    typedef SmartPointer <Self> Pointer;
-    typedef SmartPointer <const Self> ConstPointer;
+    using Self         = DWIBrainMaskExtractorCommand;
+    using Superclass   = CommandObjectBase;
+    using Pointer      = SmartPointer <Self>;
+    using ConstPointer = SmartPointer <const Self>;
     
     itkTypeMacro(DWIBrainMaskExtractorCommand, CommandObjectBase);
     itkNewMacro(Self);
     
-    const char *GetCommandName(void)
+    const char *GetCommandName() override
     { return "dwi_mask_extract"; }
     
-    int Execute(int nargs, const char *args[]);
+    int Execute(int nargs, const char *args[]) override;
     
   protected:
     DWIBrainMaskExtractorCommand();
-    ~DWIBrainMaskExtractorCommand();
+    ~DWIBrainMaskExtractorCommand() override;
     
   private:
     DWIBrainMaskExtractorCommand(const Self&);

@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  BoostTensorAnisotropyCommandFactory::GetITKSourceVersion(void) const
+  BoostTensorAnisotropyCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  BoostTensorAnisotropyCommandFactory::GetDescription(void) const
+  BoostTensorAnisotropyCommandFactory::GetDescription() const
   {
     return "Boost the tensor anisotropy (FA)";
   }

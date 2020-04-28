@@ -73,10 +73,10 @@ namespace itk
     const char* file_matrix = cl.follow ("",2,"-m","-M");
 
 
-    typedef itk::Vector<double, 3>                VectorType;
-    typedef itk::Image<VectorType, 3>             VectorImageType;
-    typedef itk::ImageFileReader<VectorImageType> ReaderType;
-    typedef itk::VectorLinearInterpolateImageFunction<VectorImageType, double> InterpolateFunctionType;
+    using VectorType              = itk::Vector<double, 3>;
+    using VectorImageType         = itk::Image<VectorType, 3>;
+    using ReaderType              = itk::ImageFileReader<VectorImageType>;
+    using InterpolateFunctionType = itk::VectorLinearInterpolateImageFunction<VectorImageType, double>;
 
 
     vtkPolyDataReader* reader = vtkPolyDataReader::New();
@@ -92,7 +92,7 @@ namespace itk
     }
 
 
-    VectorImageType::Pointer vector = 0;
+    VectorImageType::Pointer vector = nullptr;
     if( strcmp (file_vector, "")!=0 )
     {
       ReaderType::Pointer reader_v = ReaderType::New();
@@ -118,16 +118,16 @@ namespace itk
     }
 
 
-    typedef itk::MatrixOffsetTransformBase<double, 3, 3> LinearTransformType;
-    typedef itk::AffineTransform<double, 3>              AffineTransformType;
+    using LinearTransformType = itk::MatrixOffsetTransformBase<double, 3, 3>;
+    using AffineTransformType = itk::AffineTransform<double, 3>;
 
-    LinearTransformType::Pointer transform = 0;
+    LinearTransformType::Pointer transform = nullptr;
     if( strcmp (file_matrix, "")!=0 )
     {
       itk::TransformFactory< LinearTransformType >::RegisterTransform ();
       itk::TransformFactory< AffineTransformType >::RegisterTransform ();
 
-      typedef itk::TransformFileReader TransformReaderType;
+      using  TransformReaderType = itk::TransformFileReader;
       TransformReaderType::Pointer reader_t = TransformReaderType::New();
       reader_t->SetFileName ( file_matrix );
       try

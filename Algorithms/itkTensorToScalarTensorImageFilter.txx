@@ -47,20 +47,16 @@ namespace itk
   template <class TInputImage, class TOutputImage>
   void
   TensorToScalarTensorImageFilter<TInputImage, TOutputImage>
-  ::ThreadedGenerateData ( const OutputImageRegionType &outputRegionForThread, ThreadIdType threadId )
+  ::DynamicThreadedGenerateData ( const OutputImageRegionType &outputRegionForThread)
   {
     typedef ImageRegionIterator<OutputImageType>      IteratorOutputType;
     typedef ImageRegionConstIterator<InputImageType>  IteratorInputType;
 
     unsigned long numPixels = outputRegionForThread.GetNumberOfPixels();
-    unsigned long step = numPixels/100;
     unsigned long progress = 0;
 	
     IteratorOutputType itOut(this->GetOutput(), outputRegionForThread);
     IteratorInputType  itIn(this->GetInput(), outputRegionForThread);
-
-    if( threadId==0 )
-      this->UpdateProgress (0.0);
     
     while(!itOut.IsAtEnd())
     {
@@ -75,12 +71,6 @@ namespace itk
       if ( !T.IsZero() )
         out = m_TensorToScalarFunction->ComputeScalar( T );
 
-      if( threadId==0 && step>0)
-      {        
-        if( (progress%step)==0 )
-          this->UpdateProgress ( double(progress)/double(numPixels) );
-      }
-
       
       itOut.Set (out);
       ++progress;
@@ -88,10 +78,6 @@ namespace itk
       ++itIn;
       
     }
-
-    if( threadId==0 )
-      this->UpdateProgress (1.0);
-    
   }
   
   

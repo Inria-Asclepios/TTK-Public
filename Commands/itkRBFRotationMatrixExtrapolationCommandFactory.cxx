@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  RBFRotationMatrixExtrapolationCommandFactory::GetITKSourceVersion(void) const
+  RBFRotationMatrixExtrapolationCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  RBFRotationMatrixExtrapolationCommandFactory::GetDescription(void) const
+  RBFRotationMatrixExtrapolationCommandFactory::GetDescription() const
   {
     return "Extrapolate a set of rotation matrices using radial basis functions (RBF)";
   }

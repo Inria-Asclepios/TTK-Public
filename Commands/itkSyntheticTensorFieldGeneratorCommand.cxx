@@ -79,10 +79,10 @@ namespace itk
     double originz = cl.follow (0, 2, "-oz", "-OZ");
     
     
-    typedef itk::TensorImageIO<double, 3> TensorIOType;
-    typedef TensorIOType::TensorImageType TensorImageType;
-    typedef itk::CrossingTensorImageSource<TensorImageType>  CrossingTensorSourceType;
-    typedef itk::CircleTensorImageSource<TensorImageType>    CircleTensorSourceType;
+    using TensorIOType             = itk::TensorImageIO<double, 3>;
+    using TensorImageType          = TensorIOType::TensorImageType;
+    using CrossingTensorSourceType = itk::CrossingTensorImageSource<TensorImageType>;
+    using CircleTensorSourceType   = itk::CircleTensorImageSource<TensorImageType>;
     
     TensorImageType::PointType   origin;
     TensorImageType::SpacingType spacing;
@@ -101,7 +101,7 @@ namespace itk
     size[2] = sizez; 
     
     
-    TensorImageType::Pointer tensorImage = 0;
+    TensorImageType::Pointer tensorImage = nullptr;
     
     if( strcmp (type, "crossing")==0 )
     {

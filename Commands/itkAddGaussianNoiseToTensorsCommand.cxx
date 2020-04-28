@@ -64,11 +64,10 @@ namespace itk
     const char* fileOut  = cl.follow("NoFile",2,"-o","-O");
     const double variance = cl.follow(1.0, 2,"-v","-V");
     
-    typedef double ScalarType;  
-    typedef itk::TensorImageIO<ScalarType, 3, 3>           IOType;
-    typedef IOType::TensorImageType                        TensorImageType;    
-    typedef itk::AddGaussianNoiseTensorImageFilter<TensorImageType,TensorImageType>
-      FilterType;
+    using ScalarType      = double;  
+    using IOType          = itk::TensorImageIO<ScalarType, 3, 3>;
+    using TensorImageType = IOType::TensorImageType;    
+    using FilterType      = itk::AddGaussianNoiseTensorImageFilter<TensorImageType,TensorImageType>;
     
     
     IOType::Pointer myIO = IOType::New();
@@ -87,7 +86,7 @@ namespace itk
     FilterType::Pointer myFilter = FilterType::New();
     myFilter->SetInput ( myIO->GetOutput() );
     myFilter->SetVariance (variance);
-    myFilter->SetNumberOfThreads (1);
+    myFilter->SetNumberOfWorkUnits(1);
     
     // now: filter
     std::cout << "Adding noise to tensors ..." << std::flush << std::endl;

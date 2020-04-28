@@ -59,7 +59,7 @@ namespace itk
     }
     ~CircleTensorImageSource(){};
 
-    virtual void ThreadedGenerateData (const RegionType&, ThreadIdType);
+    virtual void DynamicThreadedGenerateData (const RegionType&);
     virtual void GenerateOutputInformation();
 
   private:

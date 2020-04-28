@@ -32,63 +32,62 @@ namespace itk
     template<class TImage>
     int Average4DCommandImplementation(const char *input, const char *output, const int &offset)
     {
-        typedef TImage InputImageType;
-        typedef typename InputImageType::PixelType ScalarType;
-      typedef Image<ScalarType, 3>          OutputImageType;
+        using InputImageType  = TImage;
+        using ScalarType      = typename InputImageType::PixelType;
+        using OutputImageType = Image<ScalarType, 3>;    
+        using ImageReaderType = itk::ImageFileReader<InputImageType>;
+        using ImageWriterType = itk::ImageFileWriter<OutputImageType>;
     
-    typedef itk::ImageFileReader<InputImageType>     ImageReaderType;
-    typedef itk::ImageFileWriter<OutputImageType>    ImageWriterType;
-    
-    typename InputImageType::Pointer image = 0;
-    {
-      typename ImageReaderType::Pointer reader = ImageReaderType::New();
-      reader->SetFileName( input );
-      try
-      {
-	reader->Update();
-      }
-      catch (itk::ExceptionObject &e)
-      {
-	std::cerr << e;
-	return -1;
-      }
+        typename InputImageType::Pointer image = nullptr;
+        {
+          typename ImageReaderType::Pointer reader = ImageReaderType::New();
+          reader->SetFileName( input );
+          try
+          {
+	    reader->Update();
+          }
+          catch (itk::ExceptionObject &e)
+          {
+	    std::cerr << e;
+	    return -1;
+          }
 
-      image = reader->GetOutput();
-      image->DisconnectPipeline();
-    }
+          image = reader->GetOutput();
+          image->DisconnectPipeline();
+        }
 
 
-    if (offset>0)
-    {
-      typedef ExtractImageFilter<InputImageType, InputImageType> Extract4DFilterType;
-      typename InputImageType::RegionType region = image->GetLargestPossibleRegion();
-      typename InputImageType::SizeType size = region.GetSize();
-      size[3] -= offset;
-      typename InputImageType::IndexType index = region.GetIndex();
-      index[3] = offset;
-      region.SetSize  (size);
-      region.SetIndex (index);
-      typename Extract4DFilterType::Pointer extractor = Extract4DFilterType::New();
-      extractor->SetInput (image);
-      extractor->SetExtractionRegion (region);
-        extractor->SetDirectionCollapseToGuess();
-      try
-      {
-	extractor->Update();
-      }
-      catch (itk::ExceptionObject &e)
-      {
-	std::cerr << e;
-	return -1;
-      }
+        if (offset>0)
+        {
+          using Extract4DFilterType = ExtractImageFilter<InputImageType, InputImageType>;
+          typename InputImageType::RegionType region = image->GetLargestPossibleRegion();
+          typename InputImageType::SizeType size = region.GetSize();
+          size[3] -= offset;
+          typename InputImageType::IndexType index = region.GetIndex();
+          index[3] = offset;
+          region.SetSize  (size);
+          region.SetIndex (index);
+          typename Extract4DFilterType::Pointer extractor = Extract4DFilterType::New();
+          extractor->SetInput (image);
+          extractor->SetExtractionRegion (region);
+            extractor->SetDirectionCollapseToGuess();
+          try
+          {
+	    extractor->Update();
+          }
+          catch (itk::ExceptionObject &e)
+          {
+	    std::cerr << e;
+	    return -1;
+          }
 
-      image = extractor->GetOutput();
-      image->DisconnectPipeline();
-    }    
+          image = extractor->GetOutput();
+          image->DisconnectPipeline();
+        }    
 
 
     
-    typedef GetAverageSliceImageFilter<InputImageType, InputImageType> FilterType;
+    using FilterType = GetAverageSliceImageFilter<InputImageType, InputImageType>;
     {
       typename FilterType::Pointer filter = FilterType::New();
       filter->SetInput (image);
@@ -111,8 +110,8 @@ namespace itk
     }
 
 
-    typename OutputImageType::Pointer outImage = 0;
-    typedef ExtractImageFilter<InputImageType, OutputImageType> ExtractFilterType;
+    typename OutputImageType::Pointer outImage = nullptr;
+    using ExtractFilterType = ExtractImageFilter<InputImageType, OutputImageType>;
     {
       typename InputImageType::RegionType region = image->GetLargestPossibleRegion();
       typename InputImageType::SizeType size = region.GetSize();

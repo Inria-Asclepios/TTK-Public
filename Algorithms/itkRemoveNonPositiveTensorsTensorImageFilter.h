@@ -61,7 +61,7 @@ namespace itk
      /** Superclass typedefs */
     typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
 
-    virtual void GenerateInputRequestedRegion() throw (InvalidRequestedRegionError);
+    virtual void GenerateInputRequestedRegion() noexcept(false);
 
     void SetUseImageSpacingOn()
     { this->SetUseImageSpacing (true); }
@@ -80,7 +80,7 @@ namespace itk
     RemoveNonPositiveTensorsTensorImageFilter();
     ~RemoveNonPositiveTensorsTensorImageFilter(){};
 
-    void ThreadedGenerateData (const OutputImageRegionType&, ThreadIdType);
+    void DynamicThreadedGenerateData (const OutputImageRegionType&);
     void PrintSelf (std::ostream& os, Indent indent) const
     {
       Superclass::PrintSelf (os, indent);      

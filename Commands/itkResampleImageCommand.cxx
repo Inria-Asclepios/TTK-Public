@@ -80,16 +80,16 @@ namespace itk
     const int sy = cl.follow(-1,2,"-SY","-sy");
     const int sz = cl.follow(-1,2,"-SZ","-sz");
     
-    typedef double ScalarType;
-    typedef itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >  TransformType;
-    typedef itk::AffineTransform< ScalarType, 3>                AffineTransformType;
-    typedef Image<ScalarType, 3>            ImageType;    
-    typedef itk::ImageFileReader<ImageType> ImageReaderType;
-    typedef itk::ImageFileWriter<ImageType> WriterType;
-    typedef ImageType::SizeType             SizeType;
-    typedef ImageType::SpacingType          SpacingType;
-    typedef ImageType::PointType            PointType;
-    typedef ImageType::DirectionType        DirectionType;
+    using ScalarType          = double;
+    using TransformType       = itk::MatrixOffsetTransformBase< ScalarType, 3 ,3 >;
+    using AffineTransformType = itk::AffineTransform< ScalarType, 3>;
+    using ImageType           = Image<ScalarType, 3>;    
+    using ImageReaderType     = itk::ImageFileReader<ImageType>;
+    using WriterType          = itk::ImageFileWriter<ImageType>;
+    using SizeType            = ImageType::SizeType;
+    using SpacingType         = ImageType::SpacingType;
+    using PointType           = ImageType::PointType;
+    using DirectionType       = ImageType::DirectionType;
     
     ImageReaderType::Pointer reader = ImageReaderType::New();
     reader->SetFileName( input );
@@ -107,7 +107,7 @@ namespace itk
     std::cout << " Done." << std::endl;
 
     ImageType::Pointer inputimage = reader->GetOutput();
-    ImageType::Pointer reference = 0;
+    ImageType::Pointer reference = nullptr;
     if (strcmp (ref, "NoFile"))
     {
       
@@ -129,14 +129,14 @@ namespace itk
     }
     
     // read the affine matrix
-    TransformType::Pointer transform = 0;
+    TransformType::Pointer transform = nullptr;
     if (strcmp (mat, "NoFile"))
     {
       std::cout << "Reading: " << mat;
       itk::TransformFactory< TransformType >::RegisterTransform ();
       itk::TransformFactory< AffineTransformType >::RegisterTransform ();
       
-      typedef itk::TransformFileReader TransformReaderType;
+      using TransformReaderType = itk::TransformFileReader;
       TransformReaderType::Pointer reader_t = TransformReaderType::New();
       reader_t->SetFileName ( mat );
       try
@@ -188,10 +188,10 @@ namespace itk
       direction = inputimage->GetDirection();
     }
     
-    typedef itk::ResampleImageFilter<ImageType, ImageType> FilterType;
+    using FilterType = itk::ResampleImageFilter<ImageType, ImageType>;
     FilterType::Pointer filter = FilterType::New();
     
-    typedef itk::LinearInterpolateImageFunction<ImageType, ScalarType>  InterpolatorType;
+    using InterpolatorType = itk::LinearInterpolateImageFunction<ImageType, ScalarType>;
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     
     filter->SetInterpolator( interpolator );

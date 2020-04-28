@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  Permute23TensorCoefficientsCommandFactory::GetITKSourceVersion(void) const
+  Permute23TensorCoefficientsCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  Permute23TensorCoefficientsCommandFactory::GetDescription(void) const
+  Permute23TensorCoefficientsCommandFactory::GetDescription() const
   {
     return "Divide tensors by the largest eigenvalue of the field";
   }

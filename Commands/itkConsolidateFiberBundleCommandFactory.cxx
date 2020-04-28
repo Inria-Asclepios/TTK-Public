@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  ConsolidateFiberBundleCommandFactory::GetITKSourceVersion(void) const
+  ConsolidateFiberBundleCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  ConsolidateFiberBundleCommandFactory::GetDescription(void) const
+  ConsolidateFiberBundleCommandFactory::GetDescription() const
   {
     return "Consolidate a fiber bundle by retrieving point data from all fibers";
   }

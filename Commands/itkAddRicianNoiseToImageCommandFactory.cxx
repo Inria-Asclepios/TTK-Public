@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  AddRicianNoiseToImageCommandFactory::GetITKSourceVersion(void) const
+  AddRicianNoiseToImageCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  AddRicianNoiseToImageCommandFactory::GetDescription(void) const
+  AddRicianNoiseToImageCommandFactory::GetDescription() const
   {
     return "Add Rician noise on an input scalar image";
   }

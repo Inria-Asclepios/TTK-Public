@@ -70,12 +70,12 @@ namespace itk
 
 
     // Read the input:
-    typedef double  ScalarType;
+    using ScalarType = double  ;
     const unsigned int ImageDimension  = 3;
     const unsigned int TensorDimension = 3;
 
-    typedef itk::TensorImageIO<ScalarType, TensorDimension, ImageDimension> IOType;
-    typedef IOType::TensorImageType     TensorImageType;
+    using IOType          = itk::TensorImageIO<ScalarType, TensorDimension, ImageDimension>;
+    using TensorImageType = IOType::TensorImageType;
 
     // read the vtk fiber file
     std::cout << "Reading: " << vtkFiberFile << std::endl;
@@ -105,8 +105,7 @@ namespace itk
     std::cout << " Done." << std::endl;
 
     // log the input
-    typedef itk::LogTensorImageFilter<TensorImageType,TensorImageType>
-      LogFilterType;
+    using LogFilterType = itk::LogTensorImageFilter<TensorImageType, TensorImageType>;
     LogFilterType::Pointer myLog = LogFilterType::New();
     myLog->SetInput (myReader->GetOutput() );
     std::cout << "Logarithming... " << std::flush;
@@ -124,8 +123,8 @@ namespace itk
 
 
     // convert
-    typedef itk::VTKFibersToITKFibers<TensorImageType> ConverterType;
-    typedef ConverterType::GroupSpatialObjectType      GroupSpatialObjectType;
+    using ConverterType          = itk::VTKFibersToITKFibers<TensorImageType>;
+    using GroupSpatialObjectType = ConverterType::GroupSpatialObjectType;
     ConverterType::Pointer myConverter = ConverterType::New();
     myConverter->SetInput (vtkFibers);
     myConverter->SetTensorImage (myTensors);

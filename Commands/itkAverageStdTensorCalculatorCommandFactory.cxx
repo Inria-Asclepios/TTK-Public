@@ -36,13 +36,13 @@ namespace itk
   }
   
   const char* 
-  AverageStdTensorCalculatorCommandFactory::GetITKSourceVersion(void) const
+  AverageStdTensorCalculatorCommandFactory::GetITKSourceVersion() const
   {
     return ITK_SOURCE_VERSION;
   }
   
   const char* 
-  AverageStdTensorCalculatorCommandFactory::GetDescription(void) const
+  AverageStdTensorCalculatorCommandFactory::GetDescription() const
   {
     return "Calculate the average and covariance matrix of a set of tensor fields";
   }

@@ -40,8 +40,8 @@ int main (int narg, char* arg[])
   }
 
 
-  typedef itk::Vector<double, 3>    VectorType;
-  typedef itk::Image<VectorType, 3> VectorImageType;
+  using VectorType      = itk::Vector<double, 3>;
+  using VectorImageType = itk::Image<VectorType, 3>;
   
 
   char* file_input  = arg[1];
@@ -133,7 +133,7 @@ int main (int narg, char* arg[])
   std::cout << "Total read: " << vox_count << " over " << num_voxels << std::endl;
 
 
-  typedef itk::ImageFileWriter<VectorImageType> WriterType;
+  using WriterType = itk::ImageFileWriter<VectorImageType>;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName (file_output);
   writer->SetInput (image);

@@ -172,8 +172,7 @@ protected:
   /** WarpTensorImageFilter is implemented as a multi-threaded filter.
    * As such, it needs to provide and implementation for 
    * ThreadedGenerateData(). */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            ThreadIdType threadId );
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
 
 private:
   WarpTensorImageFilter(const Self&); //purposely not implemented

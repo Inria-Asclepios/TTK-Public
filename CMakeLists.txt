@@ -236,7 +236,7 @@ find_package(IPF)
 include(${IPF_USE_FILE})
 
 include(${ITK_USE_FILE})
-include(${VTK_USE_FILE})
+include_directories(${VTK_INCLUDE_DIRS})
 
 set(TTK_BUILD_TYPE
 STATIC

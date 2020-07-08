@@ -68,7 +68,7 @@ namespace itk
       dtiTube->SetId (1);
       
       vtkIdType npts = 0;
-      vtkIdType *pts = 0;
+      vtkIdType const *pts = 0;
       vtkLines->GetNextCell(npts, pts);
       
       std::vector<DTIPointType> pointsToAdd;

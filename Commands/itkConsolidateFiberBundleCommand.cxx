@@ -97,7 +97,8 @@ namespace itk
     vtkUnsignedCharArray* colors = vtkUnsignedCharArray::New();
     colors->SetNumberOfComponents(3);
 
-    vtkIdType npt, *pto;
+    vtkIdType npt;
+    vtkIdType const *pto;
     vtkIdType cellId = lines->GetNextCell (npt, pto);
 
     while (cellId!=0)

@@ -199,7 +199,7 @@ namespace itk
     if (type==0)
     {
     
-        itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(arg.input, itk::ImageIOFactory::ReadMode);
+        itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(arg.input, IOFileModeEnum::ReadMode);
         if (io.IsNull())
         {
             return EXIT_FAILURE;
@@ -219,43 +219,43 @@ namespace itk
         {
         switch( io->GetComponentType())
         {
-            case itk::ImageIOBase::UCHAR:
+            case IOComponentEnum::UCHAR:
             return ApplyMaskToImageCommandImplementation< itk::Image<unsigned char, 3> >(arg);
             break;
 
-            case itk::ImageIOBase::CHAR:
+            case IOComponentEnum::CHAR:
             return ApplyMaskToImageCommandImplementation< itk::Image<char, 3> >(arg);
             break;
 
-            case itk::ImageIOBase::USHORT:
+            case IOComponentEnum::USHORT:
             return ApplyMaskToImageCommandImplementation< itk::Image<unsigned short, 3> >(arg);
             break;
 
-            case itk::ImageIOBase::SHORT:
+            case IOComponentEnum::SHORT:
             return ApplyMaskToImageCommandImplementation< itk::Image<short, 3> >(arg);
             break;
 
-            case itk::ImageIOBase::UINT:
+            case IOComponentEnum::UINT:
             return ApplyMaskToImageCommandImplementation< itk::Image<unsigned int, 3> >(arg);
             break;
 
-            case itk::ImageIOBase::INT:
+            case IOComponentEnum::INT:
             return ApplyMaskToImageCommandImplementation< itk::Image<int, 3> >(arg);
             break;
 
-            case itk::ImageIOBase::ULONG:
+            case IOComponentEnum::ULONG:
             return ApplyMaskToImageCommandImplementation< itk::Image<unsigned long, 3> >(arg);
             break;
 
-            case itk::ImageIOBase::LONG:
+            case IOComponentEnum::LONG:
             return ApplyMaskToImageCommandImplementation< itk::Image<long, 3> >(arg);
             break;
 
-            case itk::ImageIOBase::FLOAT:
+            case IOComponentEnum::FLOAT:
             return ApplyMaskToImageCommandImplementation< itk::Image<float, 3> >(arg);
             break;
 
-            case itk::ImageIOBase::DOUBLE:
+            case IOComponentEnum::DOUBLE:
             return ApplyMaskToImageCommandImplementation< itk::Image<double, 3> >(arg);
             break;
 
@@ -269,43 +269,43 @@ namespace itk
         {
             switch( io->GetComponentType())
             {
-            case itk::ImageIOBase::UCHAR:
+            case IOComponentEnum::UCHAR:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<unsigned char, 4> >(arg);
             break;
 
-            case itk::ImageIOBase::CHAR:
+            case IOComponentEnum::CHAR:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<char, 4> >(arg);
             break;
 
-            case itk::ImageIOBase::USHORT:
+            case IOComponentEnum::USHORT:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<unsigned short, 4> >(arg);
             break;
 
-            case itk::ImageIOBase::SHORT:
+            case IOComponentEnum::SHORT:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<short, 4> >(arg);
             break;
 
-            case itk::ImageIOBase::UINT:
+            case IOComponentEnum::UINT:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<unsigned int, 4> >(arg);
             break;
 
-            case itk::ImageIOBase::INT:
+            case IOComponentEnum::INT:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<int, 4> >(arg);
             break;
 
-            case itk::ImageIOBase::ULONG:
+            case IOComponentEnum::ULONG:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<unsigned long, 4> >(arg);
             break;
 
-            case itk::ImageIOBase::LONG:
+            case IOComponentEnum::LONG:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<long, 4> >(arg);
             break;
 
-            case itk::ImageIOBase::FLOAT:
+            case IOComponentEnum::FLOAT:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<float, 4> >(arg);
             break;
 
-            case itk::ImageIOBase::DOUBLE:
+            case IOComponentEnum::DOUBLE:
             return ApplyMaskTo4DImageCommandImplementation< itk::Image<double, 4> >(arg);
             break;
 

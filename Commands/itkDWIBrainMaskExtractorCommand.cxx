@@ -189,7 +189,7 @@ namespace itk
     else
         arg.output = "";
 
-    itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(arg.input, itk::ImageIOFactory::ReadMode);
+    itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(arg.input, IOFileModeEnum::ReadMode);
     if (io.IsNull())
     {
         return EXIT_FAILURE;
@@ -213,34 +213,34 @@ namespace itk
 
     switch( io->GetComponentType())
     {
-    case itk::ImageIOBase::UCHAR:
+    case IOComponentEnum::UCHAR:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<unsigned char, 3> >(arg);
 
-    case itk::ImageIOBase::CHAR:
+    case IOComponentEnum::CHAR:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<char, 3> >(arg);
 
-        case itk::ImageIOBase::USHORT:
+        case IOComponentEnum::USHORT:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<unsigned short, 3> >(arg);
 
-        case itk::ImageIOBase::SHORT:
+        case IOComponentEnum::SHORT:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<short, 3> >(arg);
 
-        case itk::ImageIOBase::UINT:
+        case IOComponentEnum::UINT:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<unsigned int, 3> >(arg);
 
-        case itk::ImageIOBase::INT:
+        case IOComponentEnum::INT:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<int, 3> >(arg);
 
-        case itk::ImageIOBase::ULONG:
+        case IOComponentEnum::ULONG:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<unsigned long, 3> >(arg);
 
-        case itk::ImageIOBase::LONG:
+        case IOComponentEnum::LONG:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<long, 3> >(arg);
 
-        case itk::ImageIOBase::FLOAT:
+        case IOComponentEnum::FLOAT:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<float, 3> >(arg);
 
-        case itk::ImageIOBase::DOUBLE:
+        case IOComponentEnum::DOUBLE:
         return DWIBrainMaskExtractorCommandImplementation< itk::Image<double, 3> >(arg);
 
     default:

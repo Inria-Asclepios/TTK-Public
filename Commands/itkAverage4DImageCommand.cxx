@@ -185,7 +185,7 @@ namespace itk
     const char* output = cl.follow("output.nii.gz","-o");
     int offset = cl.follow (0, "-n");
     
-    itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(input, itk::ImageIOFactory::ReadMode);
+    itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(input, IOFileModeEnum::ReadMode);
     if (io.IsNull())
     {
         return EXIT_FAILURE;
@@ -203,34 +203,34 @@ namespace itk
 
     switch( io->GetComponentType())
     {
-    case itk::ImageIOBase::UCHAR:
+    case IOComponentEnum::UCHAR:
         return Average4DCommandImplementation< itk::Image<unsigned char, 4> >(input, output, offset);
 
-    case itk::ImageIOBase::CHAR:
+    case IOComponentEnum::CHAR:
         return Average4DCommandImplementation< itk::Image<char, 4> >(input, output, offset);
 
-        case itk::ImageIOBase::USHORT:
+        case IOComponentEnum::USHORT:
         return Average4DCommandImplementation< itk::Image<unsigned short, 4> >(input, output, offset);
 
-        case itk::ImageIOBase::SHORT:
+        case IOComponentEnum::SHORT:
         return Average4DCommandImplementation< itk::Image<short, 4> >(input, output, offset);
 
-        case itk::ImageIOBase::UINT:
+        case IOComponentEnum::UINT:
         return Average4DCommandImplementation< itk::Image<unsigned int, 4> >(input, output, offset);
 
-        case itk::ImageIOBase::INT:
+        case IOComponentEnum::INT:
         return Average4DCommandImplementation< itk::Image<int, 4> >(input, output, offset);
 
-        case itk::ImageIOBase::ULONG:
+        case IOComponentEnum::ULONG:
         return Average4DCommandImplementation< itk::Image<unsigned long, 4> >(input, output, offset);
 
-        case itk::ImageIOBase::LONG:
+        case IOComponentEnum::LONG:
         return Average4DCommandImplementation< itk::Image<long, 4> >(input, output, offset);
 
-        case itk::ImageIOBase::FLOAT:
+        case IOComponentEnum::FLOAT:
         return Average4DCommandImplementation< itk::Image<float, 4> >(input, output, offset);
 
-        case itk::ImageIOBase::DOUBLE:
+        case IOComponentEnum::DOUBLE:
         return Average4DCommandImplementation< itk::Image<double, 4> >(input, output, offset);
 
     default:

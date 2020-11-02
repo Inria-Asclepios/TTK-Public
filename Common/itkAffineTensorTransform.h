@@ -21,7 +21,6 @@
 
 #include "itkMatrix.h"
 #include "itkMatrixOffsetTensorTransformBase.h"
-#include "itkExceptionObject.h"
 #include "itkMacro.h"
 
 namespace itk
@@ -75,7 +74,7 @@ namespace itk
     typedef typename Superclass::CenterType                CenterType;
     typedef typename Superclass::OffsetType                OffsetType;
     typedef typename Superclass::TranslationType           TranslationType;
-        typedef typename Superclass::TransformCategoryType TransformCategoryType;
+    typedef typename Superclass::TransformCategoryType     TransformCategoryType;
     
 
     void Translate(const OutputVectorType &offset, bool pre=0);
@@ -122,7 +121,7 @@ namespace itk
         
         virtual TransformCategoryType GetTransformCategory() const
         {
-            return Self::Linear;
+            return TransformCategoryType::Linear;
         }
     
     

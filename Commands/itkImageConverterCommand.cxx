@@ -138,7 +138,7 @@ namespace itk
     std::cerr << "Component Type: " << informationreader->GetImageIO()->GetComponentTypeAsString(informationreader->GetImageIO()->GetComponentType()) << std::endl;
     std::cerr << "Pixel Type: " << informationreader->GetImageIO()->GetPixelTypeAsString(informationreader->GetImageIO()->GetPixelType()) << std::endl;
 
-    if(informationreader->GetImageIO()->GetPixelType() != itk::ImageIOBase::SCALAR)
+    if(informationreader->GetImageIO()->GetPixelType() != IOPixelEnum::SCALAR)
     {
       std::cerr << "Only scalar images can be converted" << std::endl;
       return EXIT_FAILURE;
@@ -146,7 +146,7 @@ namespace itk
     
     // real reading with dimension and type
     unsigned int dim = informationreader->GetImageIO()->GetNumberOfDimensions();
-    itk::ImageIOBase::IOComponentType componenttype = informationreader->GetImageIO()->GetComponentType();
+    CommonEnums::IOComponent componenttype = informationreader->GetImageIO()->GetComponentType();
 
     bool isparrec = !strcmp (informationreader->GetImageIO()->GetNameOfClass(), "PhilipsRECImageIO");
     FloatImageType::DirectionType correctdirection;
@@ -162,70 +162,70 @@ namespace itk
 
     switch (componenttype)
     {
-	case itk::ImageIOBase::UCHAR:
+	case IOComponentEnum::UCHAR:
 	  if      (dim == 2) { ReadWriteImageMacro (2, unsigned char); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, unsigned char); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, unsigned char); }
 	  else if (dim == 5) { ReadWriteImageMacro (5, unsigned char); }
 	  else if (dim == 6) { ReadWriteImageMacro (6, unsigned char); }
 	  break;
-	case itk::ImageIOBase::CHAR:
+	case IOComponentEnum::CHAR:
 	  if      (dim == 2) { ReadWriteImageMacro (2, char); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, char); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, char); }
 	  else if (dim == 5) { ReadWriteImageMacro (5, char); }
 	  else if (dim == 6) { ReadWriteImageMacro (6, char); }
 	  break;
-    	case itk::ImageIOBase::USHORT:
+    	case IOComponentEnum::USHORT:
 	  if      (dim == 2) { ReadWriteImageMacro (2, unsigned short); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, unsigned short); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, unsigned short); }
 	  else if (dim == 5) { ReadWriteImageMacro (5, unsigned short); }
 	  else if (dim == 6) { ReadWriteImageMacro (6, unsigned short); }
 	  break;
-    	case itk::ImageIOBase::SHORT:
+    	case IOComponentEnum::SHORT:
 	  if      (dim == 2) { ReadWriteImageMacro (2, short); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, short); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, short); }
 	  else if (dim == 5) { ReadWriteImageMacro (5, short); }
 	  else if (dim == 6) { ReadWriteImageMacro (6, short); }
 	  break;
-    	case itk::ImageIOBase::UINT:
+    	case IOComponentEnum::UINT:
 	  if      (dim == 2) { ReadWriteImageMacro (2, unsigned int); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, unsigned int); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, unsigned int); }
 	  else if (dim == 5) { ReadWriteImageMacro (5, unsigned int); }
 	  else if (dim == 6) { ReadWriteImageMacro (6, unsigned int); }
 	  break;
-    	case itk::ImageIOBase::INT:
+    	case IOComponentEnum::INT:
 	  if      (dim == 2) { ReadWriteImageMacro (2, int); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, int); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, int); }
 	  else if (dim == 5) { ReadWriteImageMacro (5, int); }
 	  else if (dim == 6) { ReadWriteImageMacro (6, int); }
 	  break;
-    	case itk::ImageIOBase::ULONG:
+    	case IOComponentEnum::ULONG:
 	  if      (dim == 2) { ReadWriteImageMacro (2, unsigned long); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, unsigned long); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, unsigned long); }
 	  else if (dim == 5) { ReadWriteImageMacro (5, unsigned long); }
 	  else if (dim == 6) { ReadWriteImageMacro (6, unsigned long); }
 	  break;
-	case itk::ImageIOBase::LONG:
+	case IOComponentEnum::LONG:
 	  if      (dim == 2) { ReadWriteImageMacro (2, long); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, long); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, long); }
 	  else if (dim == 5) { ReadWriteImageMacro (5, long); }
 	  else if (dim == 6) { ReadWriteImageMacro (6, long); }
 	  break;
-	case itk::ImageIOBase::FLOAT:
+	case IOComponentEnum::FLOAT:
 	  if      (dim == 2) { ReadWriteImageMacro (2, float); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, float); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, float); }
 	  else if (dim == 5) { ReadWriteImageMacro (5, float); }
 	  else if (dim == 6) { ReadWriteImageMacro (6, float); }
 	  break;
-    	case itk::ImageIOBase::DOUBLE:
+    	case IOComponentEnum::DOUBLE:
 	  if      (dim == 2) { ReadWriteImageMacro (2, double); }
 	  else if (dim == 3) { ReadWriteImageMacro (3, double); }
 	  else if (dim == 4) { ReadWriteImageMacro (4, double); }

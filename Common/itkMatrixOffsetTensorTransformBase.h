@@ -21,7 +21,6 @@
 
 #include "itkMatrix.h"
 #include "itkTensorTransform.h"
-#include "itkExceptionObject.h"
 #include "itkMacro.h"
 
 namespace itk
@@ -117,11 +116,10 @@ namespace itk
     typedef OutputVectorType                          OffsetType;
     
     typedef OutputVectorType                          TranslationType;
-    typedef typename Superclass::TransformCategoryType TransformCategoryType;
     
-    virtual TransformCategoryType GetTransformCategory() const
+    virtual typename Superclass::TransformCategoryType GetTransformCategory() const
     {
-      return Self::Linear;
+      return TransformCategoryType::Linear;
     }
 
     virtual void SetIdentity( void );

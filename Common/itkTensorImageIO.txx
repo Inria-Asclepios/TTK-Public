@@ -367,10 +367,10 @@ namespace itk
       throw itk::ExceptionObject(__FILE__,__LINE__,message);
     }
 
-    if (myIO->GetPixelType() != itk::ImageIOBase::DIFFUSIONTENSOR3D)
+    if (myIO->GetPixelType() != IOPixelEnum::DIFFUSIONTENSOR3D)
     {
     // Two cases : image is stored as float or double
-        if (myIO->GetComponentType() == itk::ImageIOBase::DOUBLE)
+        if (myIO->GetComponentType() == IOComponentEnum::DOUBLE)
         {
           typedef itk::Vector<double, DegreesOfFreedom>     VectorType;
           typedef itk::Image <VectorType, ImageDimension>   VectorImageType;

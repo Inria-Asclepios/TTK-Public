@@ -210,7 +210,7 @@ namespace itk
         arg.bst        = cl.follow(0.0,"-b");
         arg.removeType = cl.follow(0,"-r");
 
-        itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(arg.input, itk::ImageIOFactory::ReadMode);
+        itk::ImageIOBase::Pointer io = itk::ImageIOFactory::CreateImageIO(arg.input, IOFileModeEnum::ReadMode);
         if (io.IsNull())
         {
             if (strcmp (itksys::SystemTools::GetFilenameLastExtension (arg.input).c_str(), ".txt") ==0)
@@ -231,7 +231,7 @@ namespace itk
                 file.getline(filename,256);
                 std::cout << "Checking type of " << filename << std::endl;
 
-                io = itk::ImageIOFactory::CreateImageIO(filename, itk::ImageIOFactory::ReadMode);
+                io = itk::ImageIOFactory::CreateImageIO(filename, IOFileModeEnum::ReadMode);
                 if (io.IsNull())
                 {
                     std::cerr << "Unknown file type for " << filename << std::endl;
@@ -260,34 +260,34 @@ namespace itk
 
         switch( io->GetComponentType())
         {
-        case itk::ImageIOBase::UCHAR:
+        case IOComponentEnum::UCHAR:
             return DTIEstimatorCommandImplementation< itk::Image<unsigned char, 3> >(arg);
 
-        case itk::ImageIOBase::CHAR:
+        case IOComponentEnum::CHAR:
             return DTIEstimatorCommandImplementation< itk::Image<char, 3> >(arg);
 
-        case itk::ImageIOBase::USHORT:
+        case IOComponentEnum::USHORT:
             return DTIEstimatorCommandImplementation< itk::Image<unsigned short, 3> >(arg);
 
-        case itk::ImageIOBase::SHORT:
+        case IOComponentEnum::SHORT:
             return DTIEstimatorCommandImplementation< itk::Image<short, 3> >(arg);
 
-        case itk::ImageIOBase::UINT:
+        case IOComponentEnum::UINT:
             return DTIEstimatorCommandImplementation< itk::Image<unsigned int, 3> >(arg);
 
-        case itk::ImageIOBase::INT:
+        case IOComponentEnum::INT:
             return DTIEstimatorCommandImplementation< itk::Image<int, 3> >(arg);
 
-        case itk::ImageIOBase::ULONG:
+        case IOComponentEnum::ULONG:
             return DTIEstimatorCommandImplementation< itk::Image<unsigned long, 3> >(arg);
 
-        case itk::ImageIOBase::LONG:
+        case IOComponentEnum::LONG:
             return DTIEstimatorCommandImplementation< itk::Image<long, 3> >(arg);
 
-        case itk::ImageIOBase::FLOAT:
+        case IOComponentEnum::FLOAT:
             return DTIEstimatorCommandImplementation< itk::Image<float, 3> >(arg);
 
-        case itk::ImageIOBase::DOUBLE:
+        case IOComponentEnum::DOUBLE:
             return DTIEstimatorCommandImplementation< itk::Image<double, 3> >(arg);
 
         default:
